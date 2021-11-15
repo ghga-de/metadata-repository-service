@@ -13,19 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Test the api module"""
+"""Entrypoint of the package"""
 
-from fastapi import status
-from fastapi.testclient import TestClient
+from ghga_service_chassis_lib.api import run_server
 
-from metadata_service.api.main import app
+from .api.main import app  # noqa: F401 pylint: disable=unused-import
+from .config import get_config
 
 
-def test_index():
-    """Test the index endpoint"""
+def run():
+    """Run the service"""
+    # Please adapt to package name
+    run_server(app="metadata_service.__main__:app", config=get_config())
 
-    client = TestClient(app)
-    response = client.get("/")
 
-    assert response.status_code == status.HTTP_200_OK
-    assert response.text == '"Index of the GHGA Metadata Service"'
+if __name__ == "__main__":
+    run()

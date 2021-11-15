@@ -13,19 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entrypoint of the package"""
+"""Defines all dataclasses/classes pertaining to a data model or schema"""
 
-from ghga_service_chassis_lib.api import run_server
+from datetime import datetime
+from typing import Literal
 
-from .api.main import app  # noqa: F401 pylint: disable=unused-import
-from .config import get_config
-
-
-def run():
-    """Run the service"""
-    # Please adapt to package name
-    run_server(app="my_microservice.__main__:app", config=get_config())
-
-
-if __name__ == "__main__":
-    run()
+from pydantic import BaseModel, Field
