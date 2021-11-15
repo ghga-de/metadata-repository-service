@@ -19,9 +19,7 @@ Additional endpoints might be structured in dedicated modules
 (each of them having a sub-router).
 """
 
-from fastapi import Depends, FastAPI
-
-from ..config import get_config
+from fastapi import FastAPI
 
 app = FastAPI()
 
@@ -29,5 +27,6 @@ app = FastAPI()
 @app.get("/", summary="")
 async def index():
     """
+    Index
     """
     return "Index of the GHGA Metadata Service"
