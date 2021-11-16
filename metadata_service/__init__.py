@@ -13,6 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""GHGA Metadata Service"""
+"""A service that manages and stores study and dataset-related metadata"""
 
 __version__ = "0.1.0"

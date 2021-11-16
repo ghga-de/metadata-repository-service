@@ -22,7 +22,7 @@ from ghga_service_chassis_lib.config import config_from_yaml
 from ghga_service_chassis_lib.pubsub import PubSubConfigBase
 
 
-@config_from_yaml(prefix="metadata-service")
+@config_from_yaml(prefix="metadata_repository_service")
 class Config(ApiConfigBase, PubSubConfigBase):
     """Config parameters and their defaults."""
 
