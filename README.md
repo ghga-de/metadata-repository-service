@@ -1,5 +1,5 @@
-![tests](https://github.com/ghga-de/metadata-service/actions/workflows/unit_and_int_tests.yaml/badge.svg)
-[![codecov](https://codecov.io/gh/ghga-de/metadata-service/branch/main/graph/badge.svg?token=GYH99Y71CK)](https://codecov.io/gh/ghga-de/microservice-repository-template)
+![tests](https://github.com/ghga-de/metadata-repository-service/actions/workflows/unit_and_int_tests.yaml/badge.svg)
+[![codecov](https://codecov.io/gh/ghga-de/metadata-repository-service/branch/main/graph/badge.svg?token=GYH99Y71CK)](https://codecov.io/gh/ghga-de/microservice-repository-template)
 
 # Metadata Repository Service
 

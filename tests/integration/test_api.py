@@ -18,7 +18,7 @@
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from metadata_service.api.main import app
+from metadata_repository_service.api.main import app
 
 
 def test_index():

@@ -28,4 +28,4 @@ USER appuser
 ENV PYTHONUNBUFFERED=1
 
 # Please adapt to package name:
-ENTRYPOINT ["metadata_service"]
+ENTRYPOINT ["metadata_repository_service"]
