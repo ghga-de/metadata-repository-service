@@ -18,7 +18,7 @@
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from my_microservice.api.main import app
+from metadata_repository_service.api.main import app
 
 
 def test_index():
@@ -28,16 +28,4 @@ def test_index():
     response = client.get("/")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.text == '"Hello World."'
-
-
-def test_greet():
-    """Test the greet endpoint"""
-
-    name = "Friendly Tester"
-
-    client = TestClient(app)
-    response = client.get(f"/greet/{name}")
-
-    assert response.status_code == status.HTTP_200_OK
-    assert name in response.json()["message"]
+    assert response.text == '"Index of the GHGA Metadata Service"'
