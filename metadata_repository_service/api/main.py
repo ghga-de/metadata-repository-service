@@ -20,13 +20,18 @@ Additional endpoints might be structured in dedicated modules
 """
 
 from fastapi import FastAPI
+from starlette.responses import RedirectResponse
+
+from metadata_repository_service.api.routers.datasets import dataset_router
 
 app = FastAPI()
+app.include_router(dataset_router)
 
 
-@app.get("/", summary="")
+@app.get("/")
 async def index():
     """
-    Index
+    Index of the Metadata Repository Service that
+    redirects to the API documentation.
     """
-    return "Index of the GHGA Metadata Service"
+    return RedirectResponse("/docs")
