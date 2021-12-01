@@ -115,23 +115,6 @@ class StatusEnum(str, Enum):
     deprecated = "deprecated"
 
 
-class NamedThing(BaseModel):
-    """
-    A databased entity, concept or class. This is a generic class that is the root of all the other classes.
-    """
-
-    id: str = Field(None, description="The internal unique identifier for an entity.")
-    xref: Optional[List[str]] = Field(
-        None, description="Holds one or more database cross references."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
 class Attribute(BaseModel):
     """
     A key/value pair that further characterizes an entity.
@@ -152,153 +135,7 @@ class Attribute(BaseModel):
     )
 
 
-class PlannedProcess(NamedThing):
-    """
-    A process is an entity that exists in time by occurring or happening, has temporal parts and always involves and depends on some entity during the time it occurs.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class BiologicalQuality(NamedThing):
-    """
-    A biological quality is a quality held by a biological entity.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class InformationContentEntity(NamedThing):
-    """
-    A generically dependent continuant that is about some thing.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Committee(NamedThing):
-    """
-    A group of people organized for a specific purpose.
-    """
-
-    name: Optional[str] = Field(None, description="The name for an entity.")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Investigation(PlannedProcess):
-    """
-    Investigation is the process of carrying out a plan or procedure so as to discover fact or information about the object of study.
-    """
-
-    title: Optional[str] = Field(
-        None, description="The title that describes an entity."
-    )
-    description: Optional[str] = Field(None, description="Description of an entity.")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class DataTransformation(PlannedProcess):
-    """
-    A data transformation technique used to analyze and interpret data to gain a better understanding of it.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    title: Optional[str] = Field(
-        None, description="The title that describes an entity."
-    )
-    description: Optional[str] = Field(None, description="Description of an entity.")
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class ResearchActivity(PlannedProcess):
-    """
-    A planned process executed in the performance of scientific research wherein systematic investigations are performed to establish facts and reach new conclusions about phenomena in the world.
-    """
-
-    title: Optional[str] = Field(
-        None, description="The title that describes an entity."
-    )
-    description: Optional[str] = Field(None, description="Description of an entity.")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Project(ResearchActivity):
+class Project(BaseModel):
     """
     Any specifically defined piece of work that is undertaken or attempted to meet a single requirement.
     """
@@ -330,7 +167,7 @@ class Project(ResearchActivity):
     )
 
 
-class Study(Investigation):
+class Study(BaseModel):
     """
     Studies are experimental investigations of a particular phenomenon. It involves a detailed examination and analysis of a subject to learn more about the phenomenon being studied.
     """
@@ -385,7 +222,7 @@ class Study(Investigation):
     )
 
 
-class Experiment(Investigation):
+class Experiment(BaseModel):
     """
     An experiment is an investigation that consists of a coordinated set of actions and observations designed to generate data with the goal of verifying, falsifying, or establishing the validity of a hypothesis.
     """
@@ -443,7 +280,7 @@ class Experiment(Investigation):
     )
 
 
-class ExperimentProcess(PlannedProcess):
+class ExperimentProcess(BaseModel):
     """
     An Experiment Process is a process that describes how a Sample is transformed to a File via an assay. The Experiment Process also keeps track of the Protocol used and the Agent that is running the experiment.
     """
@@ -481,7 +318,7 @@ class ExperimentProcess(PlannedProcess):
     )
 
 
-class Protocol(InformationContentEntity):
+class Protocol(BaseModel):
     """
     A plan specification which has sufficient level of detail and quantitative information to communicate it between investigation agents, so that different investigation agents will reliably be able to independently reproduce the process.
     """
@@ -691,7 +528,7 @@ class SequencingProtocol(Protocol):
     )
 
 
-class Agent(NamedThing):
+class Agent(BaseModel):
     """
     An agent is something that bears some form of responsibility for an activity taking place, for the existence of an entity, or for another agent's activity. Agents include a Person, Organization, or Software that performs an activity.
     """
@@ -712,26 +549,7 @@ class Agent(NamedThing):
     )
 
 
-class MaterialEntity(NamedThing):
-    """
-    A material entity is a physical entity that is spatially extended, exists as a whole at any point in time and has mass.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Technology(InformationContentEntity):
+class Technology(BaseModel):
     """
     A Technology is an abstraction that represents the instrument used for an assay. The Technology entity captures instrument-specific attributes that are relevant for an Experiment entity. The Technology entity may be further characterized by its children where each child has fields that are relevant to that particular technology.
     """
@@ -750,7 +568,7 @@ class Technology(InformationContentEntity):
     )
 
 
-class Workflow(InformationContentEntity):
+class Workflow(BaseModel):
     """
     A Workflow is an abstraction that represents the workflow used to perform an analysis. The Workflow entity captures workflow-specific attributes that are relevant for an Analysis entity. The Workflow entity may be further characterized by its children where each child has fields that are relevant to that particular workflow.
     """
@@ -769,7 +587,7 @@ class Workflow(InformationContentEntity):
     )
 
 
-class WorkflowStep(InformationContentEntity):
+class WorkflowStep(BaseModel):
     """
     A Workflow Step represents each individual step performed in a Workflow. If the Workflow is a single-step workflow then the Workflow has just one Workflow Step entity. If the Workflow is a multi-step workflow then the Workflow has a Workflow Step entity for each step. All Workflow step specific attributes like parameters, and metadata about execution environment are captured by the Workflow Step entity.
     """
@@ -805,7 +623,7 @@ class WorkflowParameter(BaseModel):
     )
 
 
-class Biospecimen(MaterialEntity):
+class Biospecimen(BaseModel):
     """
     A Biospecimen is any natural material taken from a biological entity (usually a human) for testing, diagnostics, treatment, or research purposes. The Biospecimen is linked to the Individual from which the Biospecimen is derived.
     """
@@ -846,28 +664,7 @@ class Biospecimen(MaterialEntity):
     )
 
 
-class DiseaseOrPhenotypicFeature(BiologicalQuality):
-    """
-    Disease or Phenotypic Feature that the entity is associated with. This entity is a union of Disease and Phenotypic Feature and exists to accommodate situations where Disease concepts are used interchangeably with Phenotype concepts or vice-versa.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    name: Optional[str] = Field(None, description="The name for an entity.")
-    description: Optional[str] = Field(None, description="Description of an entity.")
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Sample(MaterialEntity):
+class Sample(BaseModel):
     """
     A sample is a limited quantity of something to be used for testing, analysis, inspection, investigation, demonstration, or trial use. A sample is prepared from a Biospecimen (isolate or tissue).
     """
@@ -920,29 +717,7 @@ class Sample(MaterialEntity):
     )
 
 
-class Person(NamedThing):
-    """
-    A member of the species Homo sapiens.
-    """
-
-    given_name: Optional[str] = Field(None, description="First name.")
-    family_name: Optional[str] = Field(None, description="Last name.")
-    additional_name: Optional[str] = Field(None, description="Additional name(s).")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Individual(Person):
+class Individual(BaseModel):
     """
     An Individual is a Person who is participating in a Study.
     """
@@ -1076,7 +851,7 @@ class Donor(Individual):
     )
 
 
-class Population(MaterialEntity):
+class Population(BaseModel):
     """
     A population is a collection of individuals from the same taxonomic class living, counted or sampled at a particular site or in a particular area.
     """
@@ -1096,7 +871,7 @@ class Population(MaterialEntity):
     )
 
 
-class Family(Population):
+class Family(BaseModel):
     """
     A domestic group, or a number of domestic groups linked through descent (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
     """
@@ -1128,7 +903,7 @@ class Family(Population):
     )
 
 
-class Cohort(Population):
+class Cohort(BaseModel):
     """
     A cohort is a collection of individuals that share a common characteristic/observation and have been grouped together for a research study/investigation.
     """
@@ -1156,7 +931,7 @@ class Cohort(Population):
     )
 
 
-class File(InformationContentEntity):
+class File(BaseModel):
 
     name: str = Field(None, description="The name for an entity.")
     format: Optional[str] = Field(
@@ -1192,7 +967,7 @@ class File(InformationContentEntity):
     )
 
 
-class Analysis(DataTransformation):
+class Analysis(BaseModel):
     """
     An Analysis is a data transformation that transforms input data to output data. The workflow used to achieve this transformation and the individual steps are also captured.
     """
@@ -1235,7 +1010,7 @@ class Analysis(DataTransformation):
     )
 
 
-class AnalysisProcess(PlannedProcess):
+class AnalysisProcess(BaseModel):
     """
     An analysis process is a process that describes how one or more Files, from a Study, are transformed to another set of Files via a Workflow. The analysis process also keeps track of the workflow metadata and the Agent that is running the Analysis.
     """
@@ -1272,7 +1047,7 @@ class AnalysisProcess(PlannedProcess):
     )
 
 
-class Dataset(InformationContentEntity):
+class Dataset(BaseModel):
     """
     A Dataset is a collection of Files that is prepared for distribution.
     """
@@ -1318,127 +1093,6 @@ class Dataset(InformationContentEntity):
     )
 
 
-class ExperimentDataset(Dataset):
-    """
-    An Experiment Dataset is a collection of Files linked to one or more Experiments from one or more Studies.
-    """
-
-    has_data_access_policy: Union[List[str], List[DataAccessPolicy]] = Field(
-        None, description="The Data Access Policy that applies to this Dataset."
-    )
-    has_study: Union[List[str], List[Study]] = Field(
-        None,
-        description="One or more Study entities that are referenced by this Dataset.",
-    )
-    has_experiment: Union[List[str], List[Experiment]] = Field(
-        None,
-        description="One or more Experiment entities that are referenced by this Dataset.",
-    )
-    title: str = Field(None, description="The title that describes an entity.")
-    description: str = Field(None, description="Description of an entity.")
-    has_file: Union[List[str], List[File]] = Field(
-        None, description="The file associated with an entity."
-    )
-    accession: Optional[str] = Field(
-        None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
-    )
-    has_publication: Optional[Union[List[str], List[Publication]]] = Field(
-        None, description="The Publication associated with an entity."
-    )
-    status: Optional[StatusEnum] = Field(None, description="The status of an entity.")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class AnalysisDataset(Dataset):
-    """
-    An Analysis Dataset is a collection of Files generated from one or more Analysis performed on data from one or more Studies.
-    """
-
-    has_data_access_policy: Union[str, DataAccessPolicy] = Field(
-        None, description="The Data Access Policy that applies to this Dataset."
-    )
-    has_study: Union[List[str], List[Study]] = Field(
-        None,
-        description="One or more Study entities that are referenced by this Dataset.",
-    )
-    has_analysis: Union[List[str], List[Analysis]] = Field(
-        None, description="The analysis associated with an entity."
-    )
-    title: str = Field(None, description="The title that describes an entity.")
-    description: str = Field(None, description="Description of an entity.")
-    has_file: Union[List[str], List[File]] = Field(
-        None, description="The file associated with an entity."
-    )
-    accession: Optional[str] = Field(
-        None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
-    )
-    has_publication: Optional[Union[List[str], List[Publication]]] = Field(
-        None, description="The Publication associated with an entity."
-    )
-    status: Optional[StatusEnum] = Field(None, description="The status of an entity.")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class AggregateDataset(Dataset):
-    """
-    An Aggregate Dataset is a specialized dataset that is built by combining one or more Datasets together.
-    """
-
-    has_dataset: Optional[List[Dataset]] = Field(
-        None,
-        description="One or more Datasets that constitutes this Aggregate Dataset.",
-    )
-    title: str = Field(None, description="The title that describes an entity.")
-    description: str = Field(None, description="Description of an entity.")
-    has_file: Union[List[str], List[File]] = Field(
-        None, description="The file associated with an entity."
-    )
-    accession: Optional[str] = Field(
-        None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
-    )
-    has_publication: Optional[Union[List[str], List[Publication]]] = Field(
-        None, description="The Publication associated with an entity."
-    )
-    status: Optional[StatusEnum] = Field(None, description="The status of an entity.")
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
 class DataUseCondition(BaseModel):
     """
     Data Use Condition represents the use conditions associated with a Dataset. A permission field can have one or more terms that collectively defines the data use condition. The modifier determines the interpretation of the use permission(s).
@@ -1454,7 +1108,7 @@ class DataUseCondition(BaseModel):
     )
 
 
-class DataAccessPolicy(InformationContentEntity):
+class DataAccessPolicy(BaseModel):
     """
     A Data Access Policy specifies under which circumstances, legal or otherwise, a user can have access to one or more Datasets belonging to one or more Studies.
     """
@@ -1496,7 +1150,7 @@ class DataAccessPolicy(InformationContentEntity):
     )
 
 
-class DataAccessCommittee(Committee):
+class DataAccessCommittee(BaseModel):
     """
     A group of members that are delegated to grant access to one or more datasets after ensuring the minimum criteria for data sharing has been met, and request for data use does not raise ethical and/or legal concerns.
     """
@@ -1527,7 +1181,7 @@ class DataAccessCommittee(Committee):
     )
 
 
-class Member(Person):
+class Member(BaseModel):
     """
     Member of an Organization or a Committee.
     """
@@ -1554,7 +1208,7 @@ class Member(Person):
     )
 
 
-class Publication(InformationContentEntity):
+class Publication(BaseModel):
     """
     The Publication entity represents a publication. While a publication can be any article that is published, the minimum expectation is that the publication has a valid DOI.
     """
@@ -1576,7 +1230,7 @@ class Publication(InformationContentEntity):
     )
 
 
-class AnatomicalEntity(MaterialEntity):
+class AnatomicalEntity(BaseModel):
     """
     Biological entity that is either an individual member of a biological species or constitutes the structural organization of an individual member of a biological species.
     """
@@ -1597,26 +1251,7 @@ class AnatomicalEntity(MaterialEntity):
     )
 
 
-class CellLine(MaterialEntity):
-    """
-    A cultured cell population that represents a genetically stable and homogenous population of cultured cells that shares a common propagation history.
-    """
-
-    id: str = Field(
-        None, description="An identifier that uniquely represents an entity."
-    )
-    xref: Optional[List[str]] = Field(
-        None, description="Alternate identifiers for an entity."
-    )
-    creation_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was created."
-    )
-    update_date: Optional[str] = Field(
-        None, description="Timestamp (in ISO 8601 format) when the entity was updated."
-    )
-
-
-class Disease(DiseaseOrPhenotypicFeature):
+class Disease(BaseModel):
     """
     A disease is a disposition to undergo pathological processes that exists in an organism because of one or more disorders in that organism.
     """
@@ -1637,7 +1272,7 @@ class Disease(DiseaseOrPhenotypicFeature):
     )
 
 
-class PhenotypicFeature(DiseaseOrPhenotypicFeature):
+class PhenotypicFeature(BaseModel):
     """
     The observable form taken by some character (or group of characters) in an individual or an organism, excluding pathology and disease. The detectable outward manifestations of a specific genotype.
     """
@@ -1658,7 +1293,7 @@ class PhenotypicFeature(DiseaseOrPhenotypicFeature):
     )
 
 
-class User(Person):
+class User(BaseModel):
     """
     A user in GHGA.
     """
@@ -1826,17 +1461,7 @@ class ReleaseMixin(BaseModel):
     )
 
 
-NamedThing.update_forward_refs()
-
 Attribute.update_forward_refs()
-
-PlannedProcess.update_forward_refs()
-
-Investigation.update_forward_refs()
-
-DataTransformation.update_forward_refs()
-
-ResearchActivity.update_forward_refs()
 
 Project.update_forward_refs()
 
@@ -1845,8 +1470,6 @@ Study.update_forward_refs()
 Experiment.update_forward_refs()
 
 ExperimentProcess.update_forward_refs()
-
-Protocol.update_forward_refs()
 
 LibraryPreparationProtocol.update_forward_refs()
 
@@ -1864,11 +1487,8 @@ WorkflowParameter.update_forward_refs()
 
 Biospecimen.update_forward_refs()
 
-DiseaseOrPhenotypicFeature.update_forward_refs()
-
 Sample.update_forward_refs()
 
-Person.update_forward_refs()
 
 Individual.update_forward_refs()
 
@@ -1888,37 +1508,21 @@ AnalysisProcess.update_forward_refs()
 
 Dataset.update_forward_refs()
 
-ExperimentDataset.update_forward_refs()
-
-AnalysisDataset.update_forward_refs()
-
-AggregateDataset.update_forward_refs()
-
 DataUseCondition.update_forward_refs()
 
 DataAccessPolicy.update_forward_refs()
 
 DataAccessCommittee.update_forward_refs()
 
-Committee.update_forward_refs()
-
 Member.update_forward_refs()
 
 Publication.update_forward_refs()
 
-MaterialEntity.update_forward_refs()
-
 AnatomicalEntity.update_forward_refs()
-
-CellLine.update_forward_refs()
 
 Disease.update_forward_refs()
 
 PhenotypicFeature.update_forward_refs()
-
-BiologicalQuality.update_forward_refs()
-
-InformationContentEntity.update_forward_refs()
 
 User.update_forward_refs()
 
