@@ -1,4 +1,4 @@
-# Copyright 2021 Universität Tübingen, DKFZ and EMBL
+# # Copyright 2021 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,8 @@
 # Schema: GHGA-Metadata-Schema
 # version: 0.2.0
 
+# pylint: disable=too-many-lines
+
 from __future__ import annotations
 
 from enum import Enum
@@ -33,8 +35,8 @@ class CaseControlEnum(str, Enum):
     Enum to capture whether a Sample is to be considered as Case or Control.
     """
 
-    control = "control"
-    case = "case"
+    CONTROL = "control"
+    CASE = "case"
 
 
 class BiologicalSexEnum(str, Enum):
@@ -44,7 +46,7 @@ class BiologicalSexEnum(str, Enum):
 
     XX = "XX"
     XY = "XY"
-    none = "none"
+    NONE = "none"
 
 
 class UserRoleEnum(str, Enum):
@@ -52,8 +54,8 @@ class UserRoleEnum(str, Enum):
     Enum to capture the different roles a GHGA User can have.
     """
 
-    data_requester = "data requester"
-    data_steward = "data steward"
+    DATA_REQUESTER = "data requester"
+    DATA_STEWARD = "data steward"
 
 
 class VitalStatusEnum(str, Enum):
@@ -61,9 +63,9 @@ class VitalStatusEnum(str, Enum):
     Enum to capture the vital status of an individual.
     """
 
-    alive = "alive"
-    deceased = "deceased"
-    unknown = "unknown"
+    ALIVE = "alive"
+    DECEASED = "deceased"
+    UNKNOWN = "unknown"
 
 
 class StudyTypeEnum(str, Enum):
@@ -71,20 +73,20 @@ class StudyTypeEnum(str, Enum):
     Enum to capture the type of a study.
     """
 
-    whole_genome_sequencing = "whole_genome_sequencing"
-    metagenomics = "metagenomics"
-    transcriptome_analysis = "transcriptome_analysis"
-    resequencing = "resequencing"
-    epigenetics = "epigenetics"
-    synthetic_genomics = "synthetic_genomics"
-    forensic_paleo_genomics = "forensic_paleo_genomics"
-    gene_regulation = "gene_regulation"
-    cancer_genomics = "cancer_genomics"
-    population_genomics = "population_genomics"
-    rna_seq = "rna_seq"
-    exome_sequencing = "exome_sequencing"
-    pooled_clone_sequencing = "pooled_clone_sequencing"
-    other = "other"
+    WHOLE_GENOME_SEQUENCING = "whole_genome_sequencing"
+    METAGENOMICS = "metagenomics"
+    TRANSCRIPTOME_ANALYSIS = "transcriptome_analysis"
+    RESEQUENCING = "resequencing"
+    EPIGENETICS = "epigenetics"
+    SYNTHETIC_GENOMICS = "synthetic_genomics"
+    FORENSIC_PALEO_GENOMICS = "forensic_paleo_genomics"
+    GENE_REGULATION = "gene_regulation"
+    CANCER_GENOMICS = "cancer_genomics"
+    POPULATION_GENOMICS = "population_genomics"
+    RNA_SEQ = "rna_seq"
+    EXOME_SEQUENCING = "exome_sequencing"
+    POOLED_CLONE_SEQUENCING = "pooled_clone_sequencing"
+    OTHER = "other"
 
 
 class FileTypeEnum(str, Enum):
@@ -92,15 +94,15 @@ class FileTypeEnum(str, Enum):
     Enum to capture file types.
     """
 
-    bam = "bam"
-    complete_genomics = "complete_genomics"
-    cram = "cram"
-    fasta = "fasta"
-    fastq = "fastq"
-    pacbio_hdf5 = "pacbio_hdf5"
-    sff = "sff"
-    srf = "srf"
-    vcf = "vcf"
+    BAM = "bam"
+    COMPLETE_GENOMICS = "complete_genomics"
+    CRAM = "cram"
+    FASTA = "fasta"
+    FASTQ = "fastq"
+    PACBIO_HDF5 = "pacbio_hdf5"
+    SFF = "sff"
+    SRF = "srf"
+    VCF = "vcf"
 
 
 class StatusEnum(str, Enum):
@@ -108,11 +110,11 @@ class StatusEnum(str, Enum):
     Enum to capture the status of an entity.
     """
 
-    in_progress = "in progress"
-    submitted = "submitted"
-    unreleased = "unreleased"
-    released = "released"
-    deprecated = "deprecated"
+    IN_PROGRESS = "in progress"
+    SUBMITTED = "submitted"
+    UNRELEASED = "unreleased"
+    RELEASED = "released"
+    DEPRECATED = "deprecated"
 
 
 class Attribute(BaseModel):
@@ -123,35 +125,46 @@ class Attribute(BaseModel):
     key: str = Field(None, description="The key for an attribute.")
     key_type: Optional[str] = Field(
         None,
-        description="A semantic type that characterizes the attribute key. Usually this is a term from an ontology. For example, 'MAXO:0000616' indicates that the attribute is a measurement of oxygen saturation in the blood.",
+        description="A semantic type that characterizes the attribute key. \
+            Usually this is a term from an ontology. For example, 'MAXO:0000616' \
+            indicates that the attribute is a measurement of oxygen saturation in \
+            the blood.",
     )
     value: str = Field(
         None,
-        description="The value for an attribute. Usually this is a numerical value (without the units).",
+        description="The value for an attribute. Usually this is a numerical value \
+            (without the units).",
     )
     value_type: Optional[str] = Field(
         None,
-        description="The value type that characterizes the attribute value. Usually this is a term from an ontology that describes how to interpret the value. For example, 'SIO:001413' indicates that the value is to be interpreted as a percentage.",
+        description="The value type that characterizes the attribute value. Usually \
+            this is a term from an ontology that describes how to interpret the \
+            value. For example, 'SIO:001413' indicates that the value is to be \
+            interpreted as a percentage.",
     )
 
 
 class Project(BaseModel):
     """
-    Any specifically defined piece of work that is undertaken or attempted to meet a single requirement.
+    Any specifically defined piece of work that is undertaken or attempted to meet
+    a single requirement.
     """
 
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     has_attribute: Optional[List[Attribute]] = Field(
         None,
-        description="Custom attributes for the Project  (eg: Cancer - Colon cancer, prostrate cancer, blood cancer etc)",
+        description="Custom attributes for the Project  (eg: Cancer - Colon cancer, \
+            prostrate cancer, blood cancer etc)",
     )
     title: str = Field(None, description="Comprehensive title for the project.")
     description: str = Field(
         None,
-        description="Short textual description of the project   (Some information on the protocol, sample used and collected etc)  ",
+        description="Short textual description of the project   (Some information on \
+            the protocol, sample used and collected etc)  ",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -169,7 +182,9 @@ class Project(BaseModel):
 
 class Study(BaseModel):
     """
-    Studies are experimental investigations of a particular phenomenon. It involves a detailed examination and analysis of a subject to learn more about the phenomenon being studied.
+    Studies are experimental investigations of a particular phenomenon. It involves
+    a detailed examination and analysis of a subject to learn more about the
+    phenomenon being studied.
     """
 
     affiliation: List[str] = Field(
@@ -186,14 +201,16 @@ class Study(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     has_publication: Optional[Union[List[str], List[Publication]]] = Field(
         None, description="One or more Publication entities associated with this Study."
     )
     has_attribute: Optional[List[Attribute]] = Field(
         None,
-        description="Custom key/value pairs that further characterizes the Study.  (e.g.: approaches - single-cell, bulk etc)",
+        description="Custom key/value pairs that further characterizes the Study. \
+            (e.g.: approaches - single-cell, bulk etc)",
     )
     status: Optional[StatusEnum] = Field(
         None,
@@ -201,12 +218,14 @@ class Study(BaseModel):
     )
     release_date: Optional[str] = Field(
         None,
-        description="The timestamp (in ISO 8601 format) when the entity was released for public consumption.",
+        description="The timestamp (in ISO 8601 format) when the entity was released \
+            for public consumption.",
     )
     title: str = Field(None, description="Comprehensive title for the study.")
     description: str = Field(
         None,
-        description="A detailed description (abstract) that describes the goals of this Study.",
+        description="A detailed description (abstract) that describes the goals of \
+            this Study.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -224,20 +243,27 @@ class Study(BaseModel):
 
 class Experiment(BaseModel):
     """
-    An experiment is an investigation that consists of a coordinated set of actions and observations designed to generate data with the goal of verifying, falsifying, or establishing the validity of a hypothesis.
+    An experiment is an investigation that consists of a coordinated set of actions
+    and observations designed to generate data with the goal of verifying, falsifying,
+    or establishing the validity of a hypothesis.
     """
 
     biological_replicates: Optional[str] = Field(
         None,
-        description="A biological replicate is a replicate role that consists of  independent biological replicates made from different individual biosamples.",
+        description="A biological replicate is a replicate role that consists of \
+            independent biological replicates made from different \
+            individual biosamples.",
     )
     technical_replicates: Optional[str] = Field(
         None,
-        description="A technical replicate is a replicate role where the same BioSample is use e.g.  the same pool of RNA used to assess technical (as opposed to biological)  variation within an experiment.",
+        description="A technical replicate is a replicate role where the same \
+            BioSample is use e.g.  the same pool of RNA used to assess technical \
+            (as opposed to biological)  variation within an experiment.",
     )
     experimental_replicates: Optional[str] = Field(
         None,
-        description="The replicate number of the assay, i.e. the numeric iteration  for the assay that was repeated.",
+        description="The replicate number of the assay, i.e. the numeric iteration \
+            for the assay that was repeated.",
     )
     has_study: Union[str, Study] = Field(
         None, description="The Study entity associated with this Experiment."
@@ -250,15 +276,18 @@ class Experiment(BaseModel):
     )
     has_file: Optional[Union[List[str], List[File]]] = Field(
         None,
-        description="One or more Files entities that are generated as output of this Experiment.",
+        description="One or more Files entities that are generated as output of \
+            this Experiment.",
     )
     has_experiment_process: Optional[Union[List[str], List[ExperimentProcess]]] = Field(
         None,
-        description="One or more Experiment Processes entities associated with this Experiment.",
+        description="One or more Experiment Processes entities associated with \
+            this Experiment.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     title: str = Field(
         None, description="Name for the experiment (eg: GHGAE_PBMC_RNAseq)."
@@ -282,12 +311,17 @@ class Experiment(BaseModel):
 
 class ExperimentProcess(BaseModel):
     """
-    An Experiment Process is a process that describes how a Sample is transformed to a File via an assay. The Experiment Process also keeps track of the Protocol used and the Agent that is running the experiment.
+    An Experiment Process is a process that describes how a Sample is transformed to
+    a File via an assay. The Experiment Process also keeps track of the Protocol
+    used and the Agent that is running the experiment.
     """
 
     title: Optional[str] = Field(
         None,
-        description="A descriptive title that explains the step(s) involved in performing the experiment leading up to the sequencing of the sample and generation of raw data from the instrument. (eg: Sample extraction -> Target Enrichment) ",
+        description="A descriptive title that explains the step(s) involved in \
+            performing the experiment leading up to the sequencing of the sample \
+            and generation of raw data from the instrument. \
+            (eg: Sample extraction -> Target Enrichment) ",
     )
     has_input: Optional[Union[str, Sample]] = Field(
         None,
@@ -298,7 +332,8 @@ class ExperimentProcess(BaseModel):
     )
     has_agent: Optional[Union[str, Agent]] = Field(
         None,
-        description="The Agent - a software, institution, or human - that is executing or responsible for executing the Experiment Process.",
+        description="The Agent - a software, institution, or human - that is \
+            executing or responsible for executing the Experiment Process.",
     )
     has_output: Optional[Union[str, File]] = Field(
         None,
@@ -320,7 +355,9 @@ class ExperimentProcess(BaseModel):
 
 class Protocol(BaseModel):
     """
-    A plan specification which has sufficient level of detail and quantitative information to communicate it between investigation agents, so that different investigation agents will reliably be able to independently reproduce the process.
+    A plan specification which has sufficient level of detail and quantitative
+    information to communicate it between investigation agents, so that different
+    investigation agents will reliably be able to independently reproduce the process.
     """
 
     name: Optional[str] = Field(
@@ -342,7 +379,8 @@ class Protocol(BaseModel):
     )
     xref: Optional[List[str]] = Field(
         None,
-        description="One or more cross-references for this Protocol.  (Eg: manufacturer protocol, protocol from publication etc )",
+        description="One or more cross-references for this Protocol. \
+            (Eg: manufacturer protocol, protocol from publication etc )",
     )
     creation_date: Optional[str] = Field(
         None, description="Timestamp (in ISO 8601 format) when the entity was created."
@@ -359,66 +397,86 @@ class LibraryPreparationProtocol(Protocol):
 
     library_name: str = Field(
         None,
-        description="A short name identifying the library to potential users.  The same name may refer to multiple versions of the same continually updated library.",
+        description="A short name identifying the library to potential users. \
+            The same name may refer to multiple versions of the same continually \
+            updated library.",
     )
     library_layout: str = Field(
         None,
-        description="Describe whether the library was sequenced in single-end (forward or reverse) or paired-end mode",
+        description="Describe whether the library was sequenced in single-end \
+            (forward or reverse) or paired-end mode",
     )
     library_type: str = Field(
         None,
-        description="Describe the level of omics analysis (eg: Metagenome, transcriptome, etc) ",
+        description="Describe the level of omics analysis (eg: Metagenome, \
+            transcriptome, etc) ",
     )
     library_selection: str = Field(
         None,
-        description="Whether any method was used to select for or against, enrich, or screen the material being sequenced. Library Selection method (e.g. random, PCA, cDNA, etc )",
+        description="Whether any method was used to select for or against, enrich, \
+            or screen the material being sequenced. Library Selection method \
+            (e.g. random, PCA, cDNA, etc )",
     )
     library_construction: str = Field(
         None,
-        description="The name of a library construction approach being used. (eg: '10X v2 sequencing' or 'Smart-seq2')",
+        description="The name of a library construction approach being used. \
+            (eg: '10X v2 sequencing' or 'Smart-seq2')",
     )
     library_preparation: str = Field(
         None,
-        description="The general method for sequencing library construction (e.g. KAPA PCR-free).",
+        description="The general method for sequencing library construction \
+            (e.g. KAPA PCR-free).",
     )
     library_level: Optional[str] = Field(
         None, description="Single Cell Sequencing or Bulk Sequencing"
     )
     library_construction_kit_retail_name: str = Field(
         None,
-        description="A unique identifier for the kit used to construct a genomic library.  This may include the vendor name, kit name and kit version  (e.g. Agilent sure select Human Exome V8, Twist RefSeq Exome, etc.)",
+        description="A unique identifier for the kit used to construct a \
+            genomic library.  This may include the vendor name, kit name and \
+            kit version  (e.g. Agilent sure select Human Exome V8, \
+            Twist RefSeq Exome, etc.)",
     )
     library_construction_kit_manufacturer: str = Field(
         None, description="Manufacturer of library construction kit"
     )
     primer: Optional[str] = Field(
         None,
-        description="The type of primer used for reverse transcription, e.g. 'oligo-dT' or 'random' primer. This allows users to identify content of the cDNA library input e.g. enriched for mRNA.",
+        description="The type of primer used for reverse transcription, e.g. \
+        'oligo-dT' or 'random' primer. This allows users to identify content of \
+        the cDNA library input e.g. enriched for mRNA.",
     )
     end_bias: Optional[str] = Field(
         None,
-        description="The end of the cDNA molecule that is preferentially sequenced,  e.g. 3/5 prime tag or end, or the full-length transcript.",
+        description="The end of the cDNA molecule that is preferentially sequenced, \
+            e.g. 3/5 prime tag or end, or the full-length transcript.",
     )
     target_regions: Optional[str] = Field(
         None,
-        description="Subset of genes or specific regions of the genome, which are most likely to be involved in the phenotype under study. ",
+        description="Subset of genes or specific regions of the genome, which are \
+            most likely to be involved in the phenotype under study. ",
     )
     rnaseq_strandedness: Optional[str] = Field(
         None,
-        description="The strandedness of the library, whether reads come from both strands of the cDNA  or only from the first (antisense) or the second (sense) strand.",
+        description="The strandedness of the library, whether reads come from both \
+            strands of the cDNA  or only from the first (antisense) or the second \
+            (sense) strand.",
     )
     name: str = Field(
         None,
-        description="Name of the library preparation protocol (eg: mRNA-seq library preparation).",
+        description="Name of the library preparation protocol (eg: mRNA-seq \
+            library preparation).",
     )
     description: str = Field(
         None,
-        description="Description about how a sequencing library was prepared (eg: Library construction method).",
+        description="Description about how a sequencing library was prepared \
+            (eg: Library construction method).",
     )
     url: Optional[str] = Field(None, description="A URL to a resource.")
     has_attribute: Optional[List[Attribute]] = Field(
         None,
-        description="One or more attributes that further characterizes this Library Preparation Protocol.",
+        description="One or more attributes that further characterizes this \
+            Library Preparation Protocol.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -444,75 +502,99 @@ class SequencingProtocol(Protocol):
     )
     instrument_model: str = Field(
         None,
-        description="The name and model of the technology platform used to perform sequencing.",
+        description="The name and model of the technology platform used to \
+            perform sequencing.",
     )
     read_length: Optional[str] = Field(
         None,
-        description="Length of sequencing reads (eg: Long or short or actual number of the read length etc). The number of nucleotides successfully ordered from each side of a nucleic acid fragment  obtained after the completion of a sequencing process",
+        description="Length of sequencing reads (eg: Long or short or actual number \
+            of the read length etc). The number of nucleotides successfully ordered \
+                from each side of a nucleic acid fragment  obtained after the \
+                    completion of a sequencing process",
     )
     read_pair_number: Optional[str] = Field(
         None,
-        description="Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing replications.",
+        description="Denotes whether a submitted FASTQ file contains forward (R1) or \
+            reverse (R2) reads for paired-end sequencing. The number that identifies \
+            each read direction in a paired-end nucleotide sequencing replications.",
     )
     sequencing_length: Optional[str] = Field(None, description="Long or Short Read.")
     target_coverage: Optional[str] = Field(
         None,
-        description="Mean coverage for whole genome sequencing, or mean target coverage for whole exome and targeted sequencing. The number of times a particular locus (site, nucleotide, amplicon, region) was sequenced.",
+        description="Mean coverage for whole genome sequencing, or mean target \
+            coverage for whole exome and targeted sequencing. The number of times a \
+            particular locus (site, nucleotide, amplicon, region) was sequenced.",
     )
     reference_annotation: Optional[str] = Field(
         None,
-        description="A published genetic sequence that is used as a reference sequence against which other sequences are compared. Reference genome(s) or annotation(s) used for prior analyses (eg: GRCh38.p13).",
+        description="A published genetic sequence that is used as a reference \
+            sequence against which other sequences are compared. Reference genome(s) \
+            or annotation(s) used for prior analyses (eg: GRCh38.p13).",
     )
     lane_number: Optional[str] = Field(
         None,
-        description="he numerical identifier for the lane or machine unit where a sample was located during nucleotide sequencing.",
+        description="he numerical identifier for the lane or machine unit where a \
+            sample was located during nucleotide sequencing.",
     )
     flow_cell_id: Optional[str] = Field(
         None,
-        description="Flow Cell ID (eg: Experiment ID_Cell 1_Lane_1). The barcode assigned to a flow cell used in nucleotide sequencing.",
+        description="Flow Cell ID (eg: Experiment ID_Cell 1_Lane_1). The barcode \
+            assigned to a flow cell used in nucleotide sequencing.",
     )
     flow_cell_type: Optional[str] = Field(
         None,
-        description="Type of flow cell used (e.g. S4, S2 for NovaSeq; PromethION, Flongle for Nanopore). Aparatus in the fluidic subsystem where the sheath and sample meet.  Can be one of several types; jet-in-air, quartz cuvette, or a hybrid of the two.  The sample flows through the center of a fluid column of sheath fluid in the flow cell.",
+        description="Type of flow cell used (e.g. S4, S2 for NovaSeq; PromethION, \
+            Flongle for Nanopore). Aparatus in the fluidic subsystem where the \
+            sheath and sample meet.  Can be one of several types; jet-in-air, \
+            quartz cuvette, or a hybrid of the two.  The sample flows through \
+            the center of a fluid column of sheath fluid in the flow cell.",
     )
     umi_barcode_read: Optional[str] = Field(
         None,
-        description="The type of read that contains the UMI barcode (Eg: index1/index2/read1/read2).",
+        description="The type of read that contains the UMI barcode \
+            (Eg: index1/index2/read1/read2).",
     )
     umi_barcode_size: Optional[str] = Field(
         None, description="The size of the UMI identifying barcode (Eg. '10')."
     )
     umi_barcode_offset: Optional[str] = Field(
         None,
-        description="The offset in sequence of the UMI identifying barcode. (E.g. '16').",
+        description="The offset in sequence of the UMI identifying barcode. \
+            (E.g. '16').",
     )
     cell_barcode_read: Optional[str] = Field(
         None,
-        description="The type of read that contains the cell barcode (eg: index1/index2/read1/read2).",
+        description="The type of read that contains the cell barcode \
+            (eg: index1/index2/read1/read2).",
     )
     cell_barcode_offset: Optional[str] = Field(
         None,
-        description="The offset in sequence of the cell identifying barcode. (Eg. '0').",
+        description="The offset in sequence of the cell identifying barcode. \
+            (Eg. '0').",
     )
     cell_barcode_size: Optional[str] = Field(
         None, description="The size of the cell identifying barcode (E.g. '16')."
     )
     sample_barcode_read: Optional[str] = Field(
         None,
-        description="The type of read that contains the sample barcode (eg: index1/index2/read1/read2).",
+        description="The type of read that contains the sample barcode \
+            (eg: index1/index2/read1/read2).",
     )
     name: Optional[str] = Field(
         None,
-        description="Name of the library preparation protocol (eg: mRNA-seq,Whole exome long-read sequencing etc).",
+        description="Name of the library preparation protocol \
+            (eg: mRNA-seq,Whole exome long-read sequencing etc).",
     )
     description: Optional[str] = Field(
         None,
-        description="Description about the sequencing protocol (eg: mRNA-seq,Whole exome long-read sequencing etc).",
+        description="Description about the sequencing protocol \
+            (eg: mRNA-seq,Whole exome long-read sequencing etc).",
     )
     url: Optional[str] = Field(None, description="A URL to a resource.")
     has_attribute: Optional[List[Attribute]] = Field(
         None,
-        description="One or more attributes that further characterizes this Sequencing Protocol.",
+        description="One or more attributes that further characterizes \
+            this Sequencing Protocol.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -530,7 +612,10 @@ class SequencingProtocol(Protocol):
 
 class Agent(BaseModel):
     """
-    An agent is something that bears some form of responsibility for an activity taking place, for the existence of an entity, or for another agent's activity. Agents include a Person, Organization, or Software that performs an activity.
+    An agent is something that bears some form of responsibility for an
+    activity taking place, for the existence of an entity, or for another
+    agent's activity. Agents include a Person, Organization, or Software
+    that performs an activity.
     """
 
     name: Optional[str] = Field(None, description="The name for an entity.")
@@ -551,7 +636,11 @@ class Agent(BaseModel):
 
 class Technology(BaseModel):
     """
-    A Technology is an abstraction that represents the instrument used for an assay. The Technology entity captures instrument-specific attributes that are relevant for an Experiment entity. The Technology entity may be further characterized by its children where each child has fields that are relevant to that particular technology.
+    A Technology is an abstraction that represents the instrument used for an assay.
+    The Technology entity captures instrument-specific attributes that are relevant
+    for an Experiment entity. The Technology entity may be further characterized by
+    its children where each child has fields that are relevant to that particular
+    technology.
     """
 
     id: str = Field(
@@ -570,7 +659,11 @@ class Technology(BaseModel):
 
 class Workflow(BaseModel):
     """
-    A Workflow is an abstraction that represents the workflow used to perform an analysis. The Workflow entity captures workflow-specific attributes that are relevant for an Analysis entity. The Workflow entity may be further characterized by its children where each child has fields that are relevant to that particular workflow.
+    A Workflow is an abstraction that represents the workflow used to perform an
+    analysis. The Workflow entity captures workflow-specific attributes that are
+    relevant for an Analysis entity. The Workflow entity may be further characterized
+    by its children where each child has fields that are relevant to that
+    particular workflow.
     """
 
     id: str = Field(
@@ -589,12 +682,18 @@ class Workflow(BaseModel):
 
 class WorkflowStep(BaseModel):
     """
-    A Workflow Step represents each individual step performed in a Workflow. If the Workflow is a single-step workflow then the Workflow has just one Workflow Step entity. If the Workflow is a multi-step workflow then the Workflow has a Workflow Step entity for each step. All Workflow step specific attributes like parameters, and metadata about execution environment are captured by the Workflow Step entity.
+    A Workflow Step represents each individual step performed in a Workflow.
+    If the Workflow is a single-step workflow then the Workflow has just one
+    Workflow Step entity. If the Workflow is a multi-step workflow then the Workflow
+    has a Workflow Step entity for each step. All Workflow step specific attributes
+    like parameters, and metadata about execution environment are captured by the
+    Workflow Step entity.
     """
 
     has_parameter: Optional[List[WorkflowParameter]] = Field(
         None,
-        description="One or more parameters that are associated with this Workflow Step.",
+        description="One or more parameters that are associated with this \
+            Workflow Step.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -625,7 +724,9 @@ class WorkflowParameter(BaseModel):
 
 class Biospecimen(BaseModel):
     """
-    A Biospecimen is any natural material taken from a biological entity (usually a human) for testing, diagnostics, treatment, or research purposes. The Biospecimen is linked to the Individual from which the Biospecimen is derived.
+    A Biospecimen is any natural material taken from a biological entity
+    (usually a human) for testing, diagnostics, treatment, or research purposes.
+    The Biospecimen is linked to the Individual from which the Biospecimen is derived.
     """
 
     name: Optional[str] = Field(None, description="The name for an entity.")
@@ -636,19 +737,30 @@ class Biospecimen(BaseModel):
     )
     has_anatomical_entity: Optional[Union[str, AnatomicalEntity]] = Field(
         None,
-        description="The Anatomical entity, that represents the site, from which the Biospecimen was retrieved. Typically, a concept from Uber-anatomy Ontology (UBERON). For example, 'UBERON:0008307' indicates that the Biospecimen was extracted from the 'Heart Endothelium' of an Individual.",
+        description="The Anatomical entity, that represents the site, from which the \
+            Biospecimen was retrieved. Typically, a concept from \
+            Uber-anatomy Ontology (UBERON). For example, 'UBERON:0008307' \
+            indicates that the Biospecimen was extracted from the 'Heart Endothelium' \
+            of an Individual.",
     )
     has_disease: Optional[Union[List[str], List[Disease]]] = Field(
         None,
-        description="The Disease entity that is associated with the Individual. Typically, a concept from Mondo Disease Ontology. For example, 'MONDO:0005267' indicates that the Individual suffers from 'Heart Disease'.",
+        description="The Disease entity that is associated with the Individual. \
+            Typically, a concept from Mondo Disease Ontology. For example, \
+            'MONDO:0005267' indicates that the Individual suffers from \
+            'Heart Disease'.",
     )
     has_phenotypic_feature: Optional[Union[List[str], List[PhenotypicFeature]]] = Field(
         None,
-        description="The Phenotypic Feature entity that is associated with the Individual. Typically, a concept from Human Phenotype Ontology. For example, 'HP:0100244' indicates that the Individual exhibits 'Fibrosarcoma' as one of its phenotype.",
+        description="The Phenotypic Feature entity that is associated with the \
+            Individual. Typically, a concept from Human Phenotype Ontology. \
+            For example, 'HP:0100244' indicates that the Individual exhibits \
+            'Fibrosarcoma' as one of its phenotype.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -666,31 +778,40 @@ class Biospecimen(BaseModel):
 
 class Sample(BaseModel):
     """
-    A sample is a limited quantity of something to be used for testing, analysis, inspection, investigation, demonstration, or trial use. A sample is prepared from a Biospecimen (isolate or tissue).
+    A sample is a limited quantity of something to be used for testing, analysis, \
+        inspection, investigation, demonstration, or trial use. A sample is prepared \
+        from a Biospecimen (isolate or tissue).
     """
 
     name: str = Field(
         None,
-        description="Name of the sample (eg:GHGAS_Blood_Sample1 or GHGAS_PBMC_RNAseq_S1).",
+        description="Name of the sample (eg:GHGAS_Blood_Sample1 or \
+            GHGAS_PBMC_RNAseq_S1).",
     )
     description: str = Field(
         None,
-        description="Short textual description of the sample   (How the sample was collected, sample source,  protocol followed for processing the sample etc).",
+        description="Short textual description of the sample \
+            (How the sample was collected, sample source,  protocol followed \
+            for processing the sample etc).",
     )
     vital_status_at_sampling: Optional[str] = Field(
         None,
-        description="Vital Status of an Individual at the point of sampling (eg:'Alive', 'Deceased').",
+        description="Vital Status of an Individual at the point of sampling \
+            (eg:'Alive', 'Deceased').",
     )
     tissue: str = Field(
         None,
-        description="An anatomical structure consisting of similarly specialized cells and intercellular matrix,  aggregated according to genetically determined spatial relationships, performing a specific function.",
+        description="An anatomical structure consisting of similarly specialized \
+            cells and intercellular matrix,  aggregated according to genetically \
+            determined spatial relationships, performing a specific function.",
     )
     isolation: Optional[str] = Field(
         None, description="Method or device employed for collecting/isolating a sample."
     )
     storage: Optional[str] = Field(
         None,
-        description="Methods by which sample is stored  (e.g. frozen in liquid nitrogen).",
+        description="Methods by which sample is stored \
+            (e.g. frozen in liquid nitrogen).",
     )
     has_individual: Union[str, Individual] = Field(
         None, description="The Individual from which this Sample was derived from."
@@ -700,14 +821,17 @@ class Sample(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
     xref: Optional[List[str]] = Field(
         None,
-        description="One or more cross-references for this Sample. For example, this Sample may have an EBI BioSamples accession or an EGA Sample accession.",
+        description="One or more cross-references for this Sample. For example, \
+            this Sample may have an EBI BioSamples accession or an \
+            EGA Sample accession.",
     )
     creation_date: Optional[str] = Field(
         None, description="Timestamp (in ISO 8601 format) when the entity was created."
@@ -724,11 +848,15 @@ class Individual(BaseModel):
 
     gender: Optional[str] = Field(
         None,
-        description="Identification as male/masculine, female/feminine or something else,  and association with a (social) role or set of behavioral and cultural traits.",
+        description="Identification as male/masculine, female/feminine or \
+            something else,  and association with a (social) role or set of \
+            behavioral and cultural traits.",
     )
     sex: BiologicalSexEnum = Field(
         None,
-        description="The assemblage of physical properties or qualities by which male is distinguished from female;  the physical difference between male and female; the distinguishing peculiarity of male or female.",
+        description="The assemblage of physical properties or qualities by which \
+            male is distinguished from female;  the physical difference between \
+            male and female; the distinguishing peculiarity of male or female.",
     )
     age: int = Field(None, description="Age of an individual.")
     year_of_birth: Optional[str] = Field(
@@ -739,15 +867,19 @@ class Individual(BaseModel):
     )
     geographical_region: Optional[str] = Field(
         None,
-        description="The geographical region where the Individual is located. Any demarcated area of the Earth; may be determined by both natural and human boundaries.",
+        description="The geographical region where the Individual is located. \
+            Any demarcated area of the Earth; may be determined by both natural \
+            and human boundaries.",
     )
     ethnicity: Optional[str] = Field(
         None,
-        description="A social group characterized by a distinctive social and cultural tradition  that is maintained from generation to generation.",
+        description="A social group characterized by a distinctive social and \
+            cultural tradition  that is maintained from generation to generation.",
     )
     ancestry: Optional[str] = Field(
         None,
-        description="A person's descent or lineage, from a person or from a population.",
+        description="A person's descent or lineage, from a person or \
+            from a population.",
     )
     has_parent: Optional[Union[List[str], List[Individual]]] = Field(
         None, description="One or more parent for this Individual."
@@ -757,15 +889,24 @@ class Individual(BaseModel):
     )
     has_disease: Optional[Union[List[str], List[Disease]]] = Field(
         None,
-        description="The Disease entity that is associated with this Biospecimen at the time of retrieval from the organism. Typically, a concept from Mondo Disease Ontology. For example, 'MONDO:0003742' indicates that the Individual - from which the Biospecimen was extracted from - suffers from 'Heart Fibrosarcoma'.",
+        description="The Disease entity that is associated with this Biospecimen \
+            at the time of retrieval from the organism. Typically, a concept from \
+            Mondo Disease Ontology. For example, 'MONDO:0003742' indicates that \
+            the Individual - from which the Biospecimen was extracted from - suffers \
+            from 'Heart Fibrosarcoma'.",
     )
     has_phenotypic_feature: Optional[Union[List[str], List[PhenotypicFeature]]] = Field(
         None,
-        description="The Phenotypic Feature entity that is associated with this Biospecimen at the time of retrieval from the organism. Typically, a concept from Human Phenotype Ontology. For example, 'HP:0100244' indicates that the Individual - from which the Biospecimen was extracted from - exhibits 'Fibrosarcoma' as one of its phenotype.",
+        description="The Phenotypic Feature entity that is associated with this \
+            Biospecimen at the time of retrieval from the organism. Typically, a \
+            concept from Human Phenotype Ontology. For example, 'HP:0100244' \
+            indicates that the Individual - from which the Biospecimen was \
+            extracted from - exhibits 'Fibrosarcoma' as one of its phenotype.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     given_name: Optional[str] = Field(None, description="First name.")
     family_name: Optional[str] = Field(None, description="Last name.")
@@ -786,16 +927,22 @@ class Individual(BaseModel):
 
 class Donor(Individual):
     """
-    A Donor is an Individual that participates in a research Study by donating a Biospecimen. The use of the Biospecimen is restricted to the consent provided by the Donor.
+    A Donor is an Individual that participates in a research Study by donating
+    a Biospecimen. The use of the Biospecimen is restricted to the consent provided
+    by the Donor.
     """
 
     gender: Optional[str] = Field(
         None,
-        description="Identification as male/masculine, female/feminine or something else,  and association with a (social) role or set of behavioral and cultural traits.",
+        description="Identification as male/masculine, female/feminine or something \
+            else,  and association with a (social) role or set of behavioral and \
+            cultural traits.",
     )
     sex: BiologicalSexEnum = Field(
         None,
-        description="The assemblage of physical properties or qualities by which male is distinguished from female;  the physical difference between male and female; the distinguishing peculiarity of male or female.",
+        description="The assemblage of physical properties or qualities by which \
+            male is distinguished from female;  the physical difference between \
+            male and female; the distinguishing peculiarity of male or female.",
     )
     age: int = Field(None, description="Age of an individual.")
     year_of_birth: Optional[str] = Field(
@@ -803,19 +950,24 @@ class Donor(Individual):
     )
     vital_status: VitalStatusEnum = Field(
         None,
-        description="The state or condition of being living or deceased;  also includes the case where the vital status is unknown.",
+        description="The state or condition of being living or deceased; also \
+            includes the case where the vital status is unknown.",
     )
     geographical_region: Optional[str] = Field(
         None,
-        description="The geographical region where the Individual is located. Any demarcated area of the Earth; may be determined by both natural and human boundaries.",
+        description="The geographical region where the Individual is located. \
+            Any demarcated area of the Earth; may be determined by both natural \
+            and human boundaries.",
     )
     ethnicity: Optional[str] = Field(
         None,
-        description="A social group characterized by a distinctive social and cultural tradition  that is maintained from generation to generation.",
+        description="A social group characterized by a distinctive social and \
+            cultural tradition  that is maintained from generation to generation.",
     )
     ancestry: Optional[str] = Field(
         None,
-        description="A person's descent or lineage, from a person or from a population.",
+        description="A person's descent or lineage, from a person or from \
+            a population.",
     )
     has_parent: Optional[Union[List[str], List[Individual]]] = Field(
         None, description="The parent of an entity."
@@ -832,7 +984,8 @@ class Donor(Individual):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     given_name: Optional[str] = Field(None, description="First name.")
     family_name: Optional[str] = Field(None, description="Last name.")
@@ -853,7 +1006,8 @@ class Donor(Individual):
 
 class Population(BaseModel):
     """
-    A population is a collection of individuals from the same taxonomic class living, counted or sampled at a particular site or in a particular area.
+    A population is a collection of individuals from the same taxonomic class
+    living, counted or sampled at a particular site or in a particular area.
     """
 
     name: Optional[str] = Field(None, description="The name for an entity.")
@@ -873,7 +1027,8 @@ class Population(BaseModel):
 
 class Family(BaseModel):
     """
-    A domestic group, or a number of domestic groups linked through descent (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
+    A domestic group, or a number of domestic groups linked through descent
+    (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
     """
 
     has_member: Optional[Union[List[str], List[Individual]]] = Field(
@@ -882,11 +1037,13 @@ class Family(BaseModel):
     )
     has_proband: Optional[Union[str, Individual]] = Field(
         None,
-        description="The Individual that is reported to have a disorder which results in the Family being brought into a Study.",
+        description="The Individual that is reported to have a disorder which results \
+            in the Family being brought into a Study.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     name: Optional[str] = Field(None, description="The name for an entity.")
     id: str = Field(
@@ -905,7 +1062,9 @@ class Family(BaseModel):
 
 class Cohort(BaseModel):
     """
-    A cohort is a collection of individuals that share a common characteristic/observation and have been grouped together for a research study/investigation.
+    A cohort is a collection of individuals that share a common
+    characteristic/observation and have been grouped together for
+    a research study/investigation.
     """
 
     has_member: Optional[Union[List[str], List[Individual]]] = Field(
@@ -914,7 +1073,8 @@ class Cohort(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole \
+            purpose of referring to that entity in a global scope.",
     )
     name: Optional[str] = Field(None, description="The name for an entity.")
     id: str = Field(
@@ -932,6 +1092,10 @@ class Cohort(BaseModel):
 
 
 class File(BaseModel):
+    """
+    A file represents a data entity that has been generated by a planned process or
+    a data transformation activity.
+    """
 
     name: str = Field(None, description="The name for an entity.")
     format: Optional[str] = Field(
@@ -940,18 +1104,25 @@ class File(BaseModel):
     size: Optional[str] = Field(None, description="The size of a file in bytes.")
     checksum: Optional[str] = Field(
         None,
-        description="A computed value which depends on the contents of a block of data and which is transmitted or  stored along with the data in order to detect corruption of the data.  The receiving system recomputes the checksum based upon the received data and compares this  value with the one sent with the data. If the two values are the same, the receiver has some confidence  that the data was received correctly.",
+        description="A computed value which depends on the contents of a block of \
+            data and which is transmitted or  stored along with the data in order \
+            to detect corruption of the data.  The receiving system recomputes the \
+            checksum based upon the received data and compares this  value with the \
+            one sent with the data. If the two values are the same, the receiver has \
+            some confidence  that the data was received correctly.",
     )
     file_index: Optional[str] = Field(
         None, description="The index for this file. Commonly for BAM/VCF files."
     )
     category: Optional[str] = Field(
         None,
-        description="The category for this file: Whole Genome Sequencing, Whole Exome Sequencing, etc.",
+        description="The category for this file: Whole Genome Sequencing, Whole Exome \
+            Sequencing, etc.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -969,7 +1140,9 @@ class File(BaseModel):
 
 class Analysis(BaseModel):
     """
-    An Analysis is a data transformation that transforms input data to output data. The workflow used to achieve this transformation and the individual steps are also captured.
+    An Analysis is a data transformation that transforms input data to output data.
+    The workflow used to achieve this transformation and the individual steps are
+    also captured.
     """
 
     has_input: Optional[Union[List[str], List[File]]] = Field(
@@ -983,14 +1156,16 @@ class Analysis(BaseModel):
     )
     has_analysis_process: Optional[Union[List[str], List[AnalysisProcess]]] = Field(
         None,
-        description="One or more Analysis Process entities associated with this Analysis.",
+        description="One or more Analysis Process entities associated with this \
+            Analysis.",
     )
     has_output: Optional[Union[List[str], List[File]]] = Field(
         None, description="The output data File entities generated by this Analysis."
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -1012,7 +1187,10 @@ class Analysis(BaseModel):
 
 class AnalysisProcess(BaseModel):
     """
-    An analysis process is a process that describes how one or more Files, from a Study, are transformed to another set of Files via a Workflow. The analysis process also keeps track of the workflow metadata and the Agent that is running the Analysis.
+    An analysis process is a process that describes how one or more Files, from a
+    Study, are transformed to another set of Files via a Workflow. The analysis
+    process also keeps track of the workflow metadata and the Agent that is running
+    the Analysis.
     """
 
     title: Optional[str] = Field(
@@ -1023,11 +1201,13 @@ class AnalysisProcess(BaseModel):
     )
     has_workflow_step: Optional[WorkflowStep] = Field(
         None,
-        description="Workflow Step entity that performs a set of operations on the input data Files to generate a set of output data Files.",
+        description="Workflow Step entity that performs a set of operations on the \
+            input data Files to generate a set of output data Files.",
     )
     has_agent: Optional[Union[str, Agent]] = Field(
         None,
-        description="The Agent - a software, institution, or human - that is executing or responsible for executing the workflow.",
+        description="The Agent - a software, institution, or human - that is \
+            executing or responsible for executing the workflow.",
     )
     has_output: Optional[Union[List[str], List[File]]] = Field(
         None,
@@ -1056,11 +1236,13 @@ class Dataset(BaseModel):
     description: str = Field(None, description="Description of an entity.")
     has_file: Optional[Union[List[str], List[File]]] = Field(
         None,
-        description="One or more File entities that collectively are part of this Dataset.",
+        description="One or more File entities that collectively are part of \
+            this Dataset.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     has_publication: Optional[Union[List[str], List[Publication]]] = Field(
         None,
@@ -1072,11 +1254,13 @@ class Dataset(BaseModel):
     )
     has_analysis: Optional[Union[List[str], List[Analysis]]] = Field(
         None,
-        description="One or more Analysis entities that are referenced by this Dataset.",
+        description="One or more Analysis entities that are referenced by \
+            this Dataset.",
     )
     has_experiment: Optional[Union[List[str], List[Experiment]]] = Field(
         None,
-        description="One or more Experiment entities that are referenced by this Dataset.",
+        description="One or more Experiment entities that are referenced by \
+            this Dataset.",
     )
     status: Optional[StatusEnum] = Field(None, description="The status of an entity.")
     id: str = Field(
@@ -1095,22 +1279,28 @@ class Dataset(BaseModel):
 
 class DataUseCondition(BaseModel):
     """
-    Data Use Condition represents the use conditions associated with a Dataset. A permission field can have one or more terms that collectively defines the data use condition. The modifier determines the interpretation of the use permission(s).
+    Data Use Condition represents the use conditions associated with a Dataset.
+    A permission field can have one or more terms that collectively defines the
+    data use condition. The modifier determines the interpretation of the
+    use permission(s).
     """
 
     permission: Optional[str] = Field(
         None,
-        description="Data use permission. Typically one or more terms from DUO. Preferably descendants of 'DUO:0000001 data use permission'.",
+        description="Data use permission. Typically one or more terms from DUO. \
+            Preferably descendants of 'DUO:0000001 data use permission'.",
     )
     modifier: Optional[str] = Field(
         None,
-        description="Modifier for Data use permission. Preferable descendants of 'DUO:0000017 data use modifier'",
+        description="Modifier for Data use permission. Preferable descendants of \
+            'DUO:0000017 data use modifier'",
     )
 
 
 class DataAccessPolicy(BaseModel):
     """
-    A Data Access Policy specifies under which circumstances, legal or otherwise, a user can have access to one or more Datasets belonging to one or more Studies.
+    A Data Access Policy specifies under which circumstances, legal or otherwise,
+    a user can have access to one or more Datasets belonging to one or more Studies.
     """
 
     name: Optional[str] = Field(None, description="The name for an entity.")
@@ -1119,22 +1309,26 @@ class DataAccessPolicy(BaseModel):
     )
     policy_text: str = Field(
         None,
-        description="The terms of data use and policy verbiage should be captured here.",
+        description="The terms of data use and policy verbiage should be \
+            captured here.",
     )
     policy_url: Optional[str] = Field(
         None,
-        description="URL for the policy, if available. This is useful if the terms of the policy is made available online at a resolvable URL.",
+        description="URL for the policy, if available. This is useful if the \
+            terms of the policy is made available online at a resolvable URL.",
     )
     has_data_access_committee: Union[str, DataAccessCommittee] = Field(
         None, description="The Data Access Committee linked to this policy."
     )
     has_data_use_condition: Optional[Union[str, List[DataUseCondition]]] = Field(
         None,
-        description="Data Use Condition entities that are associated with the Data Access Policy.",
+        description="Data Use Condition entities that are associated with the \
+            Data Access Policy.",
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole \
+            purpose of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -1152,7 +1346,9 @@ class DataAccessPolicy(BaseModel):
 
 class DataAccessCommittee(BaseModel):
     """
-    A group of members that are delegated to grant access to one or more datasets after ensuring the minimum criteria for data sharing has been met, and request for data use does not raise ethical and/or legal concerns.
+    A group of members that are delegated to grant access to one or more datasets
+    after ensuring the minimum criteria for data sharing has been met, and request
+    for data use does not raise ethical and/or legal concerns.
     """
 
     name: str = Field(None, description="The name for an entity.")
@@ -1165,7 +1361,8 @@ class DataAccessCommittee(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -1210,13 +1407,16 @@ class Member(BaseModel):
 
 class Publication(BaseModel):
     """
-    The Publication entity represents a publication. While a publication can be any article that is published, the minimum expectation is that the publication has a valid DOI.
+    The Publication entity represents a publication. While a publication can be any
+    article that is published, the minimum expectation is that the publication
+    has a valid DOI.
     """
 
     title: Optional[str] = Field(None, description="The title for the Publication.")
     abstract: Optional[str] = Field(
         None,
-        description="The study abstract that describes the goals.  Can also hold abstract from a publication related to this study",
+        description="The study abstract that describes the goals.  Can also hold \
+            abstract from a publication related to this study",
     )
     id: str = Field(None, description="A PMID or DOI for the Publication.")
     xref: Optional[List[str]] = Field(
@@ -1232,7 +1432,9 @@ class Publication(BaseModel):
 
 class AnatomicalEntity(BaseModel):
     """
-    Biological entity that is either an individual member of a biological species or constitutes the structural organization of an individual member of a biological species.
+    Biological entity that is either an individual member of a biological species
+    or constitutes the structural organization of an individual member of a
+    biological species.
     """
 
     id: str = Field(
@@ -1253,7 +1455,8 @@ class AnatomicalEntity(BaseModel):
 
 class Disease(BaseModel):
     """
-    A disease is a disposition to undergo pathological processes that exists in an organism because of one or more disorders in that organism.
+    A disease is a disposition to undergo pathological processes that exists in an
+    organism because of one or more disorders in that organism.
     """
 
     id: str = Field(
@@ -1274,7 +1477,9 @@ class Disease(BaseModel):
 
 class PhenotypicFeature(BaseModel):
     """
-    The observable form taken by some character (or group of characters) in an individual or an organism, excluding pathology and disease. The detectable outward manifestations of a specific genotype.
+    The observable form taken by some character (or group of characters) in an
+    individual or an organism, excluding pathology and disease. The detectable
+    outward manifestations of a specific genotype.
     """
 
     id: str = Field(
@@ -1319,7 +1524,9 @@ class User(BaseModel):
 
 class Submission(BaseModel):
     """
-    A grouping entity that represents information about one or more entities. A submission can be considered as a set of inter-related (and inter-connected) entities that represent a data submission to GHGA.
+    A grouping entity that represents information about one or more entities.
+    A submission can be considered as a set of inter-related (and inter-connected)
+    entities that represent a data submission to GHGA.
     """
 
     id: str = Field(
@@ -1327,43 +1534,53 @@ class Submission(BaseModel):
     )
     has_study: Optional[Study] = Field(
         None,
-        description="Information about a Study entities associated with this submission.",
+        description="Information about a Study entities associated \
+            with this submission.",
     )
     has_project: Optional[Project] = Field(
         None,
-        description="Information about a Project entity associated with this submission.",
+        description="Information about a Project entity associated \
+            with this submission.",
     )
     has_sample: Optional[List[Sample]] = Field(
         None,
-        description="Information about one or more Sample entities associated with this submission.",
+        description="Information about one or more Sample entities associated \
+            with this submission.",
     )
     has_biospecimen: Optional[List[Biospecimen]] = Field(
         None,
-        description="Information about one or more Biospecimen entities associated with this submission.",
+        description="Information about one or more Biospecimen entities associated \
+            with this submission.",
     )
     has_individual: Optional[List[Individual]] = Field(
         None,
-        description="Information about one or more Individual entities associated with this submission.",
+        description="Information about one or more Individual entities associated \
+            with this submission.",
     )
     has_experiment: Optional[List[Experiment]] = Field(
         None,
-        description="Information about one or more Experiment entities associated with this submission.",
+        description="Information about one or more Experiment entities associated \
+            with this submission.",
     )
     has_analysis: Optional[List[Analysis]] = Field(
         None,
-        description="Information about one or more Analysis entities associated with this submission.",
+        description="Information about one or more Analysis entities associated \
+            with this submission.",
     )
     has_file: Optional[List[File]] = Field(
         None,
-        description="Information about one or more File entities associated with this submission.",
+        description="Information about one or more File entities associated \
+            with this submission.",
     )
     has_data_access_policy: Optional[DataAccessPolicy] = Field(
         None,
-        description="The Data Access Policy entity that applies to the data associated with this submission.",
+        description="The Data Access Policy entity that applies to the data associated \
+            with this submission.",
     )
     submission_date: Optional[str] = Field(
         None,
-        description="The timestamp (in ISO 8601 format) when submission was marked completed.",
+        description="The timestamp (in ISO 8601 format) when submission was \
+            marked completed.",
     )
     creation_date: Optional[str] = Field(
         None,
@@ -1375,7 +1592,8 @@ class Submission(BaseModel):
     )
     status: Optional[StatusEnum] = Field(
         None,
-        description="The status of a Submission. For example, 'in progress' or 'submitted'.",
+        description="The status of a Submission. \
+            For example, 'in progress' or 'submitted'.",
     )
 
 
@@ -1386,7 +1604,8 @@ class OntologyClassMixin(BaseModel):
 
     id: str = Field(
         None,
-        description="The Compact UR Identifier (CURIE) that uniquely identifies this ontology class.",
+        description="The Compact UR Identifier (CURIE) that uniquely identifies \
+            this ontology class.",
     )
     name: Optional[str] = Field(
         None, description="The name or label (rdfs:label) of an ontology class."
@@ -1403,7 +1622,8 @@ class AccessionMixin(BaseModel):
 
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose of referring to that entity in a global scope.",
+        description="A unique identifier assigned to an entity for the sole purpose \
+            of referring to that entity in a global scope.",
     )
 
 
@@ -1434,11 +1654,13 @@ class DeprecatedMixin(BaseModel):
 
     replaced_by: Optional[str] = Field(
         None,
-        description="Refers to the entity which replaces a currently deprecated entity.",
+        description="Refers to the entity which replaces a currently \
+            deprecated entity.",
     )
     deprecation_date: Optional[str] = Field(
         None,
-        description="The timestamp (in ISO 8601 format) when the entity was deprecated.",
+        description="The timestamp (in ISO 8601 format) when the entity \
+            was deprecated.",
     )
 
 
@@ -1457,7 +1679,8 @@ class ReleaseMixin(BaseModel):
 
     release_date: Optional[str] = Field(
         None,
-        description="The timestamp (in ISO 8601 format) when the entity was released for public consumption.",
+        description="The timestamp (in ISO 8601 format) when the entity \
+            was released for public consumption.",
     )
 
 
