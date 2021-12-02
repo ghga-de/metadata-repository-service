@@ -2,10 +2,14 @@
 components:
   schemas:
     Agent:
-      description: An agent is something that bears some form of responsibility for
-        an activity taking place, for the existence of an entity, or for another agent's
-        activity. Agents include a Person, Organization, or Software that performs
-        an activity.
+      description: 'An agent is something that bears some form of responsibility for
+        an
+
+        activity taking place, for the existence of an entity, or for another
+
+        agent''s activity. Agents include a Person, Organization, or Software
+
+        that performs an activity.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -36,13 +40,17 @@ components:
       title: Agent
       type: object
     Analysis:
-      description: An Analysis is a data transformation that transforms input data
-        to output data. The workflow used to achieve this transformation and the individual
-        steps are also captured.
+      description: 'An Analysis is a data transformation that transforms input data
+        to output data.
+
+        The workflow used to achieve this transformation and the individual steps
+        are
+
+        also captured.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         creation_date:
@@ -61,8 +69,7 @@ components:
           - items:
               $ref: '#/components/schemas/AnalysisProcess'
             type: array
-          description: One or more Analysis Process entities associated with this
-            Analysis.
+          description: One or more Analysis Process entities associated with this             Analysis.
           title: Has Analysis Process
         has_input:
           anyOf:
@@ -117,10 +124,14 @@ components:
       title: Analysis
       type: object
     AnalysisProcess:
-      description: An analysis process is a process that describes how one or more
-        Files, from a Study, are transformed to another set of Files via a Workflow.
-        The analysis process also keeps track of the workflow metadata and the Agent
-        that is running the Analysis.
+      description: 'An analysis process is a process that describes how one or more
+        Files, from a
+
+        Study, are transformed to another set of Files via a Workflow. The analysis
+
+        process also keeps track of the workflow metadata and the Agent that is running
+
+        the Analysis.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -130,7 +141,7 @@ components:
           anyOf:
           - type: string
           - $ref: '#/components/schemas/Agent'
-          description: The Agent - a software, institution, or human - that is executing
+          description: The Agent - a software, institution, or human - that is             executing
             or responsible for executing the workflow.
           title: Has Agent
         has_input:
@@ -156,8 +167,8 @@ components:
         has_workflow_step:
           allOf:
           - $ref: '#/components/schemas/WorkflowStep'
-          description: Workflow Step entity that performs a set of operations on the
-            input data Files to generate a set of output data Files.
+          description: Workflow Step entity that performs a set of operations on the             input
+            data Files to generate a set of output data Files.
           title: Has Workflow Step
         id:
           description: An identifier that uniquely represents an entity.
@@ -180,9 +191,12 @@ components:
       title: AnalysisProcess
       type: object
     AnatomicalEntity:
-      description: Biological entity that is either an individual member of a biological
-        species or constitutes the structural organization of an individual member
-        of a biological species.
+      description: 'Biological entity that is either an individual member of a biological
+        species
+
+        or constitutes the structural organization of an individual member of a
+
+        biological species.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -220,20 +234,21 @@ components:
           title: Key
           type: string
         key_type:
-          description: A semantic type that characterizes the attribute key. Usually
-            this is a term from an ontology. For example, 'MAXO:0000616' indicates
-            that the attribute is a measurement of oxygen saturation in the blood.
+          description: A semantic type that characterizes the attribute key.             Usually
+            this is a term from an ontology. For example, 'MAXO:0000616'             indicates
+            that the attribute is a measurement of oxygen saturation in             the
+            blood.
           title: Key Type
           type: string
         value:
-          description: The value for an attribute. Usually this is a numerical value
-            (without the units).
+          description: The value for an attribute. Usually this is a numerical value             (without
+            the units).
           title: Value
           type: string
         value_type:
-          description: The value type that characterizes the attribute value. Usually
-            this is a term from an ontology that describes how to interpret the value.
-            For example, 'SIO:001413' indicates that the value is to be interpreted
+          description: The value type that characterizes the attribute value. Usually             this
+            is a term from an ontology that describes how to interpret the             value.
+            For example, 'SIO:001413' indicates that the value is to be             interpreted
             as a percentage.
           title: Value Type
           type: string
@@ -248,14 +263,17 @@ components:
       title: BiologicalSexEnum
       type: string
     Biospecimen:
-      description: A Biospecimen is any natural material taken from a biological entity
+      description: 'A Biospecimen is any natural material taken from a biological
+        entity
+
         (usually a human) for testing, diagnostics, treatment, or research purposes.
+
         The Biospecimen is linked to the Individual from which the Biospecimen is
-        derived.
+        derived.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         creation_date:
@@ -271,9 +289,10 @@ components:
           - type: string
           - $ref: '#/components/schemas/AnatomicalEntity'
           description: The Anatomical entity, that represents the site, from which
-            the Biospecimen was retrieved. Typically, a concept from Uber-anatomy
-            Ontology (UBERON). For example, 'UBERON:0008307' indicates that the Biospecimen
-            was extracted from the 'Heart Endothelium' of an Individual.
+            the             Biospecimen was retrieved. Typically, a concept from             Uber-anatomy
+            Ontology (UBERON). For example, 'UBERON:0008307'             indicates
+            that the Biospecimen was extracted from the 'Heart Endothelium'             of
+            an Individual.
           title: Has Anatomical Entity
         has_disease:
           anyOf:
@@ -283,9 +302,9 @@ components:
           - items:
               $ref: '#/components/schemas/Disease'
             type: array
-          description: The Disease entity that is associated with the Individual.
-            Typically, a concept from Mondo Disease Ontology. For example, 'MONDO:0005267'
-            indicates that the Individual suffers from 'Heart Disease'.
+          description: The Disease entity that is associated with the Individual.             Typically,
+            a concept from Mondo Disease Ontology. For example,             'MONDO:0005267'
+            indicates that the Individual suffers from             'Heart Disease'.
           title: Has Disease
         has_individual:
           anyOf:
@@ -301,9 +320,10 @@ components:
           - items:
               $ref: '#/components/schemas/PhenotypicFeature'
             type: array
-          description: The Phenotypic Feature entity that is associated with the Individual.
-            Typically, a concept from Human Phenotype Ontology. For example, 'HP:0100244'
-            indicates that the Individual exhibits 'Fibrosarcoma' as one of its phenotype.
+          description: The Phenotypic Feature entity that is associated with the             Individual.
+            Typically, a concept from Human Phenotype Ontology.             For example,
+            'HP:0100244' indicates that the Individual exhibits             'Fibrosarcoma'
+            as one of its phenotype.
           title: Has Phenotypic Feature
         id:
           description: An identifier that uniquely represents an entity.
@@ -326,13 +346,16 @@ components:
       title: Biospecimen
       type: object
     DataAccessCommittee:
-      description: A group of members that are delegated to grant access to one or
-        more datasets after ensuring the minimum criteria for data sharing has been
-        met, and request for data use does not raise ethical and/or legal concerns.
+      description: 'A group of members that are delegated to grant access to one or
+        more datasets
+
+        after ensuring the minimum criteria for data sharing has been met, and request
+
+        for data use does not raise ethical and/or legal concerns.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         creation_date:
@@ -378,12 +401,13 @@ components:
       title: DataAccessCommittee
       type: object
     DataAccessPolicy:
-      description: A Data Access Policy specifies under which circumstances, legal
-        or otherwise, a user can have access to one or more Datasets belonging to
-        one or more Studies.
+      description: 'A Data Access Policy specifies under which circumstances, legal
+        or otherwise,
+
+        a user can have access to one or more Datasets belonging to one or more Studies.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
+          description: A unique identifier assigned to an entity for the sole             purpose
             of referring to that entity in a global scope.
           title: Accession
           type: string
@@ -407,7 +431,7 @@ components:
           - items:
               $ref: '#/components/schemas/DataUseCondition'
             type: array
-          description: Data Use Condition entities that are associated with the Data
+          description: Data Use Condition entities that are associated with the             Data
             Access Policy.
           title: Has Data Use Condition
         id:
@@ -419,12 +443,12 @@ components:
           title: Name
           type: string
         policy_text:
-          description: The terms of data use and policy verbiage should be captured
+          description: The terms of data use and policy verbiage should be             captured
             here.
           title: Policy Text
           type: string
         policy_url:
-          description: URL for the policy, if available. This is useful if the terms
+          description: URL for the policy, if available. This is useful if the             terms
             of the policy is made available online at a resolvable URL.
           title: Policy Url
           type: string
@@ -441,19 +465,23 @@ components:
       title: DataAccessPolicy
       type: object
     DataUseCondition:
-      description: Data Use Condition represents the use conditions associated with
-        a Dataset. A permission field can have one or more terms that collectively
-        defines the data use condition. The modifier determines the interpretation
-        of the use permission(s).
+      description: 'Data Use Condition represents the use conditions associated with
+        a Dataset.
+
+        A permission field can have one or more terms that collectively defines the
+
+        data use condition. The modifier determines the interpretation of the
+
+        use permission(s).'
       properties:
         modifier:
-          description: Modifier for Data use permission. Preferable descendants of
-            'DUO:0000017 data use modifier'
+          description: Modifier for Data use permission. Preferable descendants of             'DUO:0000017
+            data use modifier'
           title: Modifier
           type: string
         permission:
-          description: Data use permission. Typically one or more terms from DUO.
-            Preferably descendants of 'DUO:0000001 data use permission'.
+          description: Data use permission. Typically one or more terms from DUO.             Preferably
+            descendants of 'DUO:0000001 data use permission'.
           title: Permission
           type: string
       title: DataUseCondition
@@ -462,8 +490,8 @@ components:
       description: A Dataset is a collection of Files that is prepared for distribution.
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         creation_date:
@@ -482,7 +510,8 @@ components:
           - items:
               $ref: '#/components/schemas/Analysis'
             type: array
-          description: One or more Analysis entities that are referenced by this Dataset.
+          description: One or more Analysis entities that are referenced by             this
+            Dataset.
           title: Has Analysis
         has_experiment:
           anyOf:
@@ -492,7 +521,7 @@ components:
           - items:
               $ref: '#/components/schemas/Experiment'
             type: array
-          description: One or more Experiment entities that are referenced by this
+          description: One or more Experiment entities that are referenced by             this
             Dataset.
           title: Has Experiment
         has_file:
@@ -503,7 +532,7 @@ components:
           - items:
               $ref: '#/components/schemas/File'
             type: array
-          description: One or more File entities that collectively are part of this
+          description: One or more File entities that collectively are part of             this
             Dataset.
           title: Has File
         has_publication:
@@ -551,8 +580,10 @@ components:
       title: Dataset
       type: object
     Disease:
-      description: A disease is a disposition to undergo pathological processes that
-        exists in an organism because of one or more disorders in that organism.
+      description: 'A disease is a disposition to undergo pathological processes that
+        exists in an
+
+        organism because of one or more disorders in that organism.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -583,18 +614,21 @@ components:
       title: Disease
       type: object
     Experiment:
-      description: An experiment is an investigation that consists of a coordinated
-        set of actions and observations designed to generate data with the goal of
-        verifying, falsifying, or establishing the validity of a hypothesis.
+      description: 'An experiment is an investigation that consists of a coordinated
+        set of actions
+
+        and observations designed to generate data with the goal of verifying, falsifying,
+
+        or establishing the validity of a hypothesis.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         biological_replicates:
-          description: A biological replicate is a replicate role that consists of  independent
-            biological replicates made from different individual biosamples.
+          description: A biological replicate is a replicate role that consists of             independent
+            biological replicates made from different             individual biosamples.
           title: Biological Replicates
           type: string
         creation_date:
@@ -606,7 +640,7 @@ components:
           title: Description
           type: string
         experimental_replicates:
-          description: The replicate number of the assay, i.e. the numeric iteration  for
+          description: The replicate number of the assay, i.e. the numeric iteration             for
             the assay that was repeated.
           title: Experimental Replicates
           type: string
@@ -618,7 +652,7 @@ components:
           - items:
               $ref: '#/components/schemas/ExperimentProcess'
             type: array
-          description: One or more Experiment Processes entities associated with this
+          description: One or more Experiment Processes entities associated with             this
             Experiment.
           title: Has Experiment Process
         has_file:
@@ -629,8 +663,8 @@ components:
           - items:
               $ref: '#/components/schemas/File'
             type: array
-          description: One or more Files entities that are generated as output of
-            this Experiment.
+          description: One or more Files entities that are generated as output of             this
+            Experiment.
           title: Has File
         has_sample:
           anyOf:
@@ -655,9 +689,9 @@ components:
           title: Id
           type: string
         technical_replicates:
-          description: A technical replicate is a replicate role where the same BioSample
-            is use e.g.  the same pool of RNA used to assess technical (as opposed
-            to biological)  variation within an experiment.
+          description: A technical replicate is a replicate role where the same             BioSample
+            is use e.g.  the same pool of RNA used to assess technical             (as
+            opposed to biological)  variation within an experiment.
           title: Technical Replicates
           type: string
         title:
@@ -677,9 +711,12 @@ components:
       title: Experiment
       type: object
     ExperimentProcess:
-      description: An Experiment Process is a process that describes how a Sample
-        is transformed to a File via an assay. The Experiment Process also keeps track
-        of the Protocol used and the Agent that is running the experiment.
+      description: 'An Experiment Process is a process that describes how a Sample
+        is transformed to
+
+        a File via an assay. The Experiment Process also keeps track of the Protocol
+
+        used and the Agent that is running the experiment.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -689,7 +726,7 @@ components:
           anyOf:
           - type: string
           - $ref: '#/components/schemas/Agent'
-          description: The Agent - a software, institution, or human - that is executing
+          description: The Agent - a software, institution, or human - that is             executing
             or responsible for executing the Experiment Process.
           title: Has Agent
         has_input:
@@ -715,10 +752,10 @@ components:
           title: Id
           type: string
         title:
-          description: 'A descriptive title that explains the step(s) involved in
-            performing the experiment leading up to the sequencing of the sample and
-            generation of raw data from the instrument. (eg: Sample extraction ->
-            Target Enrichment) '
+          description: 'A descriptive title that explains the step(s) involved in             performing
+            the experiment leading up to the sequencing of the sample             and
+            generation of raw data from the instrument.             (eg: Sample extraction
+            -> Target Enrichment) '
           title: Title
           type: string
         update_date:
@@ -734,24 +771,28 @@ components:
       title: ExperimentProcess
       type: object
     File:
+      description: 'A file represents a data entity that has been generated by a planned
+        process or
+
+        a data transformation activity.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         category:
           description: 'The category for this file: Whole Genome Sequencing, Whole
-            Exome Sequencing, etc.'
+            Exome             Sequencing, etc.'
           title: Category
           type: string
         checksum:
-          description: A computed value which depends on the contents of a block of
-            data and which is transmitted or  stored along with the data in order
-            to detect corruption of the data.  The receiving system recomputes the
-            checksum based upon the received data and compares this  value with the
-            one sent with the data. If the two values are the same, the receiver has
-            some confidence  that the data was received correctly.
+          description: A computed value which depends on the contents of a block of             data
+            and which is transmitted or  stored along with the data in order             to
+            detect corruption of the data.  The receiving system recomputes the             checksum
+            based upon the received data and compares this  value with the             one
+            sent with the data. If the two values are the same, the receiver has             some
+            confidence  that the data was received correctly.
           title: Checksum
           type: string
         creation_date:
@@ -803,8 +844,8 @@ components:
       description: An Individual is a Person who is participating in a Study.
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         additional_name:
@@ -816,7 +857,8 @@ components:
           title: Age
           type: integer
         ancestry:
-          description: A person's descent or lineage, from a person or from a population.
+          description: A person's descent or lineage, from a person or             from
+            a population.
           title: Ancestry
           type: string
         creation_date:
@@ -824,7 +866,7 @@ components:
           title: Creation Date
           type: string
         ethnicity:
-          description: A social group characterized by a distinctive social and cultural
+          description: A social group characterized by a distinctive social and             cultural
             tradition  that is maintained from generation to generation.
           title: Ethnicity
           type: string
@@ -833,15 +875,15 @@ components:
           title: Family Name
           type: string
         gender:
-          description: Identification as male/masculine, female/feminine or something
-            else,  and association with a (social) role or set of behavioral and cultural
-            traits.
+          description: Identification as male/masculine, female/feminine or             something
+            else,  and association with a (social) role or set of             behavioral
+            and cultural traits.
           title: Gender
           type: string
         geographical_region:
-          description: The geographical region where the Individual is located. Any
-            demarcated area of the Earth; may be determined by both natural and human
-            boundaries.
+          description: The geographical region where the Individual is located.             Any
+            demarcated area of the Earth; may be determined by both natural             and
+            human boundaries.
           title: Geographical Region
           type: string
         given_name:
@@ -866,10 +908,10 @@ components:
           - items:
               $ref: '#/components/schemas/Disease'
             type: array
-          description: The Disease entity that is associated with this Biospecimen
-            at the time of retrieval from the organism. Typically, a concept from
-            Mondo Disease Ontology. For example, 'MONDO:0003742' indicates that the
-            Individual - from which the Biospecimen was extracted from - suffers from
+          description: The Disease entity that is associated with this Biospecimen             at
+            the time of retrieval from the organism. Typically, a concept from             Mondo
+            Disease Ontology. For example, 'MONDO:0003742' indicates that             the
+            Individual - from which the Biospecimen was extracted from - suffers             from
             'Heart Fibrosarcoma'.
           title: Has Disease
         has_parent:
@@ -890,11 +932,11 @@ components:
           - items:
               $ref: '#/components/schemas/PhenotypicFeature'
             type: array
-          description: The Phenotypic Feature entity that is associated with this
-            Biospecimen at the time of retrieval from the organism. Typically, a concept
-            from Human Phenotype Ontology. For example, 'HP:0100244' indicates that
-            the Individual - from which the Biospecimen was extracted from - exhibits
-            'Fibrosarcoma' as one of its phenotype.
+          description: The Phenotypic Feature entity that is associated with this             Biospecimen
+            at the time of retrieval from the organism. Typically, a             concept
+            from Human Phenotype Ontology. For example, 'HP:0100244'             indicates
+            that the Individual - from which the Biospecimen was             extracted
+            from - exhibits 'Fibrosarcoma' as one of its phenotype.
           title: Has Phenotypic Feature
         id:
           description: An identifier that uniquely represents an entity.
@@ -903,8 +945,8 @@ components:
         sex:
           allOf:
           - $ref: '#/components/schemas/BiologicalSexEnum'
-          description: The assemblage of physical properties or qualities by which
-            male is distinguished from female;  the physical difference between male
+          description: The assemblage of physical properties or qualities by which             male
+            is distinguished from female;  the physical difference between             male
             and female; the distinguishing peculiarity of male or female.
         update_date:
           description: Timestamp (in ISO 8601 format) when the entity was updated.
@@ -974,9 +1016,12 @@ components:
       title: Member
       type: object
     PhenotypicFeature:
-      description: The observable form taken by some character (or group of characters)
-        in an individual or an organism, excluding pathology and disease. The detectable
-        outward manifestations of a specific genotype.
+      description: 'The observable form taken by some character (or group of characters)
+        in an
+
+        individual or an organism, excluding pathology and disease. The detectable
+
+        outward manifestations of a specific genotype.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -1007,12 +1052,14 @@ components:
       title: PhenotypicFeature
       type: object
     Project:
-      description: Any specifically defined piece of work that is undertaken or attempted
-        to meet a single requirement.
+      description: 'Any specifically defined piece of work that is undertaken or attempted
+        to meet
+
+        a single requirement.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         creation_date:
@@ -1021,12 +1068,12 @@ components:
           type: string
         description:
           description: 'Short textual description of the project   (Some information
-            on the protocol, sample used and collected etc)  '
+            on             the protocol, sample used and collected etc)  '
           title: Description
           type: string
         has_attribute:
-          description: 'Custom attributes for the Project  (eg: Cancer - Colon cancer,
-            prostrate cancer, blood cancer etc)'
+          description: 'Custom attributes for the Project  (eg: Cancer - Colon cancer,             prostrate
+            cancer, blood cancer etc)'
           items:
             $ref: '#/components/schemas/Attribute'
           title: Has Attribute
@@ -1052,10 +1099,13 @@ components:
       title: Project
       type: object
     Protocol:
-      description: A plan specification which has sufficient level of detail and quantitative
+      description: 'A plan specification which has sufficient level of detail and
+        quantitative
+
         information to communicate it between investigation agents, so that different
+
         investigation agents will reliably be able to independently reproduce the
-        process.
+        process.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -1088,8 +1138,8 @@ components:
           title: Url
           type: string
         xref:
-          description: 'One or more cross-references for this Protocol.  (Eg: manufacturer
-            protocol, protocol from publication etc )'
+          description: 'One or more cross-references for this Protocol.             (Eg:
+            manufacturer protocol, protocol from publication etc )'
           items:
             type: string
           title: Xref
@@ -1097,13 +1147,16 @@ components:
       title: Protocol
       type: object
     Publication:
-      description: The Publication entity represents a publication. While a publication
-        can be any article that is published, the minimum expectation is that the
-        publication has a valid DOI.
+      description: 'The Publication entity represents a publication. While a publication
+        can be any
+
+        article that is published, the minimum expectation is that the publication
+
+        has a valid DOI.'
       properties:
         abstract:
-          description: The study abstract that describes the goals.  Can also hold
-            abstract from a publication related to this study
+          description: The study abstract that describes the goals.  Can also hold             abstract
+            from a publication related to this study
           title: Abstract
           type: string
         creation_date:
@@ -1132,12 +1185,12 @@ components:
       type: object
     Sample:
       description: A sample is a limited quantity of something to be used for testing,
-        analysis, inspection, investigation, demonstration, or trial use. A sample
-        is prepared from a Biospecimen (isolate or tissue).
+        analysis,         inspection, investigation, demonstration, or trial use.
+        A sample is prepared         from a Biospecimen (isolate or tissue).
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         creation_date:
@@ -1145,9 +1198,9 @@ components:
           title: Creation Date
           type: string
         description:
-          description: Short textual description of the sample   (How the sample was
-            collected, sample source,  protocol followed for processing the sample
-            etc).
+          description: Short textual description of the sample             (How the
+            sample was collected, sample source,  protocol followed             for
+            processing the sample etc).
           title: Description
           type: string
         has_biospecimen:
@@ -1171,16 +1224,17 @@ components:
           title: Isolation
           type: string
         name:
-          description: Name of the sample (eg:GHGAS_Blood_Sample1 or GHGAS_PBMC_RNAseq_S1).
+          description: Name of the sample (eg:GHGAS_Blood_Sample1 or             GHGAS_PBMC_RNAseq_S1).
           title: Name
           type: string
         storage:
-          description: Methods by which sample is stored  (e.g. frozen in liquid nitrogen).
+          description: Methods by which sample is stored             (e.g. frozen
+            in liquid nitrogen).
           title: Storage
           type: string
         tissue:
-          description: An anatomical structure consisting of similarly specialized
-            cells and intercellular matrix,  aggregated according to genetically determined
+          description: An anatomical structure consisting of similarly specialized             cells
+            and intercellular matrix,  aggregated according to genetically             determined
             spatial relationships, performing a specific function.
           title: Tissue
           type: string
@@ -1189,13 +1243,14 @@ components:
           title: Update Date
           type: string
         vital_status_at_sampling:
-          description: Vital Status of an Individual at the point of sampling (eg:'Alive',
+          description: Vital Status of an Individual at the point of sampling             (eg:'Alive',
             'Deceased').
           title: Vital Status At Sampling
           type: string
         xref:
-          description: One or more cross-references for this Sample. For example,
-            this Sample may have an EBI BioSamples accession or an EGA Sample accession.
+          description: One or more cross-references for this Sample. For example,             this
+            Sample may have an EBI BioSamples accession or an             EGA Sample
+            accession.
           items:
             type: string
           title: Xref
@@ -1213,13 +1268,16 @@ components:
       title: StatusEnum
       type: string
     Study:
-      description: Studies are experimental investigations of a particular phenomenon.
-        It involves a detailed examination and analysis of a subject to learn more
-        about the phenomenon being studied.
+      description: 'Studies are experimental investigations of a particular phenomenon.
+        It involves
+
+        a detailed examination and analysis of a subject to learn more about the
+
+        phenomenon being studied.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose
-            of referring to that entity in a global scope.
+          description: A unique identifier assigned to an entity for the sole purpose             of
+            referring to that entity in a global scope.
           title: Accession
           type: string
         affiliation:
@@ -1234,7 +1292,7 @@ components:
           type: string
         description:
           description: A detailed description (abstract) that describes the goals
-            of this Study.
+            of             this Study.
           title: Description
           type: string
         has_analysis:
@@ -1248,7 +1306,7 @@ components:
           description: One or more Analysis entities associated with this Study.
           title: Has Analysis
         has_attribute:
-          description: 'Custom key/value pairs that further characterizes the Study.  (e.g.:
+          description: 'Custom key/value pairs that further characterizes the Study.             (e.g.:
             approaches - single-cell, bulk etc)'
           items:
             $ref: '#/components/schemas/Attribute'
@@ -1285,8 +1343,8 @@ components:
           title: Id
           type: string
         release_date:
-          description: The timestamp (in ISO 8601 format) when the entity was released
-            for public consumption.
+          description: The timestamp (in ISO 8601 format) when the entity was released             for
+            public consumption.
           title: Release Date
           type: string
         status:
@@ -1310,11 +1368,17 @@ components:
       title: Study
       type: object
     Technology:
-      description: A Technology is an abstraction that represents the instrument used
-        for an assay. The Technology entity captures instrument-specific attributes
-        that are relevant for an Experiment entity. The Technology entity may be further
-        characterized by its children where each child has fields that are relevant
-        to that particular technology.
+      description: 'A Technology is an abstraction that represents the instrument
+        used for an assay.
+
+        The Technology entity captures instrument-specific attributes that are relevant
+
+        for an Experiment entity. The Technology entity may be further characterized
+        by
+
+        its children where each child has fields that are relevant to that particular
+
+        technology.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -1364,11 +1428,16 @@ components:
       title: VitalStatusEnum
       type: string
     Workflow:
-      description: A Workflow is an abstraction that represents the workflow used
-        to perform an analysis. The Workflow entity captures workflow-specific attributes
-        that are relevant for an Analysis entity. The Workflow entity may be further
-        characterized by its children where each child has fields that are relevant
-        to that particular workflow.
+      description: 'A Workflow is an abstraction that represents the workflow used
+        to perform an
+
+        analysis. The Workflow entity captures workflow-specific attributes that are
+
+        relevant for an Analysis entity. The Workflow entity may be further characterized
+
+        by its children where each child has fields that are relevant to that
+
+        particular workflow.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -1405,19 +1474,26 @@ components:
       title: WorkflowParameter
       type: object
     WorkflowStep:
-      description: A Workflow Step represents each individual step performed in a
-        Workflow. If the Workflow is a single-step workflow then the Workflow has
-        just one Workflow Step entity. If the Workflow is a multi-step workflow then
-        the Workflow has a Workflow Step entity for each step. All Workflow step specific
-        attributes like parameters, and metadata about execution environment are captured
-        by the Workflow Step entity.
+      description: 'A Workflow Step represents each individual step performed in a
+        Workflow.
+
+        If the Workflow is a single-step workflow then the Workflow has just one
+
+        Workflow Step entity. If the Workflow is a multi-step workflow then the Workflow
+
+        has a Workflow Step entity for each step. All Workflow step specific attributes
+
+        like parameters, and metadata about execution environment are captured by
+        the
+
+        Workflow Step entity.'
       properties:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
           type: string
         has_parameter:
-          description: One or more parameters that are associated with this Workflow
+          description: One or more parameters that are associated with this             Workflow
             Step.
           items:
             $ref: '#/components/schemas/WorkflowParameter'
