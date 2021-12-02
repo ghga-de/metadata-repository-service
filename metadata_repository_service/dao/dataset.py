@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Convenience methods for adding, updating, and retrieving Dataset records
+Convenience methods for retrieving Dataset records
 """
 
 from typing import List
@@ -21,6 +21,7 @@ from typing import List
 from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.config import get_config
+from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Dataset
 
@@ -29,27 +30,28 @@ COLLECTION_NAME = "Dataset"
 config = get_config()
 
 
-async def retrieve_datasets() -> List[Dataset]:
+async def retrieve_datasets() -> List[str]:
     """
-    Retrieve a list of Dataset objects from metadata store.
+    Retrieve a list of Dataset object IDs from metadata store.
 
     Returns:
-        A list of Dataset objects.
+        A list of Dataset object IDs.
 
     """
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     datasets = await collection.find().to_list(None)  # type: ignore
     client.close()
-    return datasets
+    return [x["id"] for x in datasets]
 
 
-async def get_dataset(dataset_id: str) -> Dataset:
+async def get_dataset(dataset_id: str, embedded: bool = False) -> Dataset:
     """
     Given a Datset ID, get the Dataset object from metadata store.
 
     Args:
         dataset_id: The Dataset ID
+        embedded: Whether or not to embed references. ``False``, by default.
 
     Returns:
         The Dataset object
@@ -63,5 +65,7 @@ async def get_dataset(dataset_id: str) -> Dataset:
             status_code=404,
             detail=f"{Dataset.__name__} with id '{dataset_id}' not found",
         )
+    if embedded:
+        dataset = await embed_references(dataset)
     client.close()
     return dataset
