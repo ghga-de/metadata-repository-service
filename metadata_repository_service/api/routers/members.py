@@ -1,0 +1,46 @@
+# Copyright 2021 Universität Tübingen, DKFZ and EMBL
+# for the German Human Genome-Phenome Archive (GHGA)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"Routes for retrieving Members"
+
+from typing import List
+
+from fastapi import APIRouter
+
+from metadata_repository_service.dao.member import get_member, retrieve_members
+from metadata_repository_service.models import Member
+
+member_router = APIRouter()
+
+
+@member_router.get("/members", response_model=List[str], summary="Get all Member IDs")
+async def get_all_members():
+    """
+    Retrieve a list of Member IDs from the metadata store.
+    """
+    members = await retrieve_members()
+    return members
+
+
+@member_router.get(
+    "/members/{member_id}",
+    response_model=Member,
+    summary="Get a Member",
+)
+async def get_members(member_id: str, embedded: bool = False):
+    """
+    Given a Member ID, get the Member record from the metadata store.
+    """
+    member = await get_member(member_id, embedded)
+    return member

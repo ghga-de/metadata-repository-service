@@ -12,24 +12,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"Routes for retrieving datasets"
+"Routes for retrieving Datasets"
 
 from typing import List
 
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.datasets import get_dataset, retrieve_datasets
+from metadata_repository_service.dao.dataset import get_dataset, retrieve_datasets
 from metadata_repository_service.models import Dataset
 
 dataset_router = APIRouter()
 
 
 @dataset_router.get(
-    "/datasets", response_model=List[Dataset], summary="Get all Datasets"
+    "/datasets", response_model=List[str], summary="Get all Dataset IDs"
 )
 async def get_all_datasets():
     """
-    Retrieve a list of Dataset records from the metadata store.
+    Retrieve a list of Dataset IDs from the metadata store.
     """
     datasets = await retrieve_datasets()
     return datasets
@@ -42,5 +42,5 @@ async def get_datasets(dataset_id: str, embedded: bool = False):
     """
     Given a Dataset ID, get the Dataset record from the metadata store.
     """
-    dataset = await get_dataset(dataset_id)
+    dataset = await get_dataset(dataset_id, embedded)
     return dataset
