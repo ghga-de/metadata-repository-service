@@ -28,4 +28,4 @@ def test_index():
     response = client.get("/")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.text == '"Index of the GHGA Metadata Service"'
+    assert response.text == '"Index of the Metadata Repository Service"'

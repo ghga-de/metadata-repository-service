@@ -20,7 +20,6 @@ Additional endpoints might be structured in dedicated modules
 """
 
 from fastapi import FastAPI
-from starlette.responses import RedirectResponse
 
 from metadata_repository_service.api.routers.analyses import analysis_router
 from metadata_repository_service.api.routers.analysis_processes import (
@@ -76,4 +75,4 @@ async def index():
     Index of the Metadata Repository Service that
     redirects to the API documentation.
     """
-    return RedirectResponse("/docs")
+    return "Index of the Metadata Repository Service"
