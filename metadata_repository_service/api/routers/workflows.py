@@ -14,25 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Workflows"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.workflow import get_workflow, retrieve_workflows
+from metadata_repository_service.dao.workflow import get_workflow
 from metadata_repository_service.models import Workflow
 
 workflow_router = APIRouter()
-
-
-@workflow_router.get(
-    "/workflows", response_model=List[str], summary="Get all Workflow IDs"
-)
-async def get_all_workflows():
-    """
-    Retrieve a list of Workflow IDs from the metadata store.
-    """
-    workflows = await retrieve_workflows()
-    return workflows
 
 
 @workflow_router.get(

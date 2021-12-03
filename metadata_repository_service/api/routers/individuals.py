@@ -14,28 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Individuals"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.individual import (
-    get_individual,
-    retrieve_individuals,
-)
+from metadata_repository_service.dao.individual import get_individual
 from metadata_repository_service.models import Individual
 
 individual_router = APIRouter()
-
-
-@individual_router.get(
-    "/individuals", response_model=List[str], summary="Get all Individual IDs"
-)
-async def get_all_individuals():
-    """
-    Retrieve a list of Individual IDs from the metadata store.
-    """
-    individuals = await retrieve_individuals()
-    return individuals
 
 
 @individual_router.get(

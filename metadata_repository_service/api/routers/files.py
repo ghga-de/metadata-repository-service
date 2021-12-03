@@ -14,23 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Files"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.file import get_file, retrieve_files
+from metadata_repository_service.dao.file import get_file
 from metadata_repository_service.models import File
 
 file_router = APIRouter()
-
-
-@file_router.get("/files", response_model=List[str], summary="Get all File IDs")
-async def get_all_files():
-    """
-    Retrieve a list of File IDs from the metadata store.
-    """
-    files = await retrieve_files()
-    return files
 
 
 @file_router.get("/files/{file_id}", response_model=File, summary="Get a File")

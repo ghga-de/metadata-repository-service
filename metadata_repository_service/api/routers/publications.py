@@ -14,28 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Publications"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.publication import (
-    get_publication,
-    retrieve_publications,
-)
+from metadata_repository_service.dao.publication import get_publication
 from metadata_repository_service.models import Publication
 
 publication_router = APIRouter()
-
-
-@publication_router.get(
-    "/publications", response_model=List[str], summary="Get all Publication IDs"
-)
-async def get_all_publications():
-    """
-    Retrieve a list of Publication IDs from the metadata store.
-    """
-    publications = await retrieve_publications()
-    return publications
 
 
 @publication_router.get(

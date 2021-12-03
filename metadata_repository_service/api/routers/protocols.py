@@ -14,25 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Protocols"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.protocol import get_protocol, retrieve_protocols
+from metadata_repository_service.dao.protocol import get_protocol
 from metadata_repository_service.models import Protocol
 
 protocol_router = APIRouter()
-
-
-@protocol_router.get(
-    "/protocols", response_model=List[str], summary="Get all Protocol IDs"
-)
-async def get_all_protocols():
-    """
-    Retrieve a list of Protocol IDs from the metadata store.
-    """
-    protocols = await retrieve_protocols()
-    return protocols
 
 
 @protocol_router.get(

@@ -14,28 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Experiments"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.experiment import (
-    get_experiment,
-    retrieve_experiments,
-)
+from metadata_repository_service.dao.experiment import get_experiment
 from metadata_repository_service.models import Experiment
 
 experiment_router = APIRouter()
-
-
-@experiment_router.get(
-    "/experiments", response_model=List[str], summary="Get all Experiment IDs"
-)
-async def get_all_experiments():
-    """
-    Retrieve a list of Experiment IDs from the metadata store.
-    """
-    experiments = await retrieve_experiments()
-    return experiments
 
 
 @experiment_router.get(

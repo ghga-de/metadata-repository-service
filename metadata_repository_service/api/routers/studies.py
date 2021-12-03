@@ -14,23 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Studies"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.study import get_study, retrieve_studies
+from metadata_repository_service.dao.study import get_study
 from metadata_repository_service.models import Study
 
 study_router = APIRouter()
-
-
-@study_router.get("/studies", response_model=List[str], summary="Get all Study IDs")
-async def get_all_studies():
-    """
-    Retrieve a list of Study IDs from the metadata store.
-    """
-    studies = await retrieve_studies()
-    return studies
 
 
 @study_router.get(

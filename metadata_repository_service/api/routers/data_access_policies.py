@@ -14,30 +14,12 @@
 # limitations under the License.
 "Routes for retrieving DataAccessPolicys"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.data_access_policy import (
-    get_data_access_policy,
-    retrieve_data_access_policies,
-)
+from metadata_repository_service.dao.data_access_policy import get_data_access_policy
 from metadata_repository_service.models import DataAccessPolicy
 
 data_access_policy_router = APIRouter()
-
-
-@data_access_policy_router.get(
-    "/data_access_policies",
-    response_model=List[str],
-    summary="Get all DataAccessPolicy IDs",
-)
-async def get_all_data_access_policies():
-    """
-    Retrieve a list of DataAccessPolicy IDs from the metadata store.
-    """
-    data_access_policies = await retrieve_data_access_policies()
-    return data_access_policies
 
 
 @data_access_policy_router.get(

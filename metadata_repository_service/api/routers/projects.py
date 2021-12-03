@@ -14,25 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Projects"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.project import get_project, retrieve_projects
+from metadata_repository_service.dao.project import get_project
 from metadata_repository_service.models import Project
 
 project_router = APIRouter()
-
-
-@project_router.get(
-    "/projects", response_model=List[str], summary="Get all Project IDs"
-)
-async def get_all_projects():
-    """
-    Retrieve a list of Project IDs from the metadata store.
-    """
-    projects = await retrieve_projects()
-    return projects
 
 
 @project_router.get(

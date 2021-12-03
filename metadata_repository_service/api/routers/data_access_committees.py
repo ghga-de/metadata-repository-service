@@ -14,30 +14,14 @@
 # limitations under the License.
 "Routes for retrieving DataAccessCommittees"
 
-from typing import List
-
 from fastapi import APIRouter
 
 from metadata_repository_service.dao.data_access_committee import (
     get_data_access_committee,
-    retrieve_data_access_committees,
 )
 from metadata_repository_service.models import DataAccessCommittee
 
 data_access_committee_router = APIRouter()
-
-
-@data_access_committee_router.get(
-    "/data_access_committees",
-    response_model=List[str],
-    summary="Get all DataAccessCommittee IDs",
-)
-async def get_all_data_access_committees():
-    """
-    Retrieve a list of DataAccessCommittee IDs from the metadata store.
-    """
-    data_access_committees = await retrieve_data_access_committees()
-    return data_access_committees
 
 
 @data_access_committee_router.get(

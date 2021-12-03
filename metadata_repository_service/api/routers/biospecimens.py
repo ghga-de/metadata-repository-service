@@ -14,28 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Biospecimens"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.biospecimen import (
-    get_biospecimen,
-    retrieve_biospecimens,
-)
+from metadata_repository_service.dao.biospecimen import get_biospecimen
 from metadata_repository_service.models import Biospecimen
 
 biospecimen_router = APIRouter()
-
-
-@biospecimen_router.get(
-    "/biospecimens", response_model=List[str], summary="Get all Biospecimen IDs"
-)
-async def get_all_biospecimens():
-    """
-    Retrieve a list of Biospecimen IDs from the metadata store.
-    """
-    biospecimens = await retrieve_biospecimens()
-    return biospecimens
 
 
 @biospecimen_router.get(

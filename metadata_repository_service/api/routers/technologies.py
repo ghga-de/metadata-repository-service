@@ -14,28 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Studies"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.technology import (
-    get_technology,
-    retrieve_technologies,
-)
+from metadata_repository_service.dao.technology import get_technology
 from metadata_repository_service.models import Technology
 
 technology_router = APIRouter()
-
-
-@technology_router.get(
-    "/technologies", response_model=List[str], summary="Get all Study IDs"
-)
-async def get_all_technologies():
-    """
-    Retrieve a list of Technology IDs from the metadata store.
-    """
-    technologies = await retrieve_technologies()
-    return technologies
 
 
 @technology_router.get(

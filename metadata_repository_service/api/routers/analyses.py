@@ -14,25 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Analyses"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.analysis import get_analysis, retrieve_analyses
+from metadata_repository_service.dao.analysis import get_analysis
 from metadata_repository_service.models import Analysis
 
 analysis_router = APIRouter()
-
-
-@analysis_router.get(
-    "/analyses", response_model=List[str], summary="Get all Analysis IDs"
-)
-async def get_all_analyses():
-    """
-    Retrieve a list of Analysis IDs from the metadata store.
-    """
-    analyses = await retrieve_analyses()
-    return analyses
 
 
 @analysis_router.get(

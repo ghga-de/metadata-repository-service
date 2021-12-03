@@ -14,23 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Samples"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.sample import get_sample, retrieve_samples
+from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.models import Sample
 
 sample_router = APIRouter()
-
-
-@sample_router.get("/samples", response_model=List[str], summary="Get all Sample IDs")
-async def get_all_samples():
-    """
-    Retrieve a list of Sample IDs from the metadata store.
-    """
-    samples = await retrieve_samples()
-    return samples
 
 
 @sample_router.get(

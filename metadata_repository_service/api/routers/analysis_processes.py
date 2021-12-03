@@ -14,30 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Analysis Processes"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.analysis_process import (
-    get_analysis_process,
-    retrieve_analysis_processes,
-)
+from metadata_repository_service.dao.analysis_process import get_analysis_process
 from metadata_repository_service.models import AnalysisProcess
 
 analysis_process_router = APIRouter()
-
-
-@analysis_process_router.get(
-    "/analysis_processes",
-    response_model=List[AnalysisProcess],
-    summary="Get all AnalysisProcess IDs",
-)
-async def get_all_analysis_processes():
-    """
-    Retrieve a list of AnalysisProcess IDs from the metadata store.
-    """
-    analysis_processes = await retrieve_analysis_processes()
-    return analysis_processes
 
 
 @analysis_process_router.get(

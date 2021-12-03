@@ -14,23 +14,12 @@
 # limitations under the License.
 "Routes for retrieving Members"
 
-from typing import List
-
 from fastapi import APIRouter
 
-from metadata_repository_service.dao.member import get_member, retrieve_members
+from metadata_repository_service.dao.member import get_member
 from metadata_repository_service.models import Member
 
 member_router = APIRouter()
-
-
-@member_router.get("/members", response_model=List[str], summary="Get all Member IDs")
-async def get_all_members():
-    """
-    Retrieve a list of Member IDs from the metadata store.
-    """
-    members = await retrieve_members()
-    return members
 
 
 @member_router.get(
