@@ -18,19 +18,20 @@ Convenience methods for retrieving Technology records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Technology
 
 COLLECTION_NAME = "Technology"
 
-config = get_config()
 
-
-async def retrieve_technologies() -> List[str]:
+async def retrieve_technologies(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Technology object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Technology object IDs.
@@ -43,13 +44,16 @@ async def retrieve_technologies() -> List[str]:
     return [x["id"] for x in technologies]
 
 
-async def get_technology(technology_id: str, embedded: bool = False) -> Technology:
+async def get_technology(
+    technology_id: str, embedded: bool = False, config: Config = get_config()
+) -> Technology:
     """
     Given an Technology ID, get the Technology object from metadata store.
 
     Args:
         technology_id: The Technology ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Technology object

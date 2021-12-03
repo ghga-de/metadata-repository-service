@@ -18,19 +18,20 @@ Convenience methods for retrieving Publication records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Publication
 
 COLLECTION_NAME = "Publication"
 
-config = get_config()
 
-
-async def retrieve_publications() -> List[str]:
+async def retrieve_publications(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Publication object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Publication object IDs.
@@ -43,13 +44,16 @@ async def retrieve_publications() -> List[str]:
     return [x["id"] for x in publications]
 
 
-async def get_publication(publication_id: str, embedded: bool = False) -> Publication:
+async def get_publication(
+    publication_id: str, embedded: bool = False, config: Config = get_config()
+) -> Publication:
     """
     Given a Datset ID, get the Publication object from metadata store.
 
     Args:
         publication_id: The Publication ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Publication object

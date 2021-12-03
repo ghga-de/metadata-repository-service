@@ -18,22 +18,24 @@ Convenience methods for retrieving Individual records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Individual
 
 COLLECTION_NAME = "Individual"
 
-config = get_config()
 
-
-async def retrieve_individuals() -> List[str]:
+async def retrieve_individuals(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Individual object IDs from metadata store.
 
+    Args:
+        config: Rumtime configuration
+
     Returns:
         A list of Individual object IDs.
+        config: Rumtime configuration
 
     """
     client = await get_db_client()
@@ -43,13 +45,16 @@ async def retrieve_individuals() -> List[str]:
     return [x["id"] for x in individuals]
 
 
-async def get_individual(individual_id: str, embedded: bool = False) -> Individual:
+async def get_individual(
+    individual_id: str, embedded: bool = False, config: Config = get_config()
+) -> Individual:
     """
     Given a Datset ID, get the Individual object from metadata store.
 
     Args:
         individual_id: The Individual ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Individual object

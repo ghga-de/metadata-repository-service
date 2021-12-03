@@ -18,19 +18,20 @@ Convenience methods for retrieving DataAccessPolicy records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import DataAccessPolicy
 
 COLLECTION_NAME = "DataAccessPolicy"
 
-config = get_config()
 
-
-async def retrieve_data_access_policies() -> List[str]:
+async def retrieve_data_access_policies(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of DataAccessPolicy object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of DataAccessPolicy object IDs.
@@ -44,7 +45,7 @@ async def retrieve_data_access_policies() -> List[str]:
 
 
 async def get_data_access_policy(
-    data_access_policy_id: str, embedded: bool = False
+    data_access_policy_id: str, embedded: bool = False, config: Config = get_config()
 ) -> DataAccessPolicy:
     """
     Given a Datset ID, get the DataAccessPolicy object from metadata store.
@@ -52,6 +53,7 @@ async def get_data_access_policy(
     Args:
         data_access_policy_id: The DataAccessPolicy ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The DataAccessPolicy object

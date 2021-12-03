@@ -18,19 +18,20 @@ Convenience methods for retrieving Project records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Project
 
 COLLECTION_NAME = "Project"
 
-config = get_config()
 
-
-async def retrieve_projects() -> List[str]:
+async def retrieve_projects(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Project object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Project object IDs.
@@ -43,13 +44,16 @@ async def retrieve_projects() -> List[str]:
     return [x["id"] for x in projects]
 
 
-async def get_project(project_id: str, embedded: bool = False) -> Project:
+async def get_project(
+    project_id: str, embedded: bool = False, config: Config = get_config()
+) -> Project:
     """
     Given a Datset ID, get the Project object from metadata store.
 
     Args:
         project_id: The Project ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Project object

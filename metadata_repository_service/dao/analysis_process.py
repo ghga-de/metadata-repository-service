@@ -18,19 +18,20 @@ Convenience methods for retrieving AnalysisProcess records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import AnalysisProcess
 
 COLLECTION_NAME = "AnalysisProcess"
 
-config = get_config()
 
-
-async def retrieve_analysis_processes() -> List[str]:
+async def retrieve_analysis_processes(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of AnalysisProcess objects from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of AnalysisProcess object IDs.
@@ -44,7 +45,7 @@ async def retrieve_analysis_processes() -> List[str]:
 
 
 async def get_analysis_process(
-    analysis_process_id: str, embedded: bool = True
+    analysis_process_id: str, embedded: bool = True, config: Config = get_config()
 ) -> AnalysisProcess:
     """
     Given a Datset ID, get the AnalysisProcess object from metadata store.
@@ -52,6 +53,7 @@ async def get_analysis_process(
     Args:
         analysis_process_id: The AnalysisProcess ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The AnalysisProcess object

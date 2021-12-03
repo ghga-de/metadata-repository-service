@@ -18,19 +18,20 @@ Convenience methods for retrieving Dataset records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Dataset
 
 COLLECTION_NAME = "Dataset"
 
-config = get_config()
 
-
-async def retrieve_datasets() -> List[str]:
+async def retrieve_datasets(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Dataset object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Dataset object IDs.
@@ -43,13 +44,16 @@ async def retrieve_datasets() -> List[str]:
     return [x["id"] for x in datasets]
 
 
-async def get_dataset(dataset_id: str, embedded: bool = False) -> Dataset:
+async def get_dataset(
+    dataset_id: str, embedded: bool = False, config: Config = get_config()
+) -> Dataset:
     """
     Given a Datset ID, get the Dataset object from metadata store.
 
     Args:
         dataset_id: The Dataset ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Dataset object

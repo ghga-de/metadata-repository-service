@@ -18,19 +18,20 @@ Convenience methods for retrieving Sample records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Sample
 
 COLLECTION_NAME = "Sample"
 
-config = get_config()
 
-
-async def retrieve_samples() -> List[str]:
+async def retrieve_samples(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Sample object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Sample object IDs.
@@ -43,13 +44,16 @@ async def retrieve_samples() -> List[str]:
     return [x["id"] for x in samples]
 
 
-async def get_sample(sample_id: str, embedded: bool = False) -> Sample:
+async def get_sample(
+    sample_id: str, embedded: bool = False, config: Config = get_config()
+) -> Sample:
     """
     Given a Datset ID, get the Sample object from metadata store.
 
     Args:
         sample_id: The Sample ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Sample object

@@ -18,19 +18,20 @@ Convenience methods for retrieving Biospecimen records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Biospecimen
 
 COLLECTION_NAME = "Biospecimen"
 
-config = get_config()
 
-
-async def retrieve_biospecimens() -> List[str]:
+async def retrieve_biospecimens(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Biospecimen object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Biospecimen object IDs.
@@ -43,13 +44,16 @@ async def retrieve_biospecimens() -> List[str]:
     return [x["id"] for x in biospecimens]
 
 
-async def get_biospecimen(biospecimen_id: str, embedded: bool = False) -> Biospecimen:
+async def get_biospecimen(
+    biospecimen_id: str, embedded: bool = False, config: Config = get_config()
+) -> Biospecimen:
     """
     Given a Datset ID, get the Biospecimen object from metadata store.
 
     Args:
         biospecimen_id: The Biospecimen ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Biospecimen object

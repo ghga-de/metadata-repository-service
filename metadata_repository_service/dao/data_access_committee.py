@@ -18,19 +18,20 @@ Convenience methods for retrieving DataAccessCommittee records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import DataAccessCommittee
 
 COLLECTION_NAME = "DataAccessCommittee"
 
-config = get_config()
 
-
-async def retrieve_data_access_committees() -> List[str]:
+async def retrieve_data_access_committees(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of DataAccessCommittee object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of DataAccessCommittee object IDs.
@@ -44,7 +45,7 @@ async def retrieve_data_access_committees() -> List[str]:
 
 
 async def get_data_access_committee(
-    data_access_committee_id: str, embedded: bool = False
+    data_access_committee_id: str, embedded: bool = False, config: Config = get_config()
 ) -> DataAccessCommittee:
     """
     Given a Datset ID, get the DataAccessCommittee object from metadata store.
@@ -52,6 +53,7 @@ async def get_data_access_committee(
     Args:
         data_access_committee_id: The DataAccessCommittee ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The DataAccessCommittee object

@@ -18,19 +18,20 @@ Convenience methods for retrieving ExperimentProcess records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import ExperimentProcess
 
 COLLECTION_NAME = "ExperimentProcess"
 
-config = get_config()
 
-
-async def retrieve_experiment_processes() -> List[str]:
+async def retrieve_experiment_processes(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of ExperimentProcess object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of ExperimentProcess object IDs.
@@ -44,7 +45,7 @@ async def retrieve_experiment_processes() -> List[str]:
 
 
 async def get_experiment_process(
-    experiment_process_id: str, embedded: bool = False
+    experiment_process_id: str, embedded: bool = False, config: Config = get_config()
 ) -> ExperimentProcess:
     """
     Given a Datset ID, get the ExperimentProcess object from metadata store.
@@ -52,6 +53,7 @@ async def get_experiment_process(
     Args:
         experiment_process_id: The ExperimentProcess ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The ExperimentProcess object

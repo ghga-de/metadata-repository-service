@@ -18,19 +18,20 @@ Convenience methods for retrieving Study records
 
 from typing import List
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Study
 
 COLLECTION_NAME = "Study"
 
-config = get_config()
 
-
-async def retrieve_studies() -> List[str]:
+async def retrieve_studies(config: Config = get_config()) -> List[str]:
     """
     Retrieve a list of Study object IDs from metadata store.
+
+    Args:
+        config: Rumtime configuration
 
     Returns:
         A list of Study object IDs.
@@ -43,13 +44,16 @@ async def retrieve_studies() -> List[str]:
     return [x["id"] for x in studies]
 
 
-async def get_study(study_id: str, embedded: bool = False) -> Study:
+async def get_study(
+    study_id: str, embedded: bool = False, config: Config = get_config()
+) -> Study:
     """
     Given a Datset ID, get the Study object from metadata store.
 
     Args:
         study_id: The Study ID
         embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
 
     Returns:
         The Study object
