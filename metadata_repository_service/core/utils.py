@@ -15,6 +15,7 @@
 """
 Core uilities for the functionality of Metadata Repository Service.
 """
+import copy
 import datetime
 import logging
 import uuid
@@ -84,27 +85,30 @@ async def embed_references(document: Dict) -> Dict:
         The denormalize/embedded document
 
     """
-    for field in document.keys():
+    parent_document = copy.deepcopy(document)
+    for field in parent_document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
             cname = field.split("_", 1)[1]
             if cname not in embedded_fields:
                 continue
             formatted_cname = stringcase.pascalcase(cname)
-            if isinstance(document[field], str):
-                referenced_doc = await _get_reference(document[field], formatted_cname)
+            if isinstance(parent_document[field], str):
+                referenced_doc = await _get_reference(
+                    parent_document[field], formatted_cname
+                )
                 if referenced_doc:
                     referenced_doc = await embed_references(referenced_doc)
-                    document[field] = referenced_doc
-            elif isinstance(document[field], (list, set, tuple)):
+                    parent_document[field] = referenced_doc
+            elif isinstance(parent_document[field], (list, set, tuple)):
                 docs = []
-                for ref in document[field]:
+                for ref in parent_document[field]:
                     referenced_doc = await _get_reference(ref, formatted_cname)
                     if referenced_doc:
                         referenced_doc = await embed_references(referenced_doc)
                         docs.append(referenced_doc)
                 if docs:
-                    document[field] = docs
-    return document
+                    parent_document[field] = docs
+    return parent_document
 
 
 async def get_timestamp() -> str:
