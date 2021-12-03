@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving DataAccessPolicys"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.data_access_policy import get_data_access_policy
 from metadata_repository_service.models import DataAccessPolicy
 
@@ -28,11 +29,17 @@ data_access_policy_router = APIRouter()
     response_model=DataAccessPolicy,
     summary="Get a DataAccessPolicy",
 )
-async def get_data_access_policies(data_access_policy_id: str, embedded: bool = False):
+async def get_data_access_policies(
+    data_access_policy_id: str,
+    embedded: bool = False,
+    config: Config = Depends(get_config),
+):
     """
     Given a DataAccessPolicy ID, get the DataAccessPolicy record from the metadata store.
     """
-    data_access_policy = await get_data_access_policy(data_access_policy_id, embedded)
+    data_access_policy = await get_data_access_policy(
+        data_access_policy_id, embedded, config
+    )
     if not data_access_policy:
         raise HTTPException(
             status_code=404,

@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Publications"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.publication import get_publication
 from metadata_repository_service.models import Publication
 
@@ -28,11 +29,13 @@ publication_router = APIRouter()
     response_model=Publication,
     summary="Get a Publication",
 )
-async def get_publications(publication_id: str, embedded: bool = False):
+async def get_publications(
+    publication_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given a Publication ID, get the Publication record from the metadata store.
     """
-    publication = await get_publication(publication_id, embedded)
+    publication = await get_publication(publication_id, embedded, config)
     if not publication:
         raise HTTPException(
             status_code=404,

@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Members"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.member import get_member
 from metadata_repository_service.models import Member
 
@@ -28,11 +29,13 @@ member_router = APIRouter()
     response_model=Member,
     summary="Get a Member",
 )
-async def get_members(member_id: str, embedded: bool = False):
+async def get_members(
+    member_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given a Member ID, get the Member record from the metadata store.
     """
-    member = await get_member(member_id, embedded)
+    member = await get_member(member_id, embedded, config)
     if not member:
         raise HTTPException(
             status_code=404,

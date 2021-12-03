@@ -37,7 +37,7 @@ async def retrieve_protocols(config: Config = get_config()) -> List[str]:
         A list of Protocol object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     protocols = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_protocol(
         The Protocol object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     protocol = await collection.find_one({"id": protocol_id})  # type: ignore
     if protocol and embedded:

@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Studies"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.study import get_study
 from metadata_repository_service.models import Study
 
@@ -28,11 +29,13 @@ study_router = APIRouter()
     response_model=Study,
     summary="Get a Study",
 )
-async def get_studies(study_id: str, embedded: bool = False):
+async def get_studies(
+    study_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given a Study ID, get the Study record from the metadata store.
     """
-    study = await get_study(study_id, embedded)
+    study = await get_study(study_id, embedded, config)
     if not study:
         raise HTTPException(
             status_code=404,

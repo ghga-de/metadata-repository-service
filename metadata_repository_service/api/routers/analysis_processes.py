@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Analysis Processes"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.analysis_process import get_analysis_process
 from metadata_repository_service.models import AnalysisProcess
 
@@ -28,11 +29,15 @@ analysis_process_router = APIRouter()
     response_model=AnalysisProcess,
     summary="Get an AnalysisProcess",
 )
-async def get_analysis_processes(analysis_process_id: str, embedded: bool = False):
+async def get_analysis_processes(
+    analysis_process_id: str,
+    embedded: bool = False,
+    config: Config = Depends(get_config),
+):
     """
     Given an AnalysisProcess ID, get the AnalysisProcess record from the metadata store.
     """
-    analysis_process = await get_analysis_process(analysis_process_id, embedded)
+    analysis_process = await get_analysis_process(analysis_process_id, embedded, config)
     if not analysis_process:
         raise HTTPException(
             status_code=404,

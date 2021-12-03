@@ -37,7 +37,7 @@ async def retrieve_datasets(config: Config = get_config()) -> List[str]:
         A list of Dataset object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     datasets = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_dataset(
         The Dataset object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     dataset = await collection.find_one({"id": dataset_id})  # type: ignore
     if dataset and embedded:

@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving ExperimentProcesses"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.experiment_process import get_experiment_process
 from metadata_repository_service.models import ExperimentProcess
 
@@ -28,11 +29,17 @@ experiment_process_router = APIRouter()
     response_model=ExperimentProcess,
     summary="Get a ExperimentProcess",
 )
-async def get_experiment_processes(experiment_process_id: str, embedded: bool = False):
+async def get_experiment_processes(
+    experiment_process_id: str,
+    embedded: bool = False,
+    config: Config = Depends(get_config),
+):
     """
     Given a ExperimentProcess ID, get the ExperimentProcess record from the metadata store.
     """
-    experiment_process = await get_experiment_process(experiment_process_id, embedded)
+    experiment_process = await get_experiment_process(
+        experiment_process_id, embedded, config
+    )
     if not experiment_process:
         raise HTTPException(
             status_code=404,

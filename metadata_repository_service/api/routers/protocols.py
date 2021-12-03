@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Protocols"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.protocol import get_protocol
 from metadata_repository_service.models import Protocol
 
@@ -28,11 +29,13 @@ protocol_router = APIRouter()
     response_model=Protocol,
     summary="Get a Protocol",
 )
-async def get_protocols(protocol_id: str, embedded: bool = False):
+async def get_protocols(
+    protocol_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given a Protocol ID, get the Protocol record from the metadata store.
     """
-    protocol = await get_protocol(protocol_id, embedded)
+    protocol = await get_protocol(protocol_id, embedded, config)
     if not protocol:
         raise HTTPException(
             status_code=404,

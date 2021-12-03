@@ -37,7 +37,7 @@ async def retrieve_experiment_processes(config: Config = get_config()) -> List[s
         A list of ExperimentProcess object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     experiment_processes = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_experiment_process(
         The ExperimentProcess object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     experiment_process = await collection.find_one({"id": experiment_process_id})  # type: ignore
     if experiment_process and embedded:

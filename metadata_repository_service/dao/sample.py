@@ -37,7 +37,7 @@ async def retrieve_samples(config: Config = get_config()) -> List[str]:
         A list of Sample object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     samples = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_sample(
         The Sample object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     sample = await collection.find_one({"id": sample_id})  # type: ignore
     if sample and embedded:

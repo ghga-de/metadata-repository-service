@@ -37,7 +37,7 @@ async def retrieve_analysis_processes(config: Config = get_config()) -> List[str
         A list of AnalysisProcess object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     analysis_processes = await collection.find_distinct().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_analysis_process(
         The AnalysisProcess object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     analysis_process = await collection.find_one({"id": analysis_process_id})  # type: ignore
     if analysis_process and embedded:

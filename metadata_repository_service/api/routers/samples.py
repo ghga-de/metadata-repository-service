@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Samples"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.models import Sample
 
@@ -28,11 +29,13 @@ sample_router = APIRouter()
     response_model=Sample,
     summary="Get a Sample",
 )
-async def get_samples(sample_id: str, embedded: bool = False):
+async def get_samples(
+    sample_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given a Sample ID, get the Sample record from the metadata store.
     """
-    sample = await get_sample(sample_id, embedded)
+    sample = await get_sample(sample_id, embedded, config)
     if not sample:
         raise HTTPException(
             status_code=404,

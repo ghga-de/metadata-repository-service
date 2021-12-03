@@ -37,7 +37,7 @@ async def retrieve_studies(config: Config = get_config()) -> List[str]:
         A list of Study object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     studies = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_study(
         The Study object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     study = await collection.find_one({"id": study_id})  # type: ignore
     if study and embedded:

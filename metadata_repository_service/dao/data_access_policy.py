@@ -37,7 +37,7 @@ async def retrieve_data_access_policies(config: Config = get_config()) -> List[s
         A list of DataAccessPolicy object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     data_access_policies = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_data_access_policy(
         The DataAccessPolicy object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     data_access_policy = await collection.find_one({"id": data_access_policy_id})  # type: ignore
     if data_access_policy and embedded:

@@ -37,7 +37,7 @@ async def retrieve_technologies(config: Config = get_config()) -> List[str]:
         A list of Technology object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     technologies = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_technology(
         The Technology object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     technology = await collection.find_one({"id": technology_id})  # type: ignore
     if technology and embedded:

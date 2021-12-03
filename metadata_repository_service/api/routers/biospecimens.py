@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Biospecimens"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.biospecimen import get_biospecimen
 from metadata_repository_service.models import Biospecimen
 
@@ -28,11 +29,13 @@ biospecimen_router = APIRouter()
     response_model=Biospecimen,
     summary="Get a Biospecimen",
 )
-async def get_biospecimens(biospecimen_id: str, embedded: bool = False):
+async def get_biospecimens(
+    biospecimen_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given a Biospecimen ID, get the Biospecimen record from the metadata store.
     """
-    biospecimen = await get_biospecimen(biospecimen_id, embedded)
+    biospecimen = await get_biospecimen(biospecimen_id, embedded, config)
     if not biospecimen:
         raise HTTPException(
             status_code=404,

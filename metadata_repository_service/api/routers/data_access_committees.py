@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving DataAccessCommittees"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.data_access_committee import (
     get_data_access_committee,
 )
@@ -31,13 +32,15 @@ data_access_committee_router = APIRouter()
     summary="Get a DataAccessCommittee",
 )
 async def get_data_access_committees(
-    data_access_committee_id: str, embedded: bool = False
+    data_access_committee_id: str,
+    embedded: bool = False,
+    config: Config = Depends(get_config),
 ):
     """
     Given a DataAccessCommittee ID, get the DataAccessCommittee record from the metadata store.
     """
     data_access_committee = await get_data_access_committee(
-        data_access_committee_id, embedded
+        data_access_committee_id, embedded, config
     )
     if not data_access_committee:
         raise HTTPException(

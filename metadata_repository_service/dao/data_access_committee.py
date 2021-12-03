@@ -37,7 +37,7 @@ async def retrieve_data_access_committees(config: Config = get_config()) -> List
         A list of DataAccessCommittee object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     data_access_committees = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_data_access_committee(
         The DataAccessCommittee object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     data_access_committee = await collection.find_one(
         {"id": data_access_committee_id}

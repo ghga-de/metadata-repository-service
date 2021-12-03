@@ -37,7 +37,7 @@ async def retrieve_projects(config: Config = get_config()) -> List[str]:
         A list of Project object IDs.
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     projects = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_project(
         The Project object
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config.db_url)
     collection = client[config.db_name][COLLECTION_NAME]
     project = await collection.find_one({"id": project_id})  # type: ignore
     if project and embedded:

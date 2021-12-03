@@ -14,9 +14,10 @@
 # limitations under the License.
 "Routes for retrieving Analyses"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
+from metadata_repository_service.config import Config, get_config
 from metadata_repository_service.dao.analysis import get_analysis
 from metadata_repository_service.models import Analysis
 
@@ -26,11 +27,13 @@ analysis_router = APIRouter()
 @analysis_router.get(
     "/analyses/{analysis_id}", response_model=Analysis, summary="Get an Analysis"
 )
-async def get_analyses(analysis_id: str, embedded: bool = False):
+async def get_analyses(
+    analysis_id: str, embedded: bool = False, config: Config = Depends(get_config)
+):
     """
     Given an Analysis ID, get the Analysis record from the metadata store.
     """
-    analysis = await get_analysis(analysis_id, embedded)
+    analysis = await get_analysis(analysis_id, embedded, config)
     if not analysis:
         raise HTTPException(
             status_code=404,
