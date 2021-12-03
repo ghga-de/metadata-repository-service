@@ -22,6 +22,7 @@ from fastapi.testclient import TestClient
 
 from metadata_repository_service.api.main import app
 from metadata_repository_service.config import Config, get_config
+from tests.fixtures import initialize_test_db  # noqa: F401,F811
 
 nest_asyncio.apply()
 
@@ -75,7 +76,9 @@ def test_index():
     ],
 )
 @pytest.mark.asyncio
-async def test_get_entity_by_id(initialize_test_db, route, entity_id, check_conditions):
+async def test_get_entity_by_id(
+    initialize_test_db, route, entity_id, check_conditions  # noqa: F811
+):
     response = client.get(f"/{route}/{entity_id}")
     assert response.status_code == 200
     data = response.json()
