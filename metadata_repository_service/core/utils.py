@@ -119,7 +119,7 @@ async def get_timestamp() -> str:
         The timestamp as a string
 
     """
-    return datetime.datetime.isoformat(datetime.datetime.utcnow())
+    return datetime.datetime.utcnow().isoformat()
 
 
 async def generate_uuid() -> str:
