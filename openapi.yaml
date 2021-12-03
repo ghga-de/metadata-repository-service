@@ -567,6 +567,10 @@ components:
           description: The title that describes an entity.
           title: Title
           type: string
+        type:
+          description: The type of Dataset.
+          title: Type
+          type: string
         update_date:
           description: Timestamp (in ISO 8601 format) when the entity was updated.
           title: Update Date
@@ -697,6 +701,10 @@ components:
         title:
           description: 'Name for the experiment (eg: GHGAE_PBMC_RNAseq).'
           title: Title
+          type: string
+        type:
+          description: The type of Experiment.
+          title: Type
           type: string
         update_date:
           description: Timestamp (in ISO 8601 format) when the entity was updated.
@@ -1355,6 +1363,10 @@ components:
           description: Comprehensive title for the study.
           title: Title
           type: string
+        type:
+          description: The type of the Study.
+          title: Type
+          type: string
         update_date:
           description: Timestamp (in ISO 8601 format) when the entity was updated.
           title: Update Date
@@ -1533,21 +1545,6 @@ paths:
               schema: {}
           description: Successful Response
       summary: Index
-  /analyses:
-    get:
-      description: Retrieve a list of Analysis IDs from the metadata store.
-      operationId: get_all_analyses_analyses_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Analyses Analyses Get
-                type: array
-          description: Successful Response
-      summary: Get all Analysis IDs
   /analyses/{analysis_id}:
     get:
       description: Given an Analysis ID, get the Analysis record from the metadata
@@ -1614,36 +1611,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an AnalysisProcess
-  /analysis_processes:
-    get:
-      description: Retrieve a list of AnalysisProcess IDs from the metadata store.
-      operationId: get_all_analysis_processes_analysis_processes_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/AnalysisProcess'
-                title: Response Get All Analysis Processes Analysis Processes Get
-                type: array
-          description: Successful Response
-      summary: Get all AnalysisProcess IDs
-  /biospecimens:
-    get:
-      description: Retrieve a list of Biospecimen IDs from the metadata store.
-      operationId: get_all_biospecimens_biospecimens_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Biospecimens Biospecimens Get
-                type: array
-          description: Successful Response
-      summary: Get all Biospecimen IDs
   /biospecimens/{biospecimen_id}:
     get:
       description: Given a Biospecimen ID, get the Biospecimen record from the metadata
@@ -1677,22 +1644,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Biospecimen
-  /data_access_committees:
-    get:
-      description: Retrieve a list of DataAccessCommittee IDs from the metadata store.
-      operationId: get_all_data_access_committees_data_access_committees_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Data Access Committees Data Access Committees
-                  Get
-                type: array
-          description: Successful Response
-      summary: Get all DataAccessCommittee IDs
   /data_access_committees/{data_access_committee_id}:
     get:
       description: Given a DataAccessCommittee ID, get the DataAccessCommittee record
@@ -1726,22 +1677,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessCommittee
-  /data_access_policies:
-    get:
-      description: Retrieve a list of DataAccessPolicy IDs from the metadata store.
-      operationId: get_all_data_access_policies_data_access_policies_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Data Access Policies Data Access Policies
-                  Get
-                type: array
-          description: Successful Response
-      summary: Get all DataAccessPolicy IDs
   /data_access_policies/{data_access_policy_id}:
     get:
       description: Given a DataAccessPolicy ID, get the DataAccessPolicy record from
@@ -1775,21 +1710,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessPolicy
-  /datasets:
-    get:
-      description: Retrieve a list of Dataset IDs from the metadata store.
-      operationId: get_all_datasets_datasets_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Datasets Datasets Get
-                type: array
-          description: Successful Response
-      summary: Get all Dataset IDs
   /datasets/{dataset_id}:
     get:
       description: Given a Dataset ID, get the Dataset record from the metadata store.
@@ -1822,22 +1742,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Dataset
-  /experiment_processes:
-    get:
-      description: Retrieve a list of ExperimentProcess IDs from the metadata store.
-      operationId: get_all_experiment_processes_experiment_processes_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Experiment Processes Experiment Processes
-                  Get
-                type: array
-          description: Successful Response
-      summary: Get all ExperimentProcess IDs
   /experiment_processes/{experiment_process_id}:
     get:
       description: Given a ExperimentProcess ID, get the ExperimentProcess record
@@ -1871,21 +1775,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a ExperimentProcess
-  /experiments:
-    get:
-      description: Retrieve a list of Experiment IDs from the metadata store.
-      operationId: get_all_experiments_experiments_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Experiments Experiments Get
-                type: array
-          description: Successful Response
-      summary: Get all Experiment IDs
   /experiments/{experiment_id}:
     get:
       description: Given a Experiment ID, get the Experiment record from the metadata
@@ -1919,21 +1808,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an Experiment
-  /files:
-    get:
-      description: Retrieve a list of File IDs from the metadata store.
-      operationId: get_all_files_files_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Files Files Get
-                type: array
-          description: Successful Response
-      summary: Get all File IDs
   /files/{file_id}:
     get:
       description: Given a File ID, get the File record from the metadata store.
@@ -1966,21 +1840,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a File
-  /individuals:
-    get:
-      description: Retrieve a list of Individual IDs from the metadata store.
-      operationId: get_all_individuals_individuals_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Individuals Individuals Get
-                type: array
-          description: Successful Response
-      summary: Get all Individual IDs
   /individuals/{individual_id}:
     get:
       description: Given a Individual ID, get the Individual record from the metadata
@@ -2014,21 +1873,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Individual
-  /members:
-    get:
-      description: Retrieve a list of Member IDs from the metadata store.
-      operationId: get_all_members_members_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Members Members Get
-                type: array
-          description: Successful Response
-      summary: Get all Member IDs
   /members/{member_id}:
     get:
       description: Given a Member ID, get the Member record from the metadata store.
@@ -2061,21 +1905,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Member
-  /projects:
-    get:
-      description: Retrieve a list of Project IDs from the metadata store.
-      operationId: get_all_projects_projects_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Projects Projects Get
-                type: array
-          description: Successful Response
-      summary: Get all Project IDs
   /projects/{project_id}:
     get:
       description: Given a Project ID, get the Project record from the metadata store.
@@ -2108,21 +1937,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Project
-  /protocols:
-    get:
-      description: Retrieve a list of Protocol IDs from the metadata store.
-      operationId: get_all_protocols_protocols_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Protocols Protocols Get
-                type: array
-          description: Successful Response
-      summary: Get all Protocol IDs
   /protocols/{protocol_id}:
     get:
       description: Given a Protocol ID, get the Protocol record from the metadata
@@ -2156,21 +1970,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Protocol
-  /publications:
-    get:
-      description: Retrieve a list of Publication IDs from the metadata store.
-      operationId: get_all_publications_publications_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Publications Publications Get
-                type: array
-          description: Successful Response
-      summary: Get all Publication IDs
   /publications/{publication_id}:
     get:
       description: Given a Publication ID, get the Publication record from the metadata
@@ -2204,21 +2003,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Publication
-  /samples:
-    get:
-      description: Retrieve a list of Sample IDs from the metadata store.
-      operationId: get_all_samples_samples_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Samples Samples Get
-                type: array
-          description: Successful Response
-      summary: Get all Sample IDs
   /samples/{sample_id}:
     get:
       description: Given a Sample ID, get the Sample record from the metadata store.
@@ -2251,21 +2035,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Sample
-  /studies:
-    get:
-      description: Retrieve a list of Study IDs from the metadata store.
-      operationId: get_all_studies_studies_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Studies Studies Get
-                type: array
-          description: Successful Response
-      summary: Get all Study IDs
   /studies/{study_id}:
     get:
       description: Given a Study ID, get the Study record from the metadata store.
@@ -2298,21 +2067,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Study
-  /technologies:
-    get:
-      description: Retrieve a list of Technology IDs from the metadata store.
-      operationId: get_all_technologies_technologies_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Technologies Technologies Get
-                type: array
-          description: Successful Response
-      summary: Get all Study IDs
   /technologies/{technology_id}:
     get:
       description: Given a Technology ID, get the Technology record from the metadata
@@ -2346,21 +2100,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Technology
-  /workflows:
-    get:
-      description: Retrieve a list of Workflow IDs from the metadata store.
-      operationId: get_all_workflows_workflows_get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  type: string
-                title: Response Get All Workflows Workflows Get
-                type: array
-          description: Successful Response
-      summary: Get all Workflow IDs
   /workflows/{workflow_id}:
     get:
       description: Given a Workflow ID, get the Workflow record from the metadata
