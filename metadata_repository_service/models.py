@@ -233,6 +233,7 @@ class Study(BaseModel):
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
+    type: Optional[str] = Field(None, description="The type of the Study.")
     creation_date: Optional[str] = Field(
         None, description="Timestamp (in ISO 8601 format) when the entity was created."
     )
@@ -301,6 +302,7 @@ class Experiment(BaseModel):
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
+    type: Optional[str] = Field(None, description="The type of Experiment.")
     creation_date: Optional[str] = Field(
         None, description="Timestamp (in ISO 8601 format) when the entity was created."
     )
@@ -1269,6 +1271,7 @@ class Dataset(BaseModel):
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
+    type: Optional[str] = Field(None, description="The type of Dataset.")
     creation_date: Optional[str] = Field(
         None, description="Timestamp (in ISO 8601 format) when the entity was created."
     )
