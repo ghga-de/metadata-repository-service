@@ -15,6 +15,7 @@
 "Routes for retrieving ExperimentProcesses"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.experiment_process import get_experiment_process
 from metadata_repository_service.models import ExperimentProcess
@@ -32,4 +33,9 @@ async def get_experiment_processes(experiment_process_id: str, embedded: bool = 
     Given a ExperimentProcess ID, get the ExperimentProcess record from the metadata store.
     """
     experiment_process = await get_experiment_process(experiment_process_id, embedded)
+    if not experiment_process:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{ExperimentProcess.__name__} with id '{experiment_process_id}' not found",
+        )
     return experiment_process

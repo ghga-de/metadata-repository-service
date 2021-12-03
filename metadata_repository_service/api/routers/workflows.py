@@ -15,6 +15,7 @@
 "Routes for retrieving Workflows"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.workflow import get_workflow
 from metadata_repository_service.models import Workflow
@@ -32,4 +33,9 @@ async def get_workflows(workflow_id: str, embedded: bool = False):
     Given a Workflow ID, get the Workflow record from the metadata store.
     """
     workflow = await get_workflow(workflow_id, embedded)
+    if not workflow:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Workflow.__name__} with id '{workflow_id}' not found",
+        )
     return workflow

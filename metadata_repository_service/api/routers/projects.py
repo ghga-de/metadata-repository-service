@@ -15,6 +15,7 @@
 "Routes for retrieving Projects"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.project import get_project
 from metadata_repository_service.models import Project
@@ -32,4 +33,9 @@ async def get_projects(project_id: str, embedded: bool = False):
     Given a Project ID, get the Project record from the metadata store.
     """
     project = await get_project(project_id, embedded)
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Project.__name__} with id '{project_id}' not found",
+        )
     return project

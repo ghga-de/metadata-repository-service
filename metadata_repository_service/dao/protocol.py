@@ -18,8 +18,6 @@ Convenience methods for retrieving Protocol records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_protocol(protocol_id: str, embedded: bool = False) -> Protocol:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     protocol = await collection.find_one({"id": protocol_id})  # type: ignore
-    if not protocol:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Protocol.__name__} with id '{protocol_id}' not found",
-        )
-    if embedded:
+    if protocol and embedded:
         protocol = await embed_references(protocol)
     client.close()
     return protocol

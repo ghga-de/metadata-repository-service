@@ -18,8 +18,6 @@ Convenience methods for retrieving Workflow records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_workflow(workflow_id: str, embedded: bool = False) -> Workflow:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     workflow = await collection.find_one({"id": workflow_id})  # type: ignore
-    if not workflow:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Workflow.__name__} with id '{workflow_id}' not found",
-        )
-    if embedded:
+    if workflow and embedded:
         workflow = await embed_references(workflow)
     client.close()
     return workflow

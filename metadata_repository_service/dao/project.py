@@ -18,8 +18,6 @@ Convenience methods for retrieving Project records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_project(project_id: str, embedded: bool = False) -> Project:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     project = await collection.find_one({"id": project_id})  # type: ignore
-    if not project:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Project.__name__} with id '{project_id}' not found",
-        )
-    if embedded:
+    if project and embedded:
         project = await embed_references(project)
     client.close()
     return project

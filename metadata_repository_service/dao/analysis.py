@@ -18,8 +18,6 @@ Convenience methods for retrieving Analysis records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_analysis(analysis_id: str, embedded: bool = False) -> Analysis:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     analysis = await collection.find_one({"id": analysis_id})  # type: ignore
-    if not analysis:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Analysis.__name__} with id '{analysis_id}' not found",
-        )
-    if embedded:
+    if analysis and embedded:
         analysis = await embed_references(analysis)
     client.close()
     return analysis

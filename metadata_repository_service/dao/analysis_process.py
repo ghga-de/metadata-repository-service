@@ -18,8 +18,6 @@ Convenience methods for retrieving AnalysisProcess records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -62,12 +60,7 @@ async def get_analysis_process(
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     analysis_process = await collection.find_one({"id": analysis_process_id})  # type: ignore
-    if not analysis_process:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{AnalysisProcess.__name__} with id '{analysis_process_id}' not found",
-        )
-    if embedded:
+    if analysis_process and embedded:
         analysis_process = await embed_references(analysis_process)
     client.close()
     return analysis_process

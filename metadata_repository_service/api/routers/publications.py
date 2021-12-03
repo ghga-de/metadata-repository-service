@@ -15,6 +15,7 @@
 "Routes for retrieving Publications"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.publication import get_publication
 from metadata_repository_service.models import Publication
@@ -32,4 +33,9 @@ async def get_publications(publication_id: str, embedded: bool = False):
     Given a Publication ID, get the Publication record from the metadata store.
     """
     publication = await get_publication(publication_id, embedded)
+    if not publication:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Publication.__name__} with id '{publication_id}' not found",
+        )
     return publication

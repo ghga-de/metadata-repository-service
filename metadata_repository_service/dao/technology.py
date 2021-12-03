@@ -18,8 +18,6 @@ Convenience methods for retrieving Technology records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_technology(technology_id: str, embedded: bool = False) -> Technolo
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     technology = await collection.find_one({"id": technology_id})  # type: ignore
-    if not technology:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Technology.__name__} with id '{technology_id}' not found",
-        )
-    if embedded:
+    if technology and embedded:
         technology = await embed_references(technology)
     client.close()
     return technology

@@ -15,6 +15,7 @@
 "Routes for retrieving Members"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.member import get_member
 from metadata_repository_service.models import Member
@@ -32,4 +33,9 @@ async def get_members(member_id: str, embedded: bool = False):
     Given a Member ID, get the Member record from the metadata store.
     """
     member = await get_member(member_id, embedded)
+    if not member:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Member.__name__} with id '{member_id}' not found",
+        )
     return member

@@ -18,8 +18,6 @@ Convenience methods for retrieving Sample records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_sample(sample_id: str, embedded: bool = False) -> Sample:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     sample = await collection.find_one({"id": sample_id})  # type: ignore
-    if not sample:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Sample.__name__} with id '{sample_id}' not found",
-        )
-    if embedded:
+    if sample and embedded:
         sample = await embed_references(sample)
     client.close()
     return sample

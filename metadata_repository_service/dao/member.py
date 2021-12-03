@@ -18,8 +18,6 @@ Convenience methods for retrieving Member records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_member(member_id: str, embedded: bool = False) -> Member:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     member = await collection.find_one({"id": member_id})  # type: ignore
-    if not member:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Member.__name__} with id '{member_id}' not found",
-        )
-    if embedded:
+    if member and embedded:
         member = await embed_references(member)
     client.close()
     return member

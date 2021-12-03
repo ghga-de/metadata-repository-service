@@ -15,6 +15,7 @@
 "Routes for retrieving Datasets"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.dataset import get_dataset
 from metadata_repository_service.models import Dataset
@@ -30,4 +31,9 @@ async def get_datasets(dataset_id: str, embedded: bool = False):
     Given a Dataset ID, get the Dataset record from the metadata store.
     """
     dataset = await get_dataset(dataset_id, embedded)
+    if not dataset:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Dataset.__name__} with id '{dataset_id}' not found",
+        )
     return dataset

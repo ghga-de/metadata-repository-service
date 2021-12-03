@@ -15,6 +15,7 @@
 "Routes for retrieving Analysis Processes"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.analysis_process import get_analysis_process
 from metadata_repository_service.models import AnalysisProcess
@@ -32,4 +33,9 @@ async def get_analysis_processes(analysis_process_id: str, embedded: bool = Fals
     Given an AnalysisProcess ID, get the AnalysisProcess record from the metadata store.
     """
     analysis_process = await get_analysis_process(analysis_process_id, embedded)
+    if not analysis_process:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{AnalysisProcess.__name__} with id '{analysis_process_id}' not found",
+        )
     return analysis_process

@@ -15,6 +15,7 @@
 "Routes for retrieving Files"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.file import get_file
 from metadata_repository_service.models import File
@@ -28,4 +29,9 @@ async def get_files(file_id: str, embedded: bool = False):
     Given a File ID, get the File record from the metadata store.
     """
     file = await get_file(file_id, embedded)
+    if not file:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{File.__name__} with id '{file_id}' not found",
+        )
     return file

@@ -15,6 +15,7 @@
 "Routes for retrieving Biospecimens"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.biospecimen import get_biospecimen
 from metadata_repository_service.models import Biospecimen
@@ -32,4 +33,9 @@ async def get_biospecimens(biospecimen_id: str, embedded: bool = False):
     Given a Biospecimen ID, get the Biospecimen record from the metadata store.
     """
     biospecimen = await get_biospecimen(biospecimen_id, embedded)
+    if not biospecimen:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Biospecimen.__name__} with id '{biospecimen_id}' not found",
+        )
     return biospecimen

@@ -18,8 +18,6 @@ Convenience methods for retrieving Dataset records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_dataset(dataset_id: str, embedded: bool = False) -> Dataset:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     dataset = await collection.find_one({"id": dataset_id})  # type: ignore
-    if not dataset:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Dataset.__name__} with id '{dataset_id}' not found",
-        )
-    if embedded:
+    if dataset and embedded:
         dataset = await embed_references(dataset)
     client.close()
     return dataset

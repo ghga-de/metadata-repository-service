@@ -18,8 +18,6 @@ Convenience methods for retrieving Biospecimen records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_biospecimen(biospecimen_id: str, embedded: bool = False) -> Biospe
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     biospecimen = await collection.find_one({"id": biospecimen_id})  # type: ignore
-    if not biospecimen:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Biospecimen.__name__} with id '{biospecimen_id}' not found",
-        )
-    if embedded:
+    if biospecimen and embedded:
         biospecimen = await embed_references(biospecimen)
     client.close()
     return biospecimen

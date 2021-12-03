@@ -15,6 +15,7 @@
 "Routes for retrieving DataAccessPolicys"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.data_access_policy import get_data_access_policy
 from metadata_repository_service.models import DataAccessPolicy
@@ -32,4 +33,9 @@ async def get_data_access_policies(data_access_policy_id: str, embedded: bool = 
     Given a DataAccessPolicy ID, get the DataAccessPolicy record from the metadata store.
     """
     data_access_policy = await get_data_access_policy(data_access_policy_id, embedded)
+    if not data_access_policy:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{DataAccessPolicy.__name__} with id '{data_access_policy_id}' not found",
+        )
     return data_access_policy

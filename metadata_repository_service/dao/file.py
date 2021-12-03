@@ -18,8 +18,6 @@ Convenience methods for retrieving File records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_file(file_id: str, embedded: bool = False) -> File:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     file = await collection.find_one({"id": file_id})  # type: ignore
-    if not file:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{File.__name__} with id '{file_id}' not found",
-        )
-    if embedded:
+    if file and embedded:
         file = await embed_references(file)
     client.close()
     return file

@@ -18,8 +18,6 @@ Convenience methods for retrieving Study records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_study(study_id: str, embedded: bool = False) -> Study:
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     study = await collection.find_one({"id": study_id})  # type: ignore
-    if not study:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Study.__name__} with id '{study_id}' not found",
-        )
-    if embedded:
+    if study and embedded:
         study = await embed_references(study)
     client.close()
     return study

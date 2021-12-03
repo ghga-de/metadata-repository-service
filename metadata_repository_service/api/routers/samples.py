@@ -15,6 +15,7 @@
 "Routes for retrieving Samples"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.models import Sample
@@ -32,4 +33,9 @@ async def get_samples(sample_id: str, embedded: bool = False):
     Given a Sample ID, get the Sample record from the metadata store.
     """
     sample = await get_sample(sample_id, embedded)
+    if not sample:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Sample.__name__} with id '{sample_id}' not found",
+        )
     return sample

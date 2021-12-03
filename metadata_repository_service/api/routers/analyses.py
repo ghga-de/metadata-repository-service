@@ -15,6 +15,7 @@
 "Routes for retrieving Analyses"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.analysis import get_analysis
 from metadata_repository_service.models import Analysis
@@ -30,4 +31,9 @@ async def get_analyses(analysis_id: str, embedded: bool = False):
     Given an Analysis ID, get the Analysis record from the metadata store.
     """
     analysis = await get_analysis(analysis_id, embedded)
+    if not analysis:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Analysis.__name__} with id '{analysis_id}' not found",
+        )
     return analysis

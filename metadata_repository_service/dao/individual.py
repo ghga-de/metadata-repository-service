@@ -18,8 +18,6 @@ Convenience methods for retrieving Individual records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_individual(individual_id: str, embedded: bool = False) -> Individu
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     individual = await collection.find_one({"id": individual_id})  # type: ignore
-    if not individual:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Individual.__name__} with id '{individual_id}' not found",
-        )
-    if embedded:
+    if individual and embedded:
         individual = await embed_references(individual)
     client.close()
     return individual

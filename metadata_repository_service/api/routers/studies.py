@@ -15,6 +15,7 @@
 "Routes for retrieving Studies"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.study import get_study
 from metadata_repository_service.models import Study
@@ -32,4 +33,9 @@ async def get_studies(study_id: str, embedded: bool = False):
     Given a Study ID, get the Study record from the metadata store.
     """
     study = await get_study(study_id, embedded)
+    if not study:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Study.__name__} with id '{study_id}' not found",
+        )
     return study

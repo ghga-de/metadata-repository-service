@@ -18,8 +18,6 @@ Convenience methods for retrieving DataAccessCommittee records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -64,12 +62,7 @@ async def get_data_access_committee(
     data_access_committee = await collection.find_one(
         {"id": data_access_committee_id}
     )  # type: ignore
-    if not data_access_committee:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{DataAccessCommittee.__name__} with id '{data_access_committee_id}' not found",
-        )
-    if embedded:
+    if data_access_committee and embedded:
         data_access_committee = await embed_references(data_access_committee)
     client.close()
     return data_access_committee

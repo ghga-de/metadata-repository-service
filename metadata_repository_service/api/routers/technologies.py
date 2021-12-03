@@ -15,6 +15,7 @@
 "Routes for retrieving Studies"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.technology import get_technology
 from metadata_repository_service.models import Technology
@@ -32,4 +33,9 @@ async def get_technologies(technology_id: str, embedded: bool = False):
     Given a Technology ID, get the Technology record from the metadata store.
     """
     technology = await get_technology(technology_id, embedded)
+    if not technology:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Technology.__name__} with id '{technology_id}' not found",
+        )
     return technology

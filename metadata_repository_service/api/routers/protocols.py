@@ -15,6 +15,7 @@
 "Routes for retrieving Protocols"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.protocol import get_protocol
 from metadata_repository_service.models import Protocol
@@ -32,4 +33,9 @@ async def get_protocols(protocol_id: str, embedded: bool = False):
     Given a Protocol ID, get the Protocol record from the metadata store.
     """
     protocol = await get_protocol(protocol_id, embedded)
+    if not protocol:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{Protocol.__name__} with id '{protocol_id}' not found",
+        )
     return protocol

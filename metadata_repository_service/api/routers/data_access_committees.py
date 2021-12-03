@@ -15,6 +15,7 @@
 "Routes for retrieving DataAccessCommittees"
 
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.dao.data_access_committee import (
     get_data_access_committee,
@@ -38,4 +39,9 @@ async def get_data_access_committees(
     data_access_committee = await get_data_access_committee(
         data_access_committee_id, embedded
     )
+    if not data_access_committee:
+        raise HTTPException(
+            status_code=404,
+            detail=f"{DataAccessCommittee.__name__} with id '{data_access_committee_id}' not found",
+        )
     return data_access_committee

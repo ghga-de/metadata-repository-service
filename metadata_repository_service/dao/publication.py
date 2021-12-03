@@ -18,8 +18,6 @@ Convenience methods for retrieving Publication records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_publication(publication_id: str, embedded: bool = False) -> Public
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     publication = await collection.find_one({"id": publication_id})  # type: ignore
-    if not publication:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Publication.__name__} with id '{publication_id}' not found",
-        )
-    if embedded:
+    if publication and embedded:
         publication = await embed_references(publication)
     client.close()
     return publication

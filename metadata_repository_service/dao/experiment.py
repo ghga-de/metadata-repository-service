@@ -18,8 +18,6 @@ Convenience methods for retrieving Experiment records
 
 from typing import List
 
-from fastapi.exceptions import HTTPException
-
 from metadata_repository_service.config import get_config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
@@ -60,12 +58,7 @@ async def get_experiment(experiment_id: str, embedded: bool = False) -> Experime
     client = await get_db_client()
     collection = client[config.db_name][COLLECTION_NAME]
     experiment = await collection.find_one({"id": experiment_id})  # type: ignore
-    if not experiment:
-        raise HTTPException(
-            status_code=404,
-            detail=f"{Experiment.__name__} with id '{experiment_id}' not found",
-        )
-    if embedded:
+    if experiment and embedded:
         experiment = await embed_references(experiment)
     client.close()
     return experiment
