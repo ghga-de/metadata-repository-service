@@ -37,7 +37,7 @@ async def retrieve_files(config: Config = get_config()) -> List[str]:
         A list of File object IDs.
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     files = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_file(
         The File object
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     file = await collection.find_one({"id": file_id})  # type: ignore
     if file and embedded:

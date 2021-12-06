@@ -37,7 +37,7 @@ async def retrieve_analyses(config: Config = get_config()) -> List[str]:
         A list of Analysis object IDs.
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     analyses = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_analysis(
         The Analysis object
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     analysis = await collection.find_one({"id": analysis_id})  # type: ignore
     if analysis and embedded:

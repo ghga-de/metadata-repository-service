@@ -37,7 +37,7 @@ async def retrieve_biospecimens(config: Config = get_config()) -> List[str]:
         A list of Biospecimen object IDs.
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     biospecimens = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -59,7 +59,7 @@ async def get_biospecimen(
         The Biospecimen object
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     biospecimen = await collection.find_one({"id": biospecimen_id})  # type: ignore
     if biospecimen and embedded:

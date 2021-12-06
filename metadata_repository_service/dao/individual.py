@@ -38,7 +38,7 @@ async def retrieve_individuals(config: Config = get_config()) -> List[str]:
         config: Rumtime configuration
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     individuals = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -60,7 +60,7 @@ async def get_individual(
         The Individual object
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     individual = await collection.find_one({"id": individual_id})  # type: ignore
     if individual and embedded:

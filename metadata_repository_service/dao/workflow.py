@@ -35,7 +35,7 @@ async def retrieve_workflows(config: Config = get_config()) -> List[str]:
         config: Rumtime configuration
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     workflows = await collection.find().to_list(None)  # type: ignore
     client.close()
@@ -57,7 +57,7 @@ async def get_workflow(
         The Workflow object
 
     """
-    client = await get_db_client(config.db_url)
+    client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     workflow = await collection.find_one({"id": workflow_id})  # type: ignore
     if workflow and embedded:
