@@ -33,7 +33,7 @@ async def get_datasets(
     """
     Given a Dataset ID, get the Dataset record from the metadata store.
     """
-    dataset = await get_dataset(dataset_id, embedded, config)
+    dataset = await get_dataset(dataset_id=dataset_id, embedded=embedded, config=config)
     if not dataset:
         raise HTTPException(
             status_code=404,

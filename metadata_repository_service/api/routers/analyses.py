@@ -33,7 +33,9 @@ async def get_analyses(
     """
     Given an Analysis ID, get the Analysis record from the metadata store.
     """
-    analysis = await get_analysis(analysis_id, embedded, config)
+    analysis = await get_analysis(
+        analysis_id=analysis_id, embedded=embedded, config=config
+    )
     if not analysis:
         raise HTTPException(
             status_code=404,

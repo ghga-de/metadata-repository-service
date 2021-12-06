@@ -37,7 +37,9 @@ async def get_analysis_processes(
     """
     Given an AnalysisProcess ID, get the AnalysisProcess record from the metadata store.
     """
-    analysis_process = await get_analysis_process(analysis_process_id, embedded, config)
+    analysis_process = await get_analysis_process(
+        analysis_process_id=analysis_process_id, embedded=embedded, config=config
+    )
     if not analysis_process:
         raise HTTPException(
             status_code=404,

@@ -38,7 +38,7 @@ async def get_data_access_policies(
     Given a DataAccessPolicy ID, get the DataAccessPolicy record from the metadata store.
     """
     data_access_policy = await get_data_access_policy(
-        data_access_policy_id, embedded, config
+        data_access_policy_id=data_access_policy_id, embedded=embedded, config=config
     )
     if not data_access_policy:
         raise HTTPException(

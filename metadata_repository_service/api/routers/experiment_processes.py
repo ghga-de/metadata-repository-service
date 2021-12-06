@@ -38,7 +38,7 @@ async def get_experiment_processes(
     Given a ExperimentProcess ID, get the ExperimentProcess record from the metadata store.
     """
     experiment_process = await get_experiment_process(
-        experiment_process_id, embedded, config
+        experiment_process_id=experiment_process_id, embedded=embedded, config=config
     )
     if not experiment_process:
         raise HTTPException(

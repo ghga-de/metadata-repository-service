@@ -40,7 +40,9 @@ async def get_data_access_committees(
     Given a DataAccessCommittee ID, get the DataAccessCommittee record from the metadata store.
     """
     data_access_committee = await get_data_access_committee(
-        data_access_committee_id, embedded, config
+        data_access_committee_id=data_access_committee_id,
+        embedded=embedded,
+        config=config,
     )
     if not data_access_committee:
         raise HTTPException(

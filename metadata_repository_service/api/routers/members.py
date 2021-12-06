@@ -35,7 +35,7 @@ async def get_members(
     """
     Given a Member ID, get the Member record from the metadata store.
     """
-    member = await get_member(member_id, embedded, config)
+    member = await get_member(member_id=member_id, embedded=embedded, config=config)
     if not member:
         raise HTTPException(
             status_code=404,

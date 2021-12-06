@@ -35,7 +35,9 @@ async def get_biospecimens(
     """
     Given a Biospecimen ID, get the Biospecimen record from the metadata store.
     """
-    biospecimen = await get_biospecimen(biospecimen_id, embedded, config)
+    biospecimen = await get_biospecimen(
+        biospecimen_id=biospecimen_id, embedded=embedded, config=config
+    )
     if not biospecimen:
         raise HTTPException(
             status_code=404,

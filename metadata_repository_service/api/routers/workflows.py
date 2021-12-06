@@ -35,7 +35,9 @@ async def get_workflows(
     """
     Given a Workflow ID, get the Workflow record from the metadata store.
     """
-    workflow = await get_workflow(workflow_id, embedded, config)
+    workflow = await get_workflow(
+        workflow_id=workflow_id, embedded=embedded, config=config
+    )
     if not workflow:
         raise HTTPException(
             status_code=404,

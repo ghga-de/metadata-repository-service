@@ -35,7 +35,9 @@ async def get_individuals(
     """
     Given a Individual ID, get the Individual record from the metadata store.
     """
-    individual = await get_individual(individual_id, embedded, config)
+    individual = await get_individual(
+        individual_id=individual_id, embedded=embedded, config=config
+    )
     if not individual:
         raise HTTPException(
             status_code=404,

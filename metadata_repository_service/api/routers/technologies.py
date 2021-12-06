@@ -35,7 +35,9 @@ async def get_technologies(
     """
     Given a Technology ID, get the Technology record from the metadata store.
     """
-    technology = await get_technology(technology_id, embedded, config)
+    technology = await get_technology(
+        technology_id=technology_id, embedded=embedded, config=config
+    )
     if not technology:
         raise HTTPException(
             status_code=404,

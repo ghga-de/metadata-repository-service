@@ -35,7 +35,9 @@ async def get_protocols(
     """
     Given a Protocol ID, get the Protocol record from the metadata store.
     """
-    protocol = await get_protocol(protocol_id, embedded, config)
+    protocol = await get_protocol(
+        protocol_id=protocol_id, embedded=embedded, config=config
+    )
     if not protocol:
         raise HTTPException(
             status_code=404,

@@ -35,7 +35,9 @@ async def get_publications(
     """
     Given a Publication ID, get the Publication record from the metadata store.
     """
-    publication = await get_publication(publication_id, embedded, config)
+    publication = await get_publication(
+        publication_id=publication_id, embedded=embedded, config=config
+    )
     if not publication:
         raise HTTPException(
             status_code=404,

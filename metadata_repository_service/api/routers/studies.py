@@ -35,7 +35,7 @@ async def get_studies(
     """
     Given a Study ID, get the Study record from the metadata store.
     """
-    study = await get_study(study_id, embedded, config)
+    study = await get_study(study_id=study_id, embedded=embedded, config=config)
     if not study:
         raise HTTPException(
             status_code=404,

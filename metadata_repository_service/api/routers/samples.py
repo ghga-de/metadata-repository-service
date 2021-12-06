@@ -35,7 +35,7 @@ async def get_samples(
     """
     Given a Sample ID, get the Sample record from the metadata store.
     """
-    sample = await get_sample(sample_id, embedded, config)
+    sample = await get_sample(sample_id=sample_id, embedded=embedded, config=config)
     if not sample:
         raise HTTPException(
             status_code=404,

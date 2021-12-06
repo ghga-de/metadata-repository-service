@@ -31,7 +31,7 @@ async def get_files(
     """
     Given a File ID, get the File record from the metadata store.
     """
-    file = await get_file(file_id, embedded, config)
+    file = await get_file(file_id=file_id, embedded=embedded, config=config)
     if not file:
         raise HTTPException(
             status_code=404,

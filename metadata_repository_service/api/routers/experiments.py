@@ -35,7 +35,9 @@ async def get_experiments(
     """
     Given a Experiment ID, get the Experiment record from the metadata store.
     """
-    experiment = await get_experiment(experiment_id, embedded, config)
+    experiment = await get_experiment(
+        experiment_id=experiment_id, embedded=embedded, config=config
+    )
     if not experiment:
         raise HTTPException(
             status_code=404,

@@ -35,7 +35,7 @@ async def get_projects(
     """
     Given a Project ID, get the Project record from the metadata store.
     """
-    project = await get_project(project_id, embedded, config)
+    project = await get_project(project_id=project_id, embedded=embedded, config=config)
     if not project:
         raise HTTPException(
             status_code=404,
