@@ -14,3 +14,16 @@
 # limitations under the License.
 
 """Connects to database."""
+
+from motor.motor_asyncio import AsyncIOMotorClient
+
+from metadata_repository_service.config import Config, get_config
+
+
+async def get_db_client(config: Config = get_config()) -> AsyncIOMotorClient:
+    """
+    Get database client.
+    """
+    db_url = config.db_url
+    db_client = AsyncIOMotorClient(db_url)
+    return db_client

@@ -21,12 +21,58 @@ Additional endpoints might be structured in dedicated modules
 
 from fastapi import FastAPI
 
+from metadata_repository_service.api.routers.analyses import analysis_router
+from metadata_repository_service.api.routers.analysis_processes import (
+    analysis_process_router,
+)
+from metadata_repository_service.api.routers.biospecimens import biospecimen_router
+from metadata_repository_service.api.routers.data_access_committees import (
+    data_access_committee_router,
+)
+from metadata_repository_service.api.routers.data_access_policies import (
+    data_access_policy_router,
+)
+from metadata_repository_service.api.routers.datasets import dataset_router
+from metadata_repository_service.api.routers.experiment_processes import (
+    experiment_process_router,
+)
+from metadata_repository_service.api.routers.experiments import experiment_router
+from metadata_repository_service.api.routers.files import file_router
+from metadata_repository_service.api.routers.individuals import individual_router
+from metadata_repository_service.api.routers.members import member_router
+from metadata_repository_service.api.routers.projects import project_router
+from metadata_repository_service.api.routers.protocols import protocol_router
+from metadata_repository_service.api.routers.publications import publication_router
+from metadata_repository_service.api.routers.samples import sample_router
+from metadata_repository_service.api.routers.studies import study_router
+from metadata_repository_service.api.routers.technologies import technology_router
+from metadata_repository_service.api.routers.workflows import workflow_router
+
 app = FastAPI()
+app.include_router(dataset_router)
+app.include_router(analysis_router)
+app.include_router(analysis_process_router)
+app.include_router(biospecimen_router)
+app.include_router(data_access_committee_router)
+app.include_router(data_access_policy_router)
+app.include_router(experiment_process_router)
+app.include_router(experiment_router)
+app.include_router(file_router)
+app.include_router(individual_router)
+app.include_router(member_router)
+app.include_router(project_router)
+app.include_router(protocol_router)
+app.include_router(publication_router)
+app.include_router(sample_router)
+app.include_router(study_router)
+app.include_router(technology_router)
+app.include_router(workflow_router)
 
 
-@app.get("/", summary="")
+@app.get("/")
 async def index():
     """
-    Index
+    Index of the Metadata Repository Service that
+    redirects to the API documentation.
     """
-    return "Index of the GHGA Metadata Service"
+    return "Index of the Metadata Repository Service"
