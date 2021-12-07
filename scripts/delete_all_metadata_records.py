@@ -36,6 +36,7 @@ CollectionTypes = Literal[
     "Study",
     "Technology",
     "Publication",
+    "Project",
 ]
 
 
