@@ -44,6 +44,7 @@ RECORD_TYPES = {
     ("studies", "Study"),
     ("technogies", "Technology"),
     ("publications", "Publication"),
+    ("projects", "Project"),
 }
 
 
