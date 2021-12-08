@@ -20,8 +20,9 @@ import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
+from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.api.main import app
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import Config
 from tests.fixtures import initialize_test_db  # noqa: F401,F811
 
 nest_asyncio.apply()

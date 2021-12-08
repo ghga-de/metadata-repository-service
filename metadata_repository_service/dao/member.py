@@ -18,7 +18,7 @@ Convenience methods for retrieving Member records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Member
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Member
 COLLECTION_NAME = "Member"
 
 
-async def retrieve_members(config: Config = get_config()) -> List[str]:
+async def retrieve_members(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Member object IDs from metadata store.
 
@@ -46,7 +46,7 @@ async def retrieve_members(config: Config = get_config()) -> List[str]:
 
 
 async def get_member(
-    member_id: str, embedded: bool = False, config: Config = get_config()
+    member_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Member:
     """
     Given a Datset ID, get the Member object from metadata store.
@@ -64,6 +64,6 @@ async def get_member(
     collection = client[config.db_name][COLLECTION_NAME]
     member = await collection.find_one({"id": member_id})  # type: ignore
     if member and embedded:
-        member = await embed_references(member)
+        member = await embed_references(member, config=config)
     client.close()
     return member

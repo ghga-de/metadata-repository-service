@@ -20,6 +20,7 @@ Additional endpoints might be structured in dedicated modules
 """
 
 from fastapi import FastAPI
+from ghga_service_chassis_lib.api import configure_app
 
 from metadata_repository_service.api.routers.analyses import analysis_router
 from metadata_repository_service.api.routers.analysis_processes import (
@@ -47,8 +48,11 @@ from metadata_repository_service.api.routers.samples import sample_router
 from metadata_repository_service.api.routers.studies import study_router
 from metadata_repository_service.api.routers.technologies import technology_router
 from metadata_repository_service.api.routers.workflows import workflow_router
+from metadata_repository_service.config import CONFIG
 
 app = FastAPI()
+configure_app(app, config=CONFIG)
+
 app.include_router(dataset_router)
 app.include_router(analysis_router)
 app.include_router(analysis_process_router)

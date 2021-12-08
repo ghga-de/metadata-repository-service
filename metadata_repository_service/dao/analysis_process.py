@@ -18,7 +18,7 @@ Convenience methods for retrieving AnalysisProcess records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import AnalysisProcess
@@ -26,7 +26,7 @@ from metadata_repository_service.models import AnalysisProcess
 COLLECTION_NAME = "AnalysisProcess"
 
 
-async def retrieve_analysis_processes(config: Config = get_config()) -> List[str]:
+async def retrieve_analysis_processes(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of AnalysisProcess objects from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_analysis_processes(config: Config = get_config()) -> List[str
 
 
 async def get_analysis_process(
-    analysis_process_id: str, embedded: bool = True, config: Config = get_config()
+    analysis_process_id: str, embedded: bool = True, config: Config = CONFIG
 ) -> AnalysisProcess:
     """
     Given a Datset ID, get the AnalysisProcess object from metadata store.
@@ -63,6 +63,6 @@ async def get_analysis_process(
     collection = client[config.db_name][COLLECTION_NAME]
     analysis_process = await collection.find_one({"id": analysis_process_id})  # type: ignore
     if analysis_process and embedded:
-        analysis_process = await embed_references(analysis_process)
+        analysis_process = await embed_references(analysis_process, config=config)
     client.close()
     return analysis_process

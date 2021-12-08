@@ -18,7 +18,7 @@ Convenience methods for retrieving Analysis records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Analysis
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Analysis
 COLLECTION_NAME = "Analysis"
 
 
-async def retrieve_analyses(config: Config = get_config()) -> List[str]:
+async def retrieve_analyses(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Analysis objects from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_analyses(config: Config = get_config()) -> List[str]:
 
 
 async def get_analysis(
-    analysis_id: str, embedded: bool = False, config: Config = get_config()
+    analysis_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Analysis:
     """
     Given a Datset ID, get the Analysis object from metadata store.
@@ -63,6 +63,6 @@ async def get_analysis(
     collection = client[config.db_name][COLLECTION_NAME]
     analysis = await collection.find_one({"id": analysis_id})  # type: ignore
     if analysis and embedded:
-        analysis = await embed_references(analysis)
+        analysis = await embed_references(analysis, config=config)
     client.close()
     return analysis

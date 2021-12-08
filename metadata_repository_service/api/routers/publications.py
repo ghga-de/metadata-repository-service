@@ -17,7 +17,8 @@
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.api.deps import get_config
+from metadata_repository_service.config import Config
 from metadata_repository_service.dao.publication import get_publication
 from metadata_repository_service.models import Publication
 

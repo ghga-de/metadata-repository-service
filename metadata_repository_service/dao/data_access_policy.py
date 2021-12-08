@@ -18,7 +18,7 @@ Convenience methods for retrieving DataAccessPolicy records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import DataAccessPolicy
@@ -26,7 +26,7 @@ from metadata_repository_service.models import DataAccessPolicy
 COLLECTION_NAME = "DataAccessPolicy"
 
 
-async def retrieve_data_access_policies(config: Config = get_config()) -> List[str]:
+async def retrieve_data_access_policies(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of DataAccessPolicy object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_data_access_policies(config: Config = get_config()) -> List[s
 
 
 async def get_data_access_policy(
-    data_access_policy_id: str, embedded: bool = False, config: Config = get_config()
+    data_access_policy_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> DataAccessPolicy:
     """
     Given a Datset ID, get the DataAccessPolicy object from metadata store.
@@ -63,6 +63,6 @@ async def get_data_access_policy(
     collection = client[config.db_name][COLLECTION_NAME]
     data_access_policy = await collection.find_one({"id": data_access_policy_id})  # type: ignore
     if data_access_policy and embedded:
-        data_access_policy = await embed_references(data_access_policy)
+        data_access_policy = await embed_references(data_access_policy, config=config)
     client.close()
     return data_access_policy

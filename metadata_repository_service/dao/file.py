@@ -18,7 +18,7 @@ Convenience methods for retrieving File records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import File
@@ -26,7 +26,7 @@ from metadata_repository_service.models import File
 COLLECTION_NAME = "File"
 
 
-async def retrieve_files(config: Config = get_config()) -> List[str]:
+async def retrieve_files(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of File object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_files(config: Config = get_config()) -> List[str]:
 
 
 async def get_file(
-    file_id: str, embedded: bool = False, config: Config = get_config()
+    file_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> File:
     """
     Given a Datset ID, get the File object from metadata store.
@@ -63,6 +63,6 @@ async def get_file(
     collection = client[config.db_name][COLLECTION_NAME]
     file = await collection.find_one({"id": file_id})  # type: ignore
     if file and embedded:
-        file = await embed_references(file)
+        file = await embed_references(file, config=config)
     client.close()
     return file

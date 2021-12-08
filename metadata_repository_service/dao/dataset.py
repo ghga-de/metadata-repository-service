@@ -18,7 +18,7 @@ Convenience methods for retrieving Dataset records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Dataset
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Dataset
 COLLECTION_NAME = "Dataset"
 
 
-async def retrieve_datasets(config: Config = get_config()) -> List[str]:
+async def retrieve_datasets(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Dataset object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_datasets(config: Config = get_config()) -> List[str]:
 
 
 async def get_dataset(
-    dataset_id: str, embedded: bool = False, config: Config = get_config()
+    dataset_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Dataset:
     """
     Given a Datset ID, get the Dataset object from metadata store.
@@ -63,6 +63,6 @@ async def get_dataset(
     collection = client[config.db_name][COLLECTION_NAME]
     dataset = await collection.find_one({"id": dataset_id})  # type: ignore
     if dataset and embedded:
-        dataset = await embed_references(dataset)
+        dataset = await embed_references(dataset, config=config)
     client.close()
     return dataset
