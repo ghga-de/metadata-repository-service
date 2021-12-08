@@ -23,7 +23,7 @@ from typing import Dict, Set
 
 import stringcase
 
-from metadata_repository_service.config import get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.dao.db import get_db_client
 
 embedded_fields: Set = {
@@ -48,7 +48,9 @@ embedded_fields: Set = {
 }
 
 
-async def _get_reference(document_id: str, collection_name: str) -> Dict:
+async def _get_reference(
+    document_id: str, collection_name: str, config: Config = CONFIG
+) -> Dict:
     """Given a document ID and a collection name, query the metadata store
     and return the document.
 
@@ -61,7 +63,6 @@ async def _get_reference(document_id: str, collection_name: str) -> Dict:
 
     """
     client = await get_db_client()
-    config = get_config()
     collection = client[config.db_name][collection_name]
     doc = await collection.find_one({"id": document_id})  # type: ignore
     if not doc:
@@ -73,7 +74,7 @@ async def _get_reference(document_id: str, collection_name: str) -> Dict:
     return doc
 
 
-async def embed_references(document: Dict) -> Dict:
+async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
     """Given a document and a document type, identify the references in ``document``
     and query the metadata store. After retrieving the referenced objects,
     embed them in place of the reference in the parent document.
@@ -94,17 +95,23 @@ async def embed_references(document: Dict) -> Dict:
             formatted_cname = stringcase.pascalcase(cname)
             if isinstance(parent_document[field], str):
                 referenced_doc = await _get_reference(
-                    parent_document[field], formatted_cname
+                    parent_document[field], formatted_cname, config=config
                 )
                 if referenced_doc:
-                    referenced_doc = await embed_references(referenced_doc)
+                    referenced_doc = await embed_references(
+                        referenced_doc, config=config
+                    )
                     parent_document[field] = referenced_doc
             elif isinstance(parent_document[field], (list, set, tuple)):
                 docs = []
                 for ref in parent_document[field]:
-                    referenced_doc = await _get_reference(ref, formatted_cname)
+                    referenced_doc = await _get_reference(
+                        ref, formatted_cname, config=config
+                    )
                     if referenced_doc:
-                        referenced_doc = await embed_references(referenced_doc)
+                        referenced_doc = await embed_references(
+                            referenced_doc, config=config
+                        )
                         docs.append(referenced_doc)
                 if docs:
                     parent_document[field] = docs

@@ -18,7 +18,7 @@ Convenience methods for retrieving Individual records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Individual
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Individual
 COLLECTION_NAME = "Individual"
 
 
-async def retrieve_individuals(config: Config = get_config()) -> List[str]:
+async def retrieve_individuals(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Individual object IDs from metadata store.
 
@@ -46,7 +46,7 @@ async def retrieve_individuals(config: Config = get_config()) -> List[str]:
 
 
 async def get_individual(
-    individual_id: str, embedded: bool = False, config: Config = get_config()
+    individual_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Individual:
     """
     Given a Datset ID, get the Individual object from metadata store.
@@ -64,6 +64,6 @@ async def get_individual(
     collection = client[config.db_name][COLLECTION_NAME]
     individual = await collection.find_one({"id": individual_id})  # type: ignore
     if individual and embedded:
-        individual = await embed_references(individual)
+        individual = await embed_references(individual, config=config)
     client.close()
     return individual

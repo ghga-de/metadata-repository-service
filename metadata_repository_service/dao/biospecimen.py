@@ -18,7 +18,7 @@ Convenience methods for retrieving Biospecimen records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Biospecimen
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Biospecimen
 COLLECTION_NAME = "Biospecimen"
 
 
-async def retrieve_biospecimens(config: Config = get_config()) -> List[str]:
+async def retrieve_biospecimens(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Biospecimen object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_biospecimens(config: Config = get_config()) -> List[str]:
 
 
 async def get_biospecimen(
-    biospecimen_id: str, embedded: bool = False, config: Config = get_config()
+    biospecimen_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Biospecimen:
     """
     Given a Datset ID, get the Biospecimen object from metadata store.
@@ -63,6 +63,6 @@ async def get_biospecimen(
     collection = client[config.db_name][COLLECTION_NAME]
     biospecimen = await collection.find_one({"id": biospecimen_id})  # type: ignore
     if biospecimen and embedded:
-        biospecimen = await embed_references(biospecimen)
+        biospecimen = await embed_references(biospecimen, config=config)
     client.close()
     return biospecimen

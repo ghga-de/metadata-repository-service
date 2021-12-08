@@ -18,7 +18,7 @@ Convenience methods for retrieving DataAccessCommittee records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import DataAccessCommittee
@@ -26,7 +26,7 @@ from metadata_repository_service.models import DataAccessCommittee
 COLLECTION_NAME = "DataAccessCommittee"
 
 
-async def retrieve_data_access_committees(config: Config = get_config()) -> List[str]:
+async def retrieve_data_access_committees(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of DataAccessCommittee object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_data_access_committees(config: Config = get_config()) -> List
 
 
 async def get_data_access_committee(
-    data_access_committee_id: str, embedded: bool = False, config: Config = get_config()
+    data_access_committee_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> DataAccessCommittee:
     """
     Given a Datset ID, get the DataAccessCommittee object from metadata store.
@@ -65,6 +65,8 @@ async def get_data_access_committee(
         {"id": data_access_committee_id}
     )  # type: ignore
     if data_access_committee and embedded:
-        data_access_committee = await embed_references(data_access_committee)
+        data_access_committee = await embed_references(
+            data_access_committee, config=config
+        )
     client.close()
     return data_access_committee

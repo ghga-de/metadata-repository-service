@@ -18,7 +18,7 @@ Convenience methods for retrieving Technology records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Technology
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Technology
 COLLECTION_NAME = "Technology"
 
 
-async def retrieve_technologies(config: Config = get_config()) -> List[str]:
+async def retrieve_technologies(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Technology object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_technologies(config: Config = get_config()) -> List[str]:
 
 
 async def get_technology(
-    technology_id: str, embedded: bool = False, config: Config = get_config()
+    technology_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Technology:
     """
     Given an Technology ID, get the Technology object from metadata store.
@@ -63,6 +63,6 @@ async def get_technology(
     collection = client[config.db_name][COLLECTION_NAME]
     technology = await collection.find_one({"id": technology_id})  # type: ignore
     if technology and embedded:
-        technology = await embed_references(technology)
+        technology = await embed_references(technology, config=config)
     client.close()
     return technology

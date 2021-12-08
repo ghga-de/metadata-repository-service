@@ -18,7 +18,7 @@ Convenience methods for retrieving Project records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Project
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Project
 COLLECTION_NAME = "Project"
 
 
-async def retrieve_projects(config: Config = get_config()) -> List[str]:
+async def retrieve_projects(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Project object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_projects(config: Config = get_config()) -> List[str]:
 
 
 async def get_project(
-    project_id: str, embedded: bool = False, config: Config = get_config()
+    project_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Project:
     """
     Given a Datset ID, get the Project object from metadata store.
@@ -63,6 +63,6 @@ async def get_project(
     collection = client[config.db_name][COLLECTION_NAME]
     project = await collection.find_one({"id": project_id})  # type: ignore
     if project and embedded:
-        project = await embed_references(project)
+        project = await embed_references(project, config=config)
     client.close()
     return project

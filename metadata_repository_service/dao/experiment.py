@@ -18,7 +18,7 @@ Convenience methods for retrieving Experiment records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Experiment
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Experiment
 COLLECTION_NAME = "Experiment"
 
 
-async def retrieve_experiments(config: Config = get_config()) -> List[str]:
+async def retrieve_experiments(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Experiment object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_experiments(config: Config = get_config()) -> List[str]:
 
 
 async def get_experiment(
-    experiment_id: str, embedded: bool = False, config: Config = get_config()
+    experiment_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Experiment:
     """
     Given an Experiment ID, get the Experiment object from metadata store.
@@ -63,6 +63,6 @@ async def get_experiment(
     collection = client[config.db_name][COLLECTION_NAME]
     experiment = await collection.find_one({"id": experiment_id})  # type: ignore
     if experiment and embedded:
-        experiment = await embed_references(experiment)
+        experiment = await embed_references(experiment, config=config)
     client.close()
     return experiment

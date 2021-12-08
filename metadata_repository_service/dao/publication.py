@@ -18,7 +18,7 @@ Convenience methods for retrieving Publication records
 
 from typing import List
 
-from metadata_repository_service.config import Config, get_config
+from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Publication
@@ -26,7 +26,7 @@ from metadata_repository_service.models import Publication
 COLLECTION_NAME = "Publication"
 
 
-async def retrieve_publications(config: Config = get_config()) -> List[str]:
+async def retrieve_publications(config: Config = CONFIG) -> List[str]:
     """
     Retrieve a list of Publication object IDs from metadata store.
 
@@ -45,7 +45,7 @@ async def retrieve_publications(config: Config = get_config()) -> List[str]:
 
 
 async def get_publication(
-    publication_id: str, embedded: bool = False, config: Config = get_config()
+    publication_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Publication:
     """
     Given a Datset ID, get the Publication object from metadata store.
@@ -63,6 +63,6 @@ async def get_publication(
     collection = client[config.db_name][COLLECTION_NAME]
     publication = await collection.find_one({"id": publication_id})  # type: ignore
     if publication and embedded:
-        publication = await embed_references(publication)
+        publication = await embed_references(publication, config=config)
     client.close()
     return publication
