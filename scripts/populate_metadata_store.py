@@ -59,6 +59,13 @@ async def populate_record(
         await insert_records(db_url, db_name, collection_name, records[record_type])
 
 
+async def create_text_index(db_url: str, db_name: str, collection_name: str):
+    """Create a text index on a collection"""
+    client = motor.motor_asyncio.AsyncIOMotorClient(db_url)
+    collection = client[db_name][collection_name]
+    await collection.create_index([("$**", "text")])
+
+
 async def insert_records(db_url, db_name, collection_name, records):
     """Insert a set of records to the database"""
     client = motor.motor_asyncio.AsyncIOMotorClient(db_url)
@@ -79,6 +86,7 @@ def main(
         loop.run_until_complete(
             populate_record(example_dir, record_type, db_url, db_name, collection_name)
         )
+        loop.run_until_complete(create_text_index(db_url, db_name, collection_name))
     typer.echo("Done.")
 
 
