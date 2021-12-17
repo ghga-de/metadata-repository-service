@@ -59,6 +59,13 @@ async def populate_record(
         await insert_records(db_url, db_name, collection_name, records[record_type])
 
 
+async def create_text_index(db_url: str, db_name: str, collection_name: str):
+    """Create a text index on a collection"""
+    client = motor.motor_asyncio.AsyncIOMotorClient(db_url)
+    collection = client[db_name][collection_name]
+    await collection.create_index([("$**", "text")])
+
+
 async def insert_records(db_url, db_name, collection_name, records):
     """Insert a set of records to the database"""
     client = motor.motor_asyncio.AsyncIOMotorClient(db_url)
@@ -66,19 +73,37 @@ async def insert_records(db_url, db_name, collection_name, records):
     await collection.insert_many(records)
 
 
+async def count_documents_in_collection(db_url, db_name, collection_name):
+    """Check whether there is data in a given collection"""
+    client = motor.motor_asyncio.AsyncIOMotorClient(db_url)
+    collection = client[db_name][collection_name]
+    count = await collection.count_documents({})
+    return count
+
+
 def main(
     example_dir: str = DEFAULT_EXAMPLES_DIR,
     db_url: str = "mongodb://localhost:27017",
     db_name: str = "metadata-store",
+    reload: bool = False,
 ):
-    """Populate the database with examples for all record types"""
+    """Populate the database with records for all record types"""
     loop = asyncio.get_event_loop()
-    typer.echo("This will populate the database with examples for all record types.")
+    typer.echo("This will populate the database with records for all record types.")
     for record_type, collection_name in RECORD_TYPES:
         typer.echo(f"  - working on record type: {record_type}")
-        loop.run_until_complete(
-            populate_record(example_dir, record_type, db_url, db_name, collection_name)
+        count = loop.run_until_complete(
+            count_documents_in_collection(db_url, db_name, collection_name)
         )
+        if count > 0 and not reload:
+            typer.echo(f"Cannot write to a non-empty {collection_name} collection.")
+        else:
+            loop.run_until_complete(
+                populate_record(
+                    example_dir, record_type, db_url, db_name, collection_name
+                )
+            )
+            loop.run_until_complete(create_text_index(db_url, db_name, collection_name))
     typer.echo("Done.")
 
 
