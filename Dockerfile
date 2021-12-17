@@ -18,7 +18,7 @@ FROM python:3.9.6-buster
 COPY . /service
 WORKDIR /service
 
-RUN pip install . && pip install typer
+RUN pip install .
 
 # create new user and execute as that user
 RUN useradd --create-home appuser
