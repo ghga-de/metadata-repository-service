@@ -11,6 +11,10 @@ components:
 
         that performs an activity.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -49,9 +53,13 @@ components:
         also captured.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -60,6 +68,12 @@ components:
         description:
           description: Description of an entity.
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         has_analysis_process:
           anyOf:
@@ -133,6 +147,10 @@ components:
 
         the Analysis.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -198,6 +216,10 @@ components:
 
         biological species.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -272,9 +294,13 @@ components:
         derived.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -354,9 +380,13 @@ components:
         for data use does not raise ethical and/or legal concerns.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -365,6 +395,12 @@ components:
         description:
           description: Description of an entity.
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         has_member:
           anyOf:
@@ -407,9 +443,13 @@ components:
         a user can have access to one or more Datasets belonging to one or more Studies.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole             purpose
+          description: A unique GHGA identifier assigned to an entity for the sole             purpose
             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -418,6 +458,12 @@ components:
         description:
           description: A short description for the Data Access Policy.
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         has_data_access_committee:
           anyOf:
@@ -490,9 +536,13 @@ components:
       description: A Dataset is a collection of Files that is prepared for distribution.
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -501,6 +551,12 @@ components:
         description:
           description: Description of an entity.
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         has_analysis:
           anyOf:
@@ -513,6 +569,12 @@ components:
           description: One or more Analysis entities that are referenced by             this
             Dataset.
           title: Has Analysis
+        has_data_access_policy:
+          anyOf:
+          - type: string
+          - $ref: '#/components/schemas/DataAccessPolicy'
+          description: The Data Access Policy that applies to this Dataset.
+          title: Has Data Access Policy
         has_experiment:
           anyOf:
           - items:
@@ -545,6 +607,16 @@ components:
             type: array
           description: One or more Publication entities associated with this Dataset.
           title: Has Publication
+        has_sample:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - items:
+              $ref: '#/components/schemas/Sample'
+            type: array
+          description: One or more Sample entities that are referenced by this Dataset.
+          title: Has Sample
         has_study:
           anyOf:
           - items:
@@ -589,6 +661,10 @@ components:
 
         organism because of one or more disorders in that organism.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -626,9 +702,13 @@ components:
         or establishing the validity of a hypothesis.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         biological_replicates:
           description: A biological replicate is a replicate role that consists of             independent
@@ -642,6 +722,12 @@ components:
         description:
           description: A detailed description of the Experiment.
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         experimental_replicates:
           description: The replicate number of the assay, i.e. the numeric iteration             for
@@ -726,6 +812,10 @@ components:
 
         used and the Agent that is running the experiment.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -785,9 +875,13 @@ components:
         a data transformation activity.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         category:
           description: 'The category for this file: Whole Genome Sequencing, Whole
@@ -806,6 +900,12 @@ components:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         file_index:
           description: The index for this file. Commonly for BAM/VCF files.
@@ -852,8 +952,8 @@ components:
       description: An Individual is a Person who is participating in a Study.
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
           type: string
         additional_name:
@@ -864,6 +964,10 @@ components:
           description: Age of an individual.
           title: Age
           type: integer
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         ancestry:
           description: A person's descent or lineage, from a person or             from
             a population.
@@ -872,6 +976,12 @@ components:
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         ethnicity:
           description: A social group characterized by a distinctive social and             cultural
@@ -983,6 +1093,10 @@ components:
           description: Additional name(s).
           title: Additional Name
           type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1031,6 +1145,10 @@ components:
 
         outward manifestations of a specific genotype.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1066,9 +1184,13 @@ components:
         a single requirement.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -1115,6 +1237,10 @@ components:
         investigation agents will reliably be able to independently reproduce the
         process.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1167,6 +1293,10 @@ components:
             from a publication related to this study
           title: Abstract
           type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1197,9 +1327,13 @@ components:
         A sample is prepared         from a Biospecimen (isolate or tissue).
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
           type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
@@ -1210,6 +1344,16 @@ components:
             sample was collected, sample source,  protocol followed             for
             processing the sample etc).
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
+          type: string
+        has_anatomical_entity:
+          description: Anatomical site associated with an entity.
+          title: Has Anatomical Entity
           type: string
         has_biospecimen:
           anyOf:
@@ -1284,8 +1428,8 @@ components:
         phenomenon being studied.'
       properties:
         accession:
-          description: A unique identifier assigned to an entity for the sole purpose             of
-            referring to that entity in a global scope.
+          description: A unique GHGA identifier assigned to an entity for the sole
+            purpose             of referring to that entity in a global scope.
           title: Accession
           type: string
         affiliation:
@@ -1294,6 +1438,10 @@ components:
             type: string
           title: Affiliation
           type: array
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1302,6 +1450,12 @@ components:
           description: A detailed description (abstract) that describes the goals
             of             this Study.
           title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
           type: string
         has_analysis:
           anyOf:
@@ -1392,6 +1546,10 @@ components:
 
         technology.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1451,6 +1609,10 @@ components:
 
         particular workflow.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
@@ -1500,6 +1662,10 @@ components:
 
         Workflow Step entity.'
       properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
         creation_date:
           description: Timestamp (in ISO 8601 format) when the entity was created.
           title: Creation Date
