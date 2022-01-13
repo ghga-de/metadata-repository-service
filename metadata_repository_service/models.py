@@ -152,7 +152,7 @@ class Project(BaseModel):
 
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
     )
     has_attribute: Optional[List[Attribute]] = Field(
@@ -169,6 +169,7 @@ class Project(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -201,8 +202,14 @@ class Study(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     has_publication: Optional[Union[List[str], List[Publication]]] = Field(
         None, description="One or more Publication entities associated with this Study."
@@ -230,6 +237,7 @@ class Study(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -287,8 +295,14 @@ class Experiment(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     title: str = Field(
         None, description="Name for the experiment (eg: GHGAE_PBMC_RNAseq)."
@@ -299,6 +313,7 @@ class Experiment(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -344,6 +359,7 @@ class ExperimentProcess(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -379,6 +395,7 @@ class Protocol(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None,
         description="One or more cross-references for this Protocol. \
@@ -483,6 +500,7 @@ class LibraryPreparationProtocol(Protocol):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -601,6 +619,7 @@ class SequencingProtocol(Protocol):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -625,6 +644,7 @@ class Agent(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -648,6 +668,7 @@ class Technology(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -671,6 +692,7 @@ class Workflow(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -700,6 +722,7 @@ class WorkflowStep(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -761,12 +784,13 @@ class Biospecimen(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -818,17 +842,28 @@ class Sample(BaseModel):
     has_individual: Union[str, Individual] = Field(
         None, description="The Individual from which this Sample was derived from."
     )
+    has_anatomical_entity: Optional[str] = Field(
+        None, description="Anatomical site associated with an entity."
+    )
+
     has_biospecimen: Union[str, Optional[Biospecimen]] = Field(
         None, description="The Biospecimen from which this Sample was prepared from."
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None,
         description="One or more cross-references for this Sample. For example, \
@@ -907,8 +942,14 @@ class Individual(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     given_name: Optional[str] = Field(None, description="First name.")
     family_name: Optional[str] = Field(None, description="Last name.")
@@ -916,6 +957,7 @@ class Individual(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -986,8 +1028,14 @@ class Donor(Individual):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     given_name: Optional[str] = Field(None, description="First name.")
     family_name: Optional[str] = Field(None, description="Last name.")
@@ -995,6 +1043,7 @@ class Donor(Individual):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1016,6 +1065,7 @@ class Population(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1044,13 +1094,14 @@ class Family(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
     )
     name: Optional[str] = Field(None, description="The name for an entity.")
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1075,13 +1126,14 @@ class Cohort(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole \
+        description="A unique GHGA identifier assigned to an entity for the sole \
             purpose of referring to that entity in a global scope.",
     )
     name: Optional[str] = Field(None, description="The name for an entity.")
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1123,12 +1175,19 @@ class File(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1166,8 +1225,14 @@ class Analysis(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
@@ -1176,6 +1241,7 @@ class Analysis(BaseModel):
         None, description="The title that describes an entity."
     )
     description: Optional[str] = Field(None, description="Description of an entity.")
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1218,6 +1284,7 @@ class AnalysisProcess(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1243,8 +1310,14 @@ class Dataset(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     has_publication: Optional[Union[List[str], List[Publication]]] = Field(
         None,
@@ -1264,10 +1337,18 @@ class Dataset(BaseModel):
         description="One or more Experiment entities that are referenced by \
             this Dataset.",
     )
+    has_sample: List[Study] = Field(
+        None,
+        description="One or more Sample entities that are referenced by this Dataset.",
+    )
+    has_data_access_policy: List[DataAccessPolicy] = Field(
+        None, description="The Data Access Policy that applies to this Dataset."
+    )
     status: Optional[StatusEnum] = Field(None, description="The status of an entity.")
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1330,12 +1411,19 @@ class DataAccessPolicy(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole \
+        description="A unique GHGA identifier assigned to an entity for the sole \
             purpose of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1364,12 +1452,19 @@ class DataAccessCommittee(BaseModel):
     )
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
+    )
+    ega_accession: Optional[str] = Field(
+        None,
+        description="A unique European Genome-Phenome Archive (EGA) identifier \
+            assigned to an entity for the sole purpose of referring to that entity \
+            within the EGA federated network.",
     )
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1397,6 +1492,7 @@ class Member(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1422,6 +1518,7 @@ class Publication(BaseModel):
             abstract from a publication related to this study",
     )
     id: str = Field(None, description="A PMID or DOI for the Publication.")
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="One or more cross-references for this Publication."
     )
@@ -1443,6 +1540,7 @@ class AnatomicalEntity(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     name: Optional[str] = Field(None, description="The name for an entity.")
     description: Optional[str] = Field(None, description="Description of an entity.")
     xref: Optional[List[str]] = Field(
@@ -1467,6 +1565,7 @@ class Disease(BaseModel):
     )
     name: Optional[str] = Field(None, description="The name for an entity.")
     description: Optional[str] = Field(None, description="Description of an entity.")
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1490,6 +1589,7 @@ class PhenotypicFeature(BaseModel):
     )
     name: Optional[str] = Field(None, description="The name for an entity.")
     description: Optional[str] = Field(None, description="Description of an entity.")
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1514,6 +1614,7 @@ class User(BaseModel):
     id: str = Field(
         None, description="An identifier that uniquely represents an entity."
     )
+    alias: Optional[str] = Field(None, description="The alias for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1625,7 +1726,7 @@ class AccessionMixin(BaseModel):
 
     accession: Optional[str] = Field(
         None,
-        description="A unique identifier assigned to an entity for the sole purpose \
+        description="A unique GHGA identifier assigned to an entity for the sole purpose \
             of referring to that entity in a global scope.",
     )
 
