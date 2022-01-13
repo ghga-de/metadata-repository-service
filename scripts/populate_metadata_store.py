@@ -32,6 +32,7 @@ HERE: Path = Path(__file__).parent.resolve()
 DEFAULT_EXAMPLES_DIR: str = HERE.parent.resolve() / "example_data"  # type: ignore
 
 RECORD_TYPES = {
+    ("analyses", "Analysis"),
     ("biospecimens", "Biospecimen"),
     ("data_access_committees", "DataAccessCommittee"),
     ("data_access_policies", "DataAccessPolicy"),
@@ -45,6 +46,7 @@ RECORD_TYPES = {
     ("technologies", "Technology"),
     ("publications", "Publication"),
     ("projects", "Project"),
+    ("phenotypic_features", "PhenotypicFeature"),
 }
 
 

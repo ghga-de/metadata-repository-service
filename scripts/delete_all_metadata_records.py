@@ -24,6 +24,7 @@ import motor.motor_asyncio
 import typer
 
 CollectionTypes = Literal[
+    "Analysis",
     "Biospecimen",
     "DataAccessCommittee",
     "DataAccessPolicy",
@@ -37,6 +38,7 @@ CollectionTypes = Literal[
     "Technology",
     "Publication",
     "Project",
+    "PhenotypicFeature",
 ]
 
 
