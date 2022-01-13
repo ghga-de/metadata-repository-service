@@ -1337,11 +1337,11 @@ class Dataset(BaseModel):
         description="One or more Experiment entities that are referenced by \
             this Dataset.",
     )
-    has_sample: List[Study] = Field(
+    has_sample: Optional[Union[List[str], List[Sample]]] = Field(
         None,
         description="One or more Sample entities that are referenced by this Dataset.",
     )
-    has_data_access_policy: List[DataAccessPolicy] = Field(
+    has_data_access_policy: Optional[Union[str, DataAccessPolicy]] = Field(
         None, description="The Data Access Policy that applies to this Dataset."
     )
     status: Optional[StatusEnum] = Field(None, description="The status of an entity.")
