@@ -18,28 +18,16 @@
 import nest_asyncio
 import pytest
 from fastapi import status
-from fastapi.testclient import TestClient
 
-from metadata_repository_service.api.deps import get_config
-from metadata_repository_service.api.main import app
-from metadata_repository_service.config import Config
-from tests.fixtures import initialize_test_db  # noqa: F401,F811
+from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture  # noqa: F401
 
 nest_asyncio.apply()
 
 
-def get_config_override():
-    return Config(db_url="mongodb://localhost:27017", db_name="metadata-store-test")
-
-
-app.dependency_overrides[get_config] = get_config_override
-client = TestClient(app)
-
-
-def test_index():
+def test_index(mongo_app_fixture: MongoAppFixture):  # noqa: F811
     """Test the index endpoint"""
 
-    client = TestClient(app)
+    client = mongo_app_fixture.app_client
     response = client.get("/")
 
     assert response.status_code == status.HTTP_200_OK
@@ -78,10 +66,12 @@ def test_index():
 )
 @pytest.mark.asyncio
 async def test_get_entity_by_id(
-    initialize_test_db, route, entity_id, check_conditions  # noqa: F811
+    mongo_app_fixture: MongoAppFixture, route, entity_id, check_conditions  # noqa: F811
 ):
+    client = mongo_app_fixture.app_client
+
     response = client.get(f"/{route}/{entity_id}")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     data = response.json()
     assert "id" in data and data["id"] == entity_id
     for key, value in check_conditions.items():
