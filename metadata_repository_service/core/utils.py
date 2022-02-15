@@ -74,6 +74,38 @@ async def _get_reference(
     return doc
 
 
+async def get_entity(
+    identifier: str,
+    field: str,
+    collection_name: str,
+    embedded: bool = False,
+    config: Config = CONFIG,
+) -> Dict:
+    """
+    Given an identifier, field name and collection name, look up the
+    identifier in the provided field of a collection and return the
+    corresponding document.
+
+    Args:
+        identifier: The identifier
+        field: The name of the field
+        collection_name: The collection in the metadata store that has the document
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns
+        The document
+
+    """
+    client = await get_db_client(config)
+    collection = client[config.db_name][collection_name]
+    entity = await collection.find_one({field: identifier})  # type: ignore
+    if entity and embedded:
+        entity = await embed_references(entity, config=CONFIG)
+    client.close()
+    return entity
+
+
 async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
     """Given a document and a document type, identify the references in ``document``
     and query the metadata store. After retrieving the referenced objects,

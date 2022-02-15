@@ -19,8 +19,12 @@ from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
-from metadata_repository_service.dao.data_access_policy import get_data_access_policy
-from metadata_repository_service.models import DataAccessPolicy
+from metadata_repository_service.dao.data_access_policy import (
+    create_data_access_policy,
+    get_data_access_policy,
+    get_data_access_policy_by_accession,
+)
+from metadata_repository_service.models import CreateDataAccessPolicy, DataAccessPolicy
 
 data_access_policy_router = APIRouter()
 
@@ -47,3 +51,31 @@ async def get_data_access_policies(
             detail=f"{DataAccessPolicy.__name__} with id '{data_access_policy_id}' not found",
         )
     return data_access_policy
+
+
+@data_access_policy_router.post(
+    "/data_access_policies",
+    response_model=DataAccessPolicy,
+    summary="Create a DataAccessPolicy",
+    tags=["DataAccessPolicy"],
+)
+async def create_data_access_policies(
+    data_access_policy: CreateDataAccessPolicy,
+    config: Config = Depends(get_config),
+):
+    """
+    Create a DataAccessPolicy and write to the metadata store.
+    """
+
+    dac_accession = data_access_policy.has_data_access_committee
+    dac_entity = await get_data_access_policy_by_accession(dac_accession, config=config)
+    if not dac_entity:
+        raise HTTPException(
+            status_code=404,
+            detail=f"DataAccessCommittee Accession {dac_accession} provided in "
+            + "'data_access_policy.has_data_access_committee' could not be found. "
+            + "Cannot create a DataAccessPolicy that references a "
+            + "non-existing DataAccessCommittee.",
+        )
+    dap = await create_data_access_policy(data_access_policy, config=config)
+    return dap

@@ -66,3 +66,31 @@ async def get_experiment(
         experiment = await embed_references(experiment, config=config)
     client.close()
     return experiment
+
+
+async def get_experiment_by_linked_files(
+    file_id_list, embedded: bool = False, config: Config = CONFIG
+) -> List[Experiment]:
+    """
+    Given a list of File IDs, get the corresponding Experiment objects that
+    reference the File IDs.
+
+    Args:
+        file_id_list: The File IDs
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        A list of Experiment objects
+
+    """
+    client = await get_db_client(config)
+    collection = client[config.db_name][COLLECTION_NAME]
+    experiment_entities = await collection.find(
+        {"has_file": {"$in": file_id_list}}
+    ).to_list(None)
+    if experiment_entities and embedded:
+        for experiment in experiment_entities:
+            experiment = await embed_references(experiment, config=config)
+    client.close()
+    return experiment_entities

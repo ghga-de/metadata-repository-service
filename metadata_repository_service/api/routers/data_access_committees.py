@@ -20,9 +20,13 @@ from fastapi.exceptions import HTTPException
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
 from metadata_repository_service.dao.data_access_committee import (
+    create_data_access_committee,
     get_data_access_committee,
 )
-from metadata_repository_service.models import DataAccessCommittee
+from metadata_repository_service.models import (
+    CreateDataAccessCommittee,
+    DataAccessCommittee,
+)
 
 data_access_committee_router = APIRouter()
 
@@ -38,7 +42,8 @@ async def get_data_access_committees(
     config: Config = Depends(get_config),
 ):
     """
-    Given a DataAccessCommittee ID, get the DataAccessCommittee record from the metadata store.
+    Given a DataAccessCommittee ID, get the DataAccessCommittee record
+    from the metadata store.
     """
     data_access_committee = await get_data_access_committee(
         data_access_committee_id=data_access_committee_id,
@@ -51,3 +56,22 @@ async def get_data_access_committees(
             detail=f"{DataAccessCommittee.__name__} with id '{data_access_committee_id}' not found",
         )
     return data_access_committee
+
+
+@data_access_committee_router.post(
+    "/data_access_committees",
+    response_model=DataAccessCommittee,
+    summary="Create a DataAccessCommittee",
+    tags=["DataAccessCommittee"],
+)
+async def create_data_access_committees(
+    data_access_committee: CreateDataAccessCommittee,
+    config: Config = Depends(get_config),
+):
+    """
+    Create a DataAccessCommittee and write to the metadata store.
+    """
+    dac_entity = await create_data_access_committee(
+        data_access_committee, config=config
+    )
+    return dac_entity

@@ -19,7 +19,7 @@ Convenience methods for retrieving File records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import File
 
@@ -48,7 +48,7 @@ async def get_file(
     file_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> File:
     """
-    Given a Datset ID, get the File object from metadata store.
+    Given a File ID, get the File object from metadata store.
 
     Args:
         file_id: The File ID
@@ -59,10 +59,36 @@ async def get_file(
         The File object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    file = await collection.find_one({"id": file_id})  # type: ignore
-    if file and embedded:
-        file = await embed_references(file, config=config)
-    client.close()
-    return file
+    file_entity = get_entity(
+        identifier=file_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
+    return file_entity
+
+
+async def get_file_by_accession(
+    file_accession: str, embedded: bool = False, config: Config = CONFIG
+) -> File:
+    """
+    Given a File accession, get the File object from metadata store.
+
+    Args:
+        file_accession: The File accession
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        The File object
+
+    """
+    file_entity = get_entity(
+        identifier=file_accession,
+        field="accession",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
+    return file_entity
