@@ -21,6 +21,7 @@ from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
+    generate_accession,
     generate_uuid,
     get_entity,
     get_timestamp,
@@ -132,7 +133,7 @@ async def create_data_access_policy(
     dap_entity["has_data_access_committee"] = dac_entity["id"]
     dap_entity["creation_date"] = await get_timestamp()
     dap_entity["update_date"] = dap_entity["creation_date"]
-    dap_entity["accession"] = f"GHGA:DAP000000000{random.randint(100,999)}"
+    dap_entity["accession"] = await generate_accession(COLLECTION_NAME)
     await collection.insert_one(dap_entity)
     client.close()
     dap = await get_data_access_policy(dap_entity["id"])

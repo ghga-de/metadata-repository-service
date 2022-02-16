@@ -18,6 +18,7 @@ Core uilities for the functionality of Metadata Repository Service.
 import copy
 import datetime
 import logging
+import random
 import uuid
 from typing import Dict, Set
 
@@ -170,3 +171,60 @@ async def generate_uuid() -> str:
 
     """
     return str(uuid.uuid4())
+
+
+async def generate_accession(collection_name: str, config: Config = CONFIG) -> str:
+    """
+    Generate a unique accession.
+
+    The uniqueness of the accession is ensured by checking the metadata store
+    to see if a generated accession already exists.
+
+    Args:
+        collection_name: The name of the collection
+        config: Runtime configuration
+
+    Returns:
+        A new accession
+
+    """
+    client = await get_db_client(config)
+    collection = client[config.db_name]["_accession_tracker_"]
+    accession = await _generate_accession(collection_name=collection_name)
+    accession_tracker_obj = await collection.find_one({"accession": accession})  # type: ignore
+    if accession_tracker_obj:
+        accession = await generate_accession(
+            collection_name=collection_name, config=config
+        )
+    else:
+        accession_tracker_obj = {
+            "accession": accession,
+            "timestamp": await get_timestamp(),
+        }
+        await collection.insert_one(accession_tracker_obj)
+    client.close()
+    return accession
+
+
+async def _generate_accession(collection_name: str) -> str:
+    """
+    Generate an accession for a collection.
+
+    Args:
+        collection_name: The name of the collection
+
+    Returns:
+        A new accession
+
+    """
+    special_accession_prefix = {
+        "DataAccessPolicy": "DAP",
+        "DataAccessCommittee": "DAC",
+    }
+    reference = random.randint(1, 999_999_999_999)
+    if collection_name in special_accession_prefix:
+        collection_abbr = special_accession_prefix[collection_name]
+    else:
+        collection_abbr = collection_name[:3].upper()
+    accession = f"GHGA:{collection_abbr}{str(reference).zfill(12)}"
+    return accession

@@ -21,18 +21,14 @@ from typing import Dict, List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
+    generate_accession,
     generate_uuid,
     get_entity,
     get_timestamp,
 )
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.dao.member import (
-    create_member,
-    get_member_by_email,
-)
-from metadata_repository_service.models import (
-    CreateDataAccessCommittee
-)
+from metadata_repository_service.dao.member import create_member, get_member_by_email
+from metadata_repository_service.models import CreateDataAccessCommittee
 
 COLLECTION_NAME = "DataAccessCommittee"
 
@@ -145,7 +141,7 @@ async def create_data_access_committee(
     dac_entity["update_date"] = dac_entity["create_date"]
     dac_entity["has_member"] = member_entity_id_list
     dac_entity["main_contact"] = main_contact_member["id"]
-    dac_entity["accession"] = f"GHGA:DAC000000000{random.randint(1, 999)}"
+    dac_entity["accession"] = await generate_accession(COLLECTION_NAME)
     await collection.insert_one(dac_entity)
     client.close()
     dac = await get_data_access_committee(dac_entity["id"])

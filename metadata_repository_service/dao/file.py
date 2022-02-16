@@ -16,7 +16,7 @@
 Convenience methods for retrieving File records
 """
 
-from typing import List
+from typing import Dict, List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import get_entity
