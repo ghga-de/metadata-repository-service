@@ -2216,8 +2216,8 @@ class CreateDataAccessPolicy(BaseModel):
         description="URL for the policy, if available. This is useful if the \
             terms of the policy is made available online at a resolvable URL.",
     )
-    has_data_access_committee: Union[str, CreateDataAccessCommittee] = Field(
-        None, description="The Data Access Committee linked to this policy."
+    has_data_access_committee: str = Field(
+        None, description="The Data Access Committee accession linked to this policy."
     )
     has_data_use_condition: Optional[Union[str, List[DataUseCondition]]] = Field(
         None,

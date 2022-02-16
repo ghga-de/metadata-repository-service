@@ -18,10 +18,8 @@ Convenience methods for retrieving Dataset records
 
 from typing import List
 
-from metadata_repository_service.api.routers.studies import get_studies
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
-    embed_references,
     generate_uuid,
     get_entity,
     get_timestamp,
@@ -73,7 +71,7 @@ async def get_dataset(
         The Dataset object
 
     """
-    dataset = get_entity(
+    dataset = await get_entity(
         identifier=dataset_id,
         field="id",
         collection_name=COLLECTION_NAME,
@@ -101,7 +99,7 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
     # Get referenced File entities
     file_entities = {}
     for file_accession in dataset.has_file:
-        file_entity = get_file_by_accession(
+        file_entity = await get_file_by_accession(
             file_accession=file_accession, config=config
         )
         if not file_entity:
@@ -162,4 +160,5 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
 
     await collection.insert_one(dataset_entity)
     dataset = await get_dataset(dataset_entity["id"])
+    print(dataset)
     return dataset

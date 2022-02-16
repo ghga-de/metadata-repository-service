@@ -17,7 +17,7 @@ Convenience methods for retrieving DataAccessCommittee records
 """
 
 import random
-from typing import List
+from typing import Dict, List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
@@ -26,10 +26,12 @@ from metadata_repository_service.core.utils import (
     get_timestamp,
 )
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.dao.member import create_member, get_member
+from metadata_repository_service.dao.member import (
+    create_member,
+    get_member_by_email,
+)
 from metadata_repository_service.models import (
-    CreateDataAccessCommittee,
-    DataAccessCommittee,
+    CreateDataAccessCommittee
 )
 
 COLLECTION_NAME = "DataAccessCommittee"
@@ -55,7 +57,7 @@ async def retrieve_data_access_committees(config: Config = CONFIG) -> List[str]:
 
 async def get_data_access_committee(
     data_access_committee_id: str, embedded: bool = False, config: Config = CONFIG
-) -> DataAccessCommittee:
+) -> Dict:
     """
     Given a DatsetAccessCommittee ID, get the DataAccessCommittee object
     from metadata store.
@@ -81,7 +83,7 @@ async def get_data_access_committee(
 
 async def get_data_access_committee_by_accession(
     data_access_committee_accession: str, embedded: bool = True, config: Config = CONFIG
-) -> DataAccessCommittee:
+) -> Dict:
     """
     Given a DataAccessCommittee accession, get the corresponding
     DataAccessCommittee object from metadata store.
@@ -107,7 +109,7 @@ async def get_data_access_committee_by_accession(
 
 async def create_data_access_committee(
     data_access_committee: CreateDataAccessCommittee, config: Config = CONFIG
-) -> DataAccessCommittee:
+) -> Dict:
     """
     Create a DataAccessCommittee object and write to the metadata store.
 
@@ -130,8 +132,8 @@ async def create_data_access_committee(
 
     main_contact_member = None
     for member_obj in member_objs.values():
-        member = get_member(member_obj["id"], config=config)
-        if not member:
+        member_entity = await get_member_by_email(member_obj.email, config=config)
+        if not member_entity:
             member_entity = await create_member(member_obj)
         if member_entity["email"] == data_access_committee.main_contact.email:
             main_contact_member = member_entity

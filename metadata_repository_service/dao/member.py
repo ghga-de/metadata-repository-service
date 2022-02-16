@@ -16,17 +16,16 @@
 Convenience methods for retrieving Member records
 """
 
-from typing import List
+from typing import Dict, List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
-    embed_references,
     generate_uuid,
     get_entity,
     get_timestamp,
 )
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.models import CreateMember, Member
+from metadata_repository_service.models import CreateMember
 
 COLLECTION_NAME = "Member"
 
@@ -52,7 +51,7 @@ async def retrieve_members(config: Config = CONFIG) -> List[str]:
 
 async def get_member(
     member_id: str, embedded: bool = False, config: Config = CONFIG
-) -> Member:
+) -> Dict:
     """
     Given a Member ID, get the Member object from metadata store.
 
@@ -65,7 +64,7 @@ async def get_member(
         The Member object
 
     """
-    member = get_entity(
+    member = await get_entity(
         identifier=member_id,
         field="id",
         collection_name=COLLECTION_NAME,
@@ -77,7 +76,7 @@ async def get_member(
 
 async def get_member_by_email(
     email: str, embedded: bool = False, config: Config = CONFIG
-) -> Member:
+) -> Dict:
     """
     Given an email of a Member, get the Member object from metadata store.
 
@@ -90,7 +89,7 @@ async def get_member_by_email(
         The Member object
 
     """
-    member = get_entity(
+    member = await get_entity(
         identifier=email,
         field="email",
         collection_name=COLLECTION_NAME,
@@ -100,7 +99,7 @@ async def get_member_by_email(
     return member
 
 
-async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Member:
+async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Dict:
     """
     Create a Member object and write to the metadata store.
 
@@ -120,5 +119,5 @@ async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Me
     member_entity["update_date"] = member_entity["creation_date"]
     await collection.insert_one(member_entity)
     client.close()
-    member = get_member(member_entity["id"])
+    member = await get_member(member_entity["id"])
     return member

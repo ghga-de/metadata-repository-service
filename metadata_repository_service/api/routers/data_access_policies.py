@@ -19,10 +19,12 @@ from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
+from metadata_repository_service.dao.data_access_committee import (
+    get_data_access_committee_by_accession,
+)
 from metadata_repository_service.dao.data_access_policy import (
     create_data_access_policy,
     get_data_access_policy,
-    get_data_access_policy_by_accession,
 )
 from metadata_repository_service.models import CreateDataAccessPolicy, DataAccessPolicy
 
@@ -68,7 +70,9 @@ async def create_data_access_policies(
     """
 
     dac_accession = data_access_policy.has_data_access_committee
-    dac_entity = await get_data_access_policy_by_accession(dac_accession, config=config)
+    dac_entity = await get_data_access_committee_by_accession(
+        dac_accession, config=config
+    )
     if not dac_entity:
         raise HTTPException(
             status_code=404,
