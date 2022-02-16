@@ -48,7 +48,7 @@ async def get_biospecimen(
     biospecimen_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Biospecimen:
     """
-    Given a Datset ID, get the Biospecimen object from metadata store.
+    Given a Biospecimen ID, get the Biospecimen object from metadata store.
 
     Args:
         biospecimen_id: The Biospecimen ID

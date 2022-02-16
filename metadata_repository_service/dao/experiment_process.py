@@ -48,7 +48,7 @@ async def get_experiment_process(
     experiment_process_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> ExperimentProcess:
     """
-    Given a Datset ID, get the ExperimentProcess object from metadata store.
+    Given a ExperimentProcess ID, get the ExperimentProcess object from metadata store.
 
     Args:
         experiment_process_id: The ExperimentProcess ID

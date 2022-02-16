@@ -48,7 +48,7 @@ async def get_analysis_process(
     analysis_process_id: str, embedded: bool = True, config: Config = CONFIG
 ) -> AnalysisProcess:
     """
-    Given a Datset ID, get the AnalysisProcess object from metadata store.
+    Given an AnalysisProcess ID, get the AnalysisProcess object from metadata store.
 
     Args:
         analysis_process_id: The AnalysisProcess ID

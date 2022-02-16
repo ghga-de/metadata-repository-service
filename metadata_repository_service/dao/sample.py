@@ -48,7 +48,7 @@ async def get_sample(
     sample_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Sample:
     """
-    Given a Datset ID, get the Sample object from metadata store.
+    Given a Sample ID, get the Sample object from metadata store.
 
     Args:
         sample_id: The Sample ID

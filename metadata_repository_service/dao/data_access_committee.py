@@ -55,7 +55,7 @@ async def get_data_access_committee(
     data_access_committee_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Dict:
     """
-    Given a DatsetAccessCommittee ID, get the DataAccessCommittee object
+    Given a DatasetAccessCommittee ID, get the DataAccessCommittee object
     from metadata store.
 
     Args:

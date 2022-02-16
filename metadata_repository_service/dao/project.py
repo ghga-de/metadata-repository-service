@@ -48,7 +48,7 @@ async def get_project(
     project_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Project:
     """
-    Given a Datset ID, get the Project object from metadata store.
+    Given a Project ID, get the Project object from metadata store.
 
     Args:
         project_id: The Project ID

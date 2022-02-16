@@ -49,7 +49,7 @@ async def get_individual(
     individual_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Individual:
     """
-    Given a Datset ID, get the Individual object from metadata store.
+    Given a Individual ID, get the Individual object from metadata store.
 
     Args:
         individual_id: The Individual ID

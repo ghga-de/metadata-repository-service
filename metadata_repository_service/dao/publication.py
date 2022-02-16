@@ -48,7 +48,7 @@ async def get_publication(
     publication_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Publication:
     """
-    Given a Datset ID, get the Publication object from metadata store.
+    Given a Publication ID, get the Publication object from metadata store.
 
     Args:
         publication_id: The Publication ID

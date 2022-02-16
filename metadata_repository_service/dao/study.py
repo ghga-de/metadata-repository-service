@@ -48,7 +48,7 @@ async def get_study(
     study_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Study:
     """
-    Given a Datset ID, get the Study object from metadata store.
+    Given a Study ID, get the Study object from metadata store.
 
     Args:
         study_id: The Study ID
