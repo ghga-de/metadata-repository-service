@@ -19,7 +19,7 @@ Convenience methods for retrieving Sample records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references, get_entity
+from metadata_repository_service.core.utils import get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Sample
 
@@ -63,6 +63,7 @@ async def get_sample(
         identifier=sample_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Sample,
         embedded=embedded,
         config=config,
     )

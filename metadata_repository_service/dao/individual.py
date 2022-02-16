@@ -19,7 +19,7 @@ Convenience methods for retrieving Individual records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references, get_entity
+from metadata_repository_service.core.utils import get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Individual
 
@@ -64,6 +64,7 @@ async def get_individual(
         identifier=individual_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Individual,
         embedded=embedded,
         config=config,
     )

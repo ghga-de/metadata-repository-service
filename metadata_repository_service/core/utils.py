@@ -20,12 +20,14 @@ import datetime
 import logging
 import random
 import uuid
-from typing import Dict, Set
+from typing import Any, Dict, Set
 
 import stringcase
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.dao.db import get_db_client
+
+# pylint: disable=too-many-arguments
 
 embedded_fields: Set = {
     "analysis",
@@ -79,9 +81,10 @@ async def get_entity(
     identifier: str,
     field: str,
     collection_name: str,
+    model_class: Any = None,
     embedded: bool = False,
     config: Config = CONFIG,
-) -> Dict:
+) -> Any:
     """
     Given an identifier, field name and collection name, look up the
     identifier in the provided field of a collection and return the
@@ -91,6 +94,7 @@ async def get_entity(
         identifier: The identifier
         field: The name of the field
         collection_name: The collection in the metadata store that has the document
+        model_class:
         embedded: Whether or not to embed references. ``False``, by default.
         config: Rumtime configuration
 
@@ -104,7 +108,11 @@ async def get_entity(
     if entity and embedded:
         entity = await embed_references(entity, config=CONFIG)
     client.close()
-    return entity
+    if model_class:
+        entity_obj = model_class(**entity)
+    else:
+        entity_obj = entity
+    return entity_obj
 
 
 async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
@@ -223,7 +231,7 @@ async def _generate_accession(collection_name: str) -> str:
     }
     reference = random.randint(1, 999_999_999_999)
     if collection_name in special_accession_prefix:
-        collection_abbr = special_accession_prefix[collection_name]
+        collection_abbr = special_accession_prefix.get(collection_name)
     else:
         collection_abbr = collection_name[:3].upper()
     accession = f"GHGA:{collection_abbr}{str(reference).zfill(12)}"

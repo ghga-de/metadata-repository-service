@@ -19,7 +19,7 @@ Convenience methods for retrieving Workflow records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references, get_entity
+from metadata_repository_service.core.utils import get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Workflow
 
@@ -61,6 +61,7 @@ async def get_workflow(
         identifier=workflow_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Workflow,
         embedded=embedded,
         config=config,
     )

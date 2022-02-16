@@ -16,7 +16,6 @@
 Convenience methods for retrieving DataAccessPolicy records
 """
 
-import random
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
@@ -72,6 +71,7 @@ async def get_data_access_policy(
         identifier=data_access_policy_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=DataAccessPolicy,
         embedded=embedded,
         config=config,
     )
@@ -98,6 +98,7 @@ async def get_data_access_policy_by_accession(
         identifier=data_access_policy_accession,
         field="accession",
         collection_name=COLLECTION_NAME,
+        model_class=DataAccessPolicy,
         embedded=embedded,
         config=config,
     )
@@ -130,7 +131,7 @@ async def create_data_access_policy(
         )
     dap_entity = data_access_policy.dict()
     dap_entity["id"] = await generate_uuid()
-    dap_entity["has_data_access_committee"] = dac_entity["id"]
+    dap_entity["has_data_access_committee"] = dac_entity.id
     dap_entity["creation_date"] = await get_timestamp()
     dap_entity["update_date"] = dap_entity["creation_date"]
     dap_entity["accession"] = await generate_accession(COLLECTION_NAME)

@@ -19,7 +19,7 @@ Convenience methods for retrieving AnalysisProcess records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references, get_entity
+from metadata_repository_service.core.utils import get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import AnalysisProcess
 
@@ -62,6 +62,7 @@ async def get_analysis_process(
     analysis_process = await get_entity(
         identifier=analysis_process_id,
         field="id",
+        model_class=AnalysisProcess,
         collection_name=COLLECTION_NAME,
         embedded=embedded,
         config=config,

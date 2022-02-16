@@ -16,7 +16,7 @@
 Convenience methods for retrieving Member records
 """
 
-from typing import Dict, List
+from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
@@ -25,7 +25,7 @@ from metadata_repository_service.core.utils import (
     get_timestamp,
 )
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.models import CreateMember
+from metadata_repository_service.models import CreateMember, Member
 
 COLLECTION_NAME = "Member"
 
@@ -51,7 +51,7 @@ async def retrieve_members(config: Config = CONFIG) -> List[str]:
 
 async def get_member(
     member_id: str, embedded: bool = False, config: Config = CONFIG
-) -> Dict:
+) -> Member:
     """
     Given a Member ID, get the Member object from metadata store.
 
@@ -68,6 +68,7 @@ async def get_member(
         identifier=member_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Member,
         embedded=embedded,
         config=config,
     )
@@ -76,7 +77,7 @@ async def get_member(
 
 async def get_member_by_email(
     email: str, embedded: bool = False, config: Config = CONFIG
-) -> Dict:
+) -> Member:
     """
     Given an email of a Member, get the Member object from metadata store.
 
@@ -93,13 +94,14 @@ async def get_member_by_email(
         identifier=email,
         field="email",
         collection_name=COLLECTION_NAME,
+        model_class=Member,
         embedded=embedded,
         config=config,
     )
     return member
 
 
-async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Dict:
+async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Member:
     """
     Create a Member object and write to the metadata store.
 

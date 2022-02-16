@@ -63,6 +63,7 @@ async def get_experiment(
         identifier=experiment_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Experiment,
         embedded=embedded,
         config=config,
     )
@@ -87,11 +88,10 @@ async def get_experiment_by_linked_files(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    experiment_entities = await collection.find(
-        {"has_file": {"$in": file_id_list}}
-    ).to_list(None)
-    if experiment_entities and embedded:
-        for experiment in experiment_entities:
+    entities = await collection.find({"has_file": {"$in": file_id_list}}).to_list(None)
+    if entities and embedded:
+        for experiment in entities:
             experiment = await embed_references(experiment, config=config)
     client.close()
+    experiment_entities = [Experiment(**x) for x in entities]
     return experiment_entities

@@ -35,6 +35,8 @@ from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.dao.study import get_study
 from metadata_repository_service.models import CreateDataset, Dataset
 
+# pylint: disable=too-many-locals, too-many-statements
+
 COLLECTION_NAME = "Dataset"
 
 
@@ -75,6 +77,7 @@ async def get_dataset(
         identifier=dataset_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Dataset,
         embedded=embedded,
         config=config,
     )
@@ -104,7 +107,7 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
         )
         if not file_entity:
             raise Exception("Cannot find a File with accession: " + file_accession)
-        file_entities[file_entity["id"]] = file_entity
+        file_entities[file_entity.id] = file_entity
 
     print(f"File objects: {file_entities}")
     dap_entity = await get_data_access_policy_by_accession(
@@ -127,19 +130,28 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
     study_entities = {}
     sample_entities = {}
     for experiment in experiment_entities:
-        study_entity = await get_study(experiment["has_study"], config=config)
-        study_entities[study_entity["id"]] = study_entity
-        sample_entity = await get_sample(experiment["has_sample"], config=config)
-        sample_entities[sample_entity["id"]] = sample_entity
+        if isinstance(experiment.has_study, str):
+            study_entity = await get_study(experiment.has_study, config=config)
+        else:
+            study_entity = await get_study(experiment.has_study.id, config=config)
+        study_entities[study_entity.id] = study_entity
+        if isinstance(experiment.has_sample, str):
+            sample_entity = await get_sample(experiment.has_sample, config=config)
+        else:
+            sample_entity = await get_sample(experiment.has_sample.id, config=config)
+        sample_entities[sample_entity.id] = sample_entity
 
     # Analysis
     analysis_entities = await get_analysis_by_linked_files(
         file_id_list=file_entity_id_list, config=config
     )
     for analysis in analysis_entities:
-        study_entity = await get_study(analysis["has_study"], config=config)
-        if study_entity["id"] not in study_entities:
-            study_entities[study_entity["id"]] = study_entity
+        if isinstance(analysis.has_study, str):
+            study_entity = await get_study(analysis.has_study, config=config)
+        else:
+            study_entity = await get_study(analysis.has_study.id, config=config)
+        if study_entity.id not in study_entities:
+            study_entities[study_entity.id] = study_entity
 
     print(f"Studies: {study_entities}")
     print(f"Samples: {sample_entities}")
@@ -152,13 +164,13 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
     dataset_entity["update_date"] = dataset_entity["creation_date"]
 
     dataset_entity["has_file"] = file_entity_id_list
-    dataset_entity["has_experiment"] = [x["id"] for x in experiment_entities]
-    dataset_entity["has_analysis"] = [x["id"] for x in analysis_entities]
+    dataset_entity["has_experiment"] = [x.id for x in experiment_entities]
+    dataset_entity["has_analysis"] = [x.id for x in analysis_entities]
     dataset_entity["has_study"] = list(study_entities.keys())
     dataset_entity["has_sample"] = list(sample_entities.keys())
-    dataset_entity["has_data_access_policy"] = dap_entity["id"]
+    dataset_entity["has_data_access_policy"] = dap_entity.id
 
     await collection.insert_one(dataset_entity)
-    dataset = await get_dataset(dataset_entity["id"])
-    print(dataset)
-    return dataset
+    new_dataset = await get_dataset(dataset_entity["id"])
+    print(new_dataset)
+    return new_dataset

@@ -16,11 +16,12 @@
 Convenience methods for retrieving File records
 """
 
-from typing import Dict, List
+from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import get_entity
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.models import File
 
 COLLECTION_NAME = "File"
 
@@ -45,7 +46,7 @@ async def retrieve_files(config: Config = CONFIG) -> List[str]:
 
 async def get_file(
     file_id: str, embedded: bool = False, config: Config = CONFIG
-) -> Dict:
+) -> File:
     """
     Given a File ID, get the File object from metadata store.
 
@@ -62,6 +63,7 @@ async def get_file(
         identifier=file_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=File,
         embedded=embedded,
         config=config,
     )
@@ -70,7 +72,7 @@ async def get_file(
 
 async def get_file_by_accession(
     file_accession: str, embedded: bool = False, config: Config = CONFIG
-) -> Dict:
+) -> File:
     """
     Given a File accession, get the File object from metadata store.
 
@@ -87,6 +89,7 @@ async def get_file_by_accession(
         identifier=file_accession,
         field="accession",
         collection_name=COLLECTION_NAME,
+        model_class=File,
         embedded=embedded,
         config=config,
     )

@@ -63,6 +63,7 @@ async def get_analysis(
         identifier=analysis_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=Analysis,
         embedded=embedded,
         config=config,
     )
@@ -84,10 +85,11 @@ async def get_analysis_by_accession(
         The Analysis object
 
     """
-    analysis_entity = get_entity(
+    analysis_entity = await get_entity(
         identifier=analysis_accession,
         field="accession",
         collection_name=COLLECTION_NAME,
+        model_class=Analysis,
         embedded=embedded,
         config=config,
     )
@@ -112,11 +114,10 @@ async def get_analysis_by_linked_files(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    analysis_entities = await collection.find(
-        {"has_file": {"$in": file_id_list}}
-    ).to_list(None)
-    if analysis_entities and embedded:
-        for analysis in analysis_entities:
+    entities = await collection.find({"has_file": {"$in": file_id_list}}).to_list(None)
+    if entities and embedded:
+        for analysis in entities:
             analysis = await embed_references(analysis, config=config)
     client.close()
+    analysis_entities = [Analysis(**x) for x in entities]
     return analysis_entities

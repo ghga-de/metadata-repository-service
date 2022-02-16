@@ -16,8 +16,7 @@
 Convenience methods for retrieving DataAccessCommittee records
 """
 
-import random
-from typing import Dict, List
+from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
@@ -28,7 +27,10 @@ from metadata_repository_service.core.utils import (
 )
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.dao.member import create_member, get_member_by_email
-from metadata_repository_service.models import CreateDataAccessCommittee
+from metadata_repository_service.models import (
+    CreateDataAccessCommittee,
+    DataAccessCommittee,
+)
 
 COLLECTION_NAME = "DataAccessCommittee"
 
@@ -53,7 +55,7 @@ async def retrieve_data_access_committees(config: Config = CONFIG) -> List[str]:
 
 async def get_data_access_committee(
     data_access_committee_id: str, embedded: bool = False, config: Config = CONFIG
-) -> Dict:
+) -> DataAccessCommittee:
     """
     Given a DatasetAccessCommittee ID, get the DataAccessCommittee object
     from metadata store.
@@ -71,6 +73,7 @@ async def get_data_access_committee(
         identifier=data_access_committee_id,
         field="id",
         collection_name=COLLECTION_NAME,
+        model_class=DataAccessCommittee,
         embedded=embedded,
         config=config,
     )
@@ -79,7 +82,7 @@ async def get_data_access_committee(
 
 async def get_data_access_committee_by_accession(
     data_access_committee_accession: str, embedded: bool = True, config: Config = CONFIG
-) -> Dict:
+) -> DataAccessCommittee:
     """
     Given a DataAccessCommittee accession, get the corresponding
     DataAccessCommittee object from metadata store.
@@ -97,6 +100,7 @@ async def get_data_access_committee_by_accession(
         identifier=data_access_committee_accession,
         field="accession",
         collection_name=COLLECTION_NAME,
+        model_class=DataAccessCommittee,
         embedded=embedded,
         config=config,
     )
@@ -105,7 +109,7 @@ async def get_data_access_committee_by_accession(
 
 async def create_data_access_committee(
     data_access_committee: CreateDataAccessCommittee, config: Config = CONFIG
-) -> Dict:
+) -> DataAccessCommittee:
     """
     Create a DataAccessCommittee object and write to the metadata store.
 
@@ -131,16 +135,17 @@ async def create_data_access_committee(
         member_entity = await get_member_by_email(member_obj.email, config=config)
         if not member_entity:
             member_entity = await create_member(member_obj)
-        if member_entity["email"] == data_access_committee.main_contact.email:
+        if member_entity.email == data_access_committee.main_contact.email:
             main_contact_member = member_entity
-        member_entity_id_list.append(member_entity["id"])
+        member_entity_id_list.append(member_entity.id)
 
     dac_entity = data_access_committee.dict()
     dac_entity["id"] = await generate_uuid()
     dac_entity["create_date"] = await get_timestamp()
     dac_entity["update_date"] = dac_entity["create_date"]
     dac_entity["has_member"] = member_entity_id_list
-    dac_entity["main_contact"] = main_contact_member["id"]
+    if main_contact_member:
+        dac_entity["main_contact"] = main_contact_member.id
     dac_entity["accession"] = await generate_accession(COLLECTION_NAME)
     await collection.insert_one(dac_entity)
     client.close()

@@ -85,8 +85,8 @@ async def create_datasets(dataset: CreateDataset, config: Config = Depends(get_c
                 + "non-existing File entity.",
             )
 
-    dataset = await create_dataset(dataset, config=config)
-    return dataset
+    new_dataset = await create_dataset(dataset, config=config)
+    return new_dataset
 
 
 @dataset_router.post(
