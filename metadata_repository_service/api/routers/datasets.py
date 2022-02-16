@@ -22,12 +22,17 @@ from metadata_repository_service.config import Config
 from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
 )
-from metadata_repository_service.dao.dataset import create_dataset, get_dataset
+from metadata_repository_service.dao.dataset import (
+    change_dataset_status,
+    create_dataset,
+    get_dataset,
+)
 from metadata_repository_service.dao.file import get_file_by_accession
 from metadata_repository_service.models import (
     CreateDataset,
     Dataset,
     DatasetStatusPatch,
+    ReleaseStatusEnum,
 )
 
 dataset_router = APIRouter()
@@ -95,8 +100,22 @@ async def create_datasets(dataset: CreateDataset, config: Config = Depends(get_c
     summary="Update status of a Dataset",
     tags=["Dataset"],
 )
-async def update_dataset_status(dataset_id: str, dataset: DatasetStatusPatch):
+async def update_dataset_status(
+    dataset_accession: str,
+    dataset: DatasetStatusPatch,
+    config: Config = Depends(get_config),
+):
     """
     Update status of a Dataset entity.
     """
-    pass
+    if dataset.status not in set(ReleaseStatusEnum):
+        raise HTTPException(
+            status_code=400,
+            detail=f"dataset.status {dataset.status} is not a valid value."
+            + f" Must be one of {[x.value for x in ReleaseStatusEnum]}",
+        )
+
+    updated_dataset = await change_dataset_status(
+        dataset_accession, dataset, config=config
+    )
+    return updated_dataset

@@ -20,6 +20,7 @@ from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import (
+    generate_accession,
     generate_uuid,
     get_entity,
     get_timestamp,
@@ -33,7 +34,12 @@ from metadata_repository_service.dao.experiment import get_experiment_by_linked_
 from metadata_repository_service.dao.file import get_file_by_accession
 from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.dao.study import get_study
-from metadata_repository_service.models import CreateDataset, Dataset
+from metadata_repository_service.models import (
+    CreateDataset,
+    Dataset,
+    DatasetStatusPatch,
+    ReleaseStatusEnum,
+)
 
 # pylint: disable=too-many-locals, too-many-statements
 
@@ -76,6 +82,32 @@ async def get_dataset(
     dataset = await get_entity(
         identifier=dataset_id,
         field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Dataset,
+        embedded=embedded,
+        config=config,
+    )
+    return dataset
+
+
+async def get_dataset_by_accession(
+    dataset_accession: str, embedded: bool = False, config: Config = CONFIG
+) -> Dataset:
+    """
+    Given a Dataset accession, get the Dataset object from metadata store.
+
+    Args:
+        dataset_accession: The Dataset accession
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        The Dataset object
+
+    """
+    dataset = await get_entity(
+        identifier=dataset_accession,
+        field="accession",
         collection_name=COLLECTION_NAME,
         model_class=Dataset,
         embedded=embedded,
@@ -162,7 +194,8 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
     dataset_entity["id"] = await generate_uuid()
     dataset_entity["creation_date"] = await get_timestamp()
     dataset_entity["update_date"] = dataset_entity["creation_date"]
-
+    dataset_entity["status"] = ReleaseStatusEnum.UNRELEASED.value
+    dataset_entity["accession"] = await generate_accession(COLLECTION_NAME)
     dataset_entity["has_file"] = file_entity_id_list
     dataset_entity["has_experiment"] = [x.id for x in experiment_entities]
     dataset_entity["has_analysis"] = [x.id for x in analysis_entities]
@@ -171,6 +204,41 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
     dataset_entity["has_data_access_policy"] = dap_entity.id
 
     await collection.insert_one(dataset_entity)
-    new_dataset = await get_dataset(dataset_entity["id"])
+    new_dataset = await get_dataset(dataset_entity["id"], config=config)
     print(new_dataset)
     return new_dataset
+
+
+async def change_dataset_status(
+    dataset_accession: str, dataset: DatasetStatusPatch, config: Config = CONFIG
+) -> Dataset:
+    """_summary_
+    Given a Dataset accession, update its status.
+
+    Args:
+        dataset_accession: The Dataset accession
+        dataset: The status of the dataset
+        config: Rumtime configuration
+
+    Returns:
+        The Dataset object
+
+    """
+    client = await get_db_client(config)
+    collection = client[config.db_name][COLLECTION_NAME]
+    dataset_entity = await get_dataset_by_accession(dataset_accession, config=config)
+    if dataset_entity.status != dataset.status:
+        if dataset.status not in set(ReleaseStatusEnum):
+            raise Exception(
+                f"dataset.status {dataset.status} not a valid value."
+                + f" Must be one of {[x.value for x in ReleaseStatusEnum]}"
+            )
+        await collection.update_one(
+            {"accession": dataset_accession},
+            {"$set": {"status": dataset.status, "update_date": await get_timestamp()}},
+        )
+        updated_dataset = await get_dataset(dataset_entity.id, config=config)
+    else:
+        updated_dataset = dataset_entity
+    client.close()
+    return updated_dataset
