@@ -371,6 +371,172 @@ components:
           type: array
       title: Biospecimen
       type: object
+    CreateDataAccessCommittee:
+      description: 'A group of members that are delegated to grant access to one or
+        more datasets
+
+        after ensuring the minimum criteria for data sharing has been met, and request
+
+        for data use does not raise ethical and/or legal concerns.'
+      properties:
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
+          type: string
+        has_member:
+          description: All the members that are part of this Data Access Committee.
+          items:
+            $ref: '#/components/schemas/CreateMember'
+          title: Has Member
+          type: array
+        main_contact:
+          allOf:
+          - $ref: '#/components/schemas/CreateMember'
+          description: The main contact for the Data Access Committee.
+          title: Main Contact
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateDataAccessCommittee
+      type: object
+    CreateDataAccessPolicy:
+      description: 'A Data Access Policy specifies under which circumstances, legal
+        or otherwise,
+
+        a user can have access to one or more Datasets belonging to one or more Studies.'
+      properties:
+        description:
+          description: A short description for the Data Access Policy.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
+          type: string
+        has_data_access_committee:
+          description: The Data Access Committee accession linked to this policy.
+          title: Has Data Access Committee
+          type: string
+        has_data_use_condition:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/DataUseCondition'
+            type: array
+          description: Data Use Condition entities that are associated with the             Data
+            Access Policy.
+          title: Has Data Use Condition
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        policy_text:
+          description: The terms of data use and policy verbiage should be             captured
+            here.
+          title: Policy Text
+          type: string
+        policy_url:
+          description: URL for the policy, if available. This is useful if the             terms
+            of the policy is made available online at a resolvable URL.
+          title: Policy Url
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateDataAccessPolicy
+      type: object
+    CreateDataset:
+      description: A Dataset is a collection of Files that is prepared for distribution.
+      properties:
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        has_data_access_policy:
+          description: The accession of the Data Access Policy that applies             to
+            this Dataset.
+          title: Has Data Access Policy
+          type: string
+        has_file:
+          description: One or more File accessions that collectively are part of             this
+            Dataset.
+          items:
+            type: string
+          title: Has File
+          type: array
+        title:
+          description: The title that describes an entity.
+          title: Title
+          type: string
+        type:
+          description: The type of Dataset.
+          title: Type
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateDataset
+      type: object
+    CreateMember:
+      description: Member of an Organization or a Committee.
+      properties:
+        additional_name:
+          description: Additional name(s).
+          title: Additional Name
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        email:
+          description: The email of the Member.
+          title: Email
+          type: string
+        family_name:
+          description: Last name.
+          title: Family Name
+          type: string
+        given_name:
+          description: First name.
+          title: Given Name
+          type: string
+        organization:
+          description: The organization that the Member is part of.
+          title: Organization
+          type: string
+        telephone:
+          description: The telephone number of the Member.
+          title: Telephone
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateMember
+      type: object
     DataAccessCommittee:
       description: 'A group of members that are delegated to grant access to one or
         more datasets
@@ -633,7 +799,7 @@ components:
           type: string
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/ReleaseStatusEnum'
           description: The status of an entity.
         title:
           description: The title that describes an entity.
@@ -654,6 +820,15 @@ components:
           title: Xref
           type: array
       title: Dataset
+      type: object
+    DatasetStatusPatch:
+      description: A Dataset is a collection of Files that is prepared for distribution.
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ReleaseStatusEnum'
+          description: The status of an entity.
+      title: DatasetStatusPatch
       type: object
     Disease:
       description: 'A disease is a disposition to undergo pathological processes that
@@ -1321,10 +1496,20 @@ components:
           type: array
       title: Publication
       type: object
+    ReleaseStatusEnum:
+      description: Enum to capture the release status of an entity.
+      enum:
+      - unreleased
+      - released
+      title: ReleaseStatusEnum
+      type: string
     Sample:
-      description: A sample is a limited quantity of something to be used for testing,
-        analysis,         inspection, investigation, demonstration, or trial use.
-        A sample is prepared         from a Biospecimen (isolate or tissue).
+      description: 'A sample is a limited quantity of something to be used for testing,
+        analysis,
+
+        inspection, investigation, demonstration, or trial use. A sample is prepared
+
+        from a Biospecimen (isolate or tissue).'
       properties:
         accession:
           description: A unique GHGA identifier assigned to an entity for the sole
@@ -1409,16 +1594,6 @@ components:
           type: array
       title: Sample
       type: object
-    StatusEnum:
-      description: Enum to capture the status of an entity.
-      enum:
-      - in progress
-      - submitted
-      - unreleased
-      - released
-      - deprecated
-      title: StatusEnum
-      type: string
     Study:
       description: 'Studies are experimental investigations of a particular phenomenon.
         It involves
@@ -1511,7 +1686,7 @@ components:
           type: string
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/ReleaseStatusEnum'
           description: The status of a Study. For example, 'released' or 'unreleased'.
         title:
           description: Comprehensive title for the study.
@@ -1810,10 +1985,37 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Biospecimen
+  /data_access_committees:
+    post:
+      description: Create a DataAccessCommittee and write to the metadata store.
+      operationId: create_data_access_committees_data_access_committees_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAccessCommittee'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAccessCommittee'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create a DataAccessCommittee
+      tags:
+      - DataAccessCommittee
   /data_access_committees/{data_access_committee_id}:
     get:
-      description: Given a DataAccessCommittee ID, get the DataAccessCommittee record
-        from the metadata store.
+      description: 'Given a DataAccessCommittee ID, get the DataAccessCommittee record
+
+        from the metadata store.'
       operationId: get_data_access_committees_data_access_committees__data_access_committee_id__get
       parameters:
       - in: path
@@ -1843,6 +2045,32 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessCommittee
+  /data_access_policies:
+    post:
+      description: Create a DataAccessPolicy and write to the metadata store.
+      operationId: create_data_access_policies_data_access_policies_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAccessPolicy'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAccessPolicy'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create a DataAccessPolicy
+      tags:
+      - DataAccessPolicy
   /data_access_policies/{data_access_policy_id}:
     get:
       description: Given a DataAccessPolicy ID, get the DataAccessPolicy record from
@@ -1876,6 +2104,35 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessPolicy
+  /datasets:
+    post:
+      description: 'Given a list of File accessions and a DataAccessPolicy accession,
+        create a
+
+        Dataset and write to the metadata store.'
+      operationId: create_datasets_datasets_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataset'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create a Dataset
+      tags:
+      - Dataset
   /datasets/{dataset_id}:
     get:
       description: Given a Dataset ID, get the Dataset record from the metadata store.
@@ -1908,6 +2165,40 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Dataset
+      tags:
+      - Query
+    post:
+      description: Update status of a Dataset entity.
+      operationId: update_dataset_status_datasets__dataset_id__post
+      parameters:
+      - in: query
+        name: dataset_accession
+        required: true
+        schema:
+          title: Dataset Accession
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetStatusPatch'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Update status of a Dataset
+      tags:
+      - Dataset
   /experiment_processes/{experiment_process_id}:
     get:
       description: Given a ExperimentProcess ID, get the ExperimentProcess record
