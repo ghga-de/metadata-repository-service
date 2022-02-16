@@ -19,7 +19,7 @@ Convenience methods for retrieving Workflow records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Workflow
 
@@ -57,10 +57,11 @@ async def get_workflow(
         The Workflow object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    workflow = await collection.find_one({"id": workflow_id})  # type: ignore
-    if workflow and embedded:
-        workflow = await embed_references(workflow, config=config)
-    client.close()
+    workflow = await get_entity(
+        identifier=workflow_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return workflow

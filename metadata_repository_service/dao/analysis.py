@@ -59,12 +59,13 @@ async def get_analysis(
         The Analysis object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    analysis = await collection.find_one({"id": analysis_id})  # type: ignore
-    if analysis and embedded:
-        analysis = await embed_references(analysis, config=config)
-    client.close()
+    analysis = await get_entity(
+        identifier=analysis_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return analysis
 
 

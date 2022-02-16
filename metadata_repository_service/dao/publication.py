@@ -19,7 +19,7 @@ Convenience methods for retrieving Publication records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Publication
 
@@ -59,10 +59,11 @@ async def get_publication(
         The Publication object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    publication = await collection.find_one({"id": publication_id})  # type: ignore
-    if publication and embedded:
-        publication = await embed_references(publication, config=config)
-    client.close()
+    publication = await get_entity(
+        identifier=publication_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return publication

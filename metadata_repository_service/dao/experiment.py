@@ -19,7 +19,7 @@ Convenience methods for retrieving Experiment records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Experiment
 
@@ -59,12 +59,13 @@ async def get_experiment(
         The Experiment object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    experiment = await collection.find_one({"id": experiment_id})  # type: ignore
-    if experiment and embedded:
-        experiment = await embed_references(experiment, config=config)
-    client.close()
+    experiment = await get_entity(
+        identifier=experiment_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return experiment
 
 

@@ -19,7 +19,7 @@ Convenience methods for retrieving Project records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Project
 
@@ -59,10 +59,11 @@ async def get_project(
         The Project object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    project = await collection.find_one({"id": project_id})  # type: ignore
-    if project and embedded:
-        project = await embed_references(project, config=config)
-    client.close()
+    project = await get_entity(
+        identifier=project_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return project

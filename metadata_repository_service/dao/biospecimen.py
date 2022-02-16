@@ -19,7 +19,7 @@ Convenience methods for retrieving Biospecimen records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Biospecimen
 
@@ -59,10 +59,11 @@ async def get_biospecimen(
         The Biospecimen object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    biospecimen = await collection.find_one({"id": biospecimen_id})  # type: ignore
-    if biospecimen and embedded:
-        biospecimen = await embed_references(biospecimen, config=config)
-    client.close()
+    biospecimen = await get_entity(
+        identifier=biospecimen_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return biospecimen

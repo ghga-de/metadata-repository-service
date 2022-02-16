@@ -19,7 +19,7 @@ Convenience methods for retrieving Technology records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Technology
 
@@ -59,10 +59,11 @@ async def get_technology(
         The Technology object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    technology = await collection.find_one({"id": technology_id})  # type: ignore
-    if technology and embedded:
-        technology = await embed_references(technology, config=config)
-    client.close()
+    technology = await get_entity(
+        identifier=technology_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return technology

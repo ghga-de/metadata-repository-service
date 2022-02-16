@@ -19,7 +19,7 @@ Convenience methods for retrieving Sample records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import Sample
 
@@ -59,10 +59,11 @@ async def get_sample(
         The Sample object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    sample = await collection.find_one({"id": sample_id})  # type: ignore
-    if sample and embedded:
-        sample = await embed_references(sample, config=config)
-    client.close()
+    sample = await get_entity(
+        identifier=sample_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        embedded=embedded,
+        config=config,
+    )
     return sample
