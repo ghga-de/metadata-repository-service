@@ -1919,6 +1919,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an Analysis
+      tags:
+      - Query
   /analysis_process/{analysis_process_id}:
     get:
       description: Given an AnalysisProcess ID, get the AnalysisProcess record from
@@ -1952,6 +1954,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an AnalysisProcess
+      tags:
+      - Query
   /biospecimens/{biospecimen_id}:
     get:
       description: Given a Biospecimen ID, get the Biospecimen record from the metadata
@@ -1985,6 +1989,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Biospecimen
+      tags:
+      - Query
   /data_access_committees:
     post:
       description: Create a DataAccessCommittee and write to the metadata store.
@@ -2045,6 +2051,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessCommittee
+      tags:
+      - Query
   /data_access_policies:
     post:
       description: Create a DataAccessPolicy and write to the metadata store.
@@ -2104,6 +2112,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessPolicy
+      tags:
+      - Query
   /datasets:
     post:
       description: 'Given a list of File accessions and a DataAccessPolicy accession,
@@ -2131,6 +2141,39 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Create a Dataset
+      tags:
+      - Dataset
+  /datasets/{dataset_accession}:
+    patch:
+      description: Update status of a Dataset entity.
+      operationId: update_dataset_status_datasets__dataset_accession__patch
+      parameters:
+      - in: path
+        name: dataset_accession
+        required: true
+        schema:
+          title: Dataset Accession
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetStatusPatch'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Update status of a Dataset
       tags:
       - Dataset
   /datasets/{dataset_id}:
@@ -2167,38 +2210,6 @@ paths:
       summary: Get a Dataset
       tags:
       - Query
-    post:
-      description: Update status of a Dataset entity.
-      operationId: update_dataset_status_datasets__dataset_id__post
-      parameters:
-      - in: query
-        name: dataset_accession
-        required: true
-        schema:
-          title: Dataset Accession
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DatasetStatusPatch'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Dataset'
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      summary: Update status of a Dataset
-      tags:
-      - Dataset
   /experiment_processes/{experiment_process_id}:
     get:
       description: Given a ExperimentProcess ID, get the ExperimentProcess record
@@ -2232,6 +2243,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a ExperimentProcess
+      tags:
+      - Query
   /experiments/{experiment_id}:
     get:
       description: Given a Experiment ID, get the Experiment record from the metadata
@@ -2265,6 +2278,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an Experiment
+      tags:
+      - Query
   /files/{file_id}:
     get:
       description: Given a File ID, get the File record from the metadata store.
@@ -2297,6 +2312,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a File
+      tags:
+      - Query
   /individuals/{individual_id}:
     get:
       description: Given a Individual ID, get the Individual record from the metadata
@@ -2330,6 +2347,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Individual
+      tags:
+      - Query
   /members/{member_id}:
     get:
       description: Given a Member ID, get the Member record from the metadata store.
@@ -2362,6 +2381,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Member
+      tags:
+      - Query
   /projects/{project_id}:
     get:
       description: Given a Project ID, get the Project record from the metadata store.
@@ -2394,6 +2415,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Project
+      tags:
+      - Query
   /protocols/{protocol_id}:
     get:
       description: Given a Protocol ID, get the Protocol record from the metadata
@@ -2427,6 +2450,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Protocol
+      tags:
+      - Query
   /publications/{publication_id}:
     get:
       description: Given a Publication ID, get the Publication record from the metadata
@@ -2460,6 +2485,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Publication
+      tags:
+      - Query
   /samples/{sample_id}:
     get:
       description: Given a Sample ID, get the Sample record from the metadata store.
@@ -2492,6 +2519,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Sample
+      tags:
+      - Query
   /studies/{study_id}:
     get:
       description: Given a Study ID, get the Study record from the metadata store.
@@ -2524,6 +2553,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Study
+      tags:
+      - Query
   /technologies/{technology_id}:
     get:
       description: Given a Technology ID, get the Technology record from the metadata
@@ -2557,6 +2588,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Technology
+      tags:
+      - Query
   /workflows/{workflow_id}:
     get:
       description: Given a Workflow ID, get the Workflow record from the metadata
@@ -2590,3 +2623,5 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Workflow
+      tags:
+      - Query
