@@ -141,9 +141,8 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
             raise Exception("Cannot find a File with accession: " + file_accession)
         file_entities[file_entity.id] = file_entity
 
-    print(f"File objects: {file_entities}")
     dap_entity = await get_data_access_policy_by_accession(
-        dataset.has_data_access_policy
+        dataset.has_data_access_policy, config=config
     )
     if not dap_entity:
         raise Exception(
@@ -151,12 +150,10 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
             + dataset.has_data_access_policy
         )
     file_entity_id_list = list(file_entities.keys())
-    print(file_entity_id_list)
 
     experiment_entities = await get_experiment_by_linked_files(
         file_id_list=file_entity_id_list, config=config
     )
-    print(experiment_entities)
 
     # Get Sample entities that are linked to Experiment entities
     study_entities = {}
@@ -185,17 +182,15 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
         if study_entity.id not in study_entities:
             study_entities[study_entity.id] = study_entity
 
-    print(f"Studies: {study_entities}")
-    print(f"Samples: {sample_entities}")
-    print(f"Analyses: {analysis_entities}")
-
     # Dataset
     dataset_entity = dataset.dict()
     dataset_entity["id"] = await generate_uuid()
     dataset_entity["creation_date"] = await get_timestamp()
     dataset_entity["update_date"] = dataset_entity["creation_date"]
     dataset_entity["status"] = ReleaseStatusEnum.UNRELEASED.value
-    dataset_entity["accession"] = await generate_accession(COLLECTION_NAME)
+    dataset_entity["accession"] = await generate_accession(
+        COLLECTION_NAME, config=config
+    )
     dataset_entity["has_file"] = file_entity_id_list
     dataset_entity["has_experiment"] = [x.id for x in experiment_entities]
     dataset_entity["has_analysis"] = [x.id for x in analysis_entities]
@@ -205,7 +200,6 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
 
     await collection.insert_one(dataset_entity)
     new_dataset = await get_dataset(dataset_entity["id"], config=config)
-    print(new_dataset)
     return new_dataset
 
 

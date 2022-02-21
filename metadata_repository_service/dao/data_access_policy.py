@@ -122,7 +122,7 @@ async def create_data_access_policy(
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     dac_entity = await get_data_access_committee_by_accession(
-        data_access_policy.has_data_access_committee
+        data_access_policy.has_data_access_committee, config=config
     )
     if not dac_entity:
         raise Exception(
@@ -134,9 +134,8 @@ async def create_data_access_policy(
     dap_entity["has_data_access_committee"] = dac_entity.id
     dap_entity["creation_date"] = await get_timestamp()
     dap_entity["update_date"] = dap_entity["creation_date"]
-    dap_entity["accession"] = await generate_accession(COLLECTION_NAME)
+    dap_entity["accession"] = await generate_accession(COLLECTION_NAME, config=config)
     await collection.insert_one(dap_entity)
     client.close()
-    dap = await get_data_access_policy(dap_entity["id"])
-    print(dap)
+    dap = await get_data_access_policy(dap_entity["id"], config=config)
     return dap

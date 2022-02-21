@@ -134,7 +134,7 @@ async def create_data_access_committee(
     for member_obj in member_objs.values():
         member_entity = await get_member_by_email(member_obj.email, config=config)
         if not member_entity:
-            member_entity = await create_member(member_obj)
+            member_entity = await create_member(member_obj, config=config)
         if member_entity.email == data_access_committee.main_contact.email:
             main_contact_member = member_entity
         member_entity_id_list.append(member_entity.id)
@@ -146,9 +146,8 @@ async def create_data_access_committee(
     dac_entity["has_member"] = member_entity_id_list
     if main_contact_member:
         dac_entity["main_contact"] = main_contact_member.id
-    dac_entity["accession"] = await generate_accession(COLLECTION_NAME)
+    dac_entity["accession"] = await generate_accession(COLLECTION_NAME, config=config)
     await collection.insert_one(dac_entity)
     client.close()
-    dac = await get_data_access_committee(dac_entity["id"])
-    print(f"> {dac}")
+    dac = await get_data_access_committee(dac_entity["id"], config=config)
     return dac

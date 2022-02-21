@@ -106,9 +106,9 @@ async def get_entity(
     collection = client[config.db_name][collection_name]
     entity = await collection.find_one({field: identifier})  # type: ignore
     if entity and embedded:
-        entity = await embed_references(entity, config=CONFIG)
+        entity = await embed_references(entity, config=config)
     client.close()
-    if model_class:
+    if model_class and entity:
         entity_obj = model_class(**entity)
     else:
         entity_obj = entity
@@ -229,7 +229,7 @@ async def _generate_accession(collection_name: str) -> str:
         "DataAccessPolicy": "DAP",
         "DataAccessCommittee": "DAC",
     }
-    reference = random.randint(1, 999_999_999_999)
+    reference = random.randint(1, 999_999_999_999)  # nosec
     if collection_name in special_accession_prefix:
         collection_abbr = special_accession_prefix.get(collection_name)
     else:
