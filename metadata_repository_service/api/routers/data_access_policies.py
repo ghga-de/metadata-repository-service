@@ -35,6 +35,7 @@ data_access_policy_router = APIRouter()
     "/data_access_policies/{data_access_policy_id}",
     response_model=DataAccessPolicy,
     summary="Get a DataAccessPolicy",
+    tags=["Query"],
 )
 async def get_data_access_policies(
     data_access_policy_id: str,

@@ -29,6 +29,7 @@ project_router = APIRouter()
     "/projects/{project_id}",
     response_model=Project,
     summary="Get a Project",
+    tags=["Query"],
 )
 async def get_projects(
     project_id: str, embedded: bool = False, config: Config = Depends(get_config)

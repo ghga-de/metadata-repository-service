@@ -29,6 +29,7 @@ protocol_router = APIRouter()
     "/protocols/{protocol_id}",
     response_model=Protocol,
     summary="Get a Protocol",
+    tags=["Query"],
 )
 async def get_protocols(
     protocol_id: str, embedded: bool = False, config: Config = Depends(get_config)

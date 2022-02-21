@@ -35,6 +35,7 @@ data_access_committee_router = APIRouter()
     "/data_access_committees/{data_access_committee_id}",
     response_model=DataAccessCommittee,
     summary="Get a DataAccessCommittee",
+    tags=["Query"],
 )
 async def get_data_access_committees(
     data_access_committee_id: str,
