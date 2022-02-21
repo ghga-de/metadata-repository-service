@@ -94,8 +94,8 @@ async def create_datasets(dataset: CreateDataset, config: Config = Depends(get_c
     return new_dataset
 
 
-@dataset_router.post(
-    "/datasets/{dataset_id}",
+@dataset_router.patch(
+    "/datasets/{dataset_accession}",
     response_model=Dataset,
     summary="Update status of a Dataset",
     tags=["Dataset"],

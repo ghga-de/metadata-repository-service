@@ -1,0 +1,31 @@
+{
+  "files": [
+    {
+      "accession": "GHGA:FIL000000000001",
+      "alias": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
+      "checksum": "0181a2605d552b7733ef4492031ccf3c",
+      "ega_accession": "EGAF00000101304",
+      "format": "bam",
+      "id": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
+      "size": 202142862506
+    },
+    {
+      "accession": "GHGA:FIL000000000002",
+      "alias": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
+      "checksum": "59237c0e3060a625e6cf0a5d71dd7611",
+      "ega_accession": "EGAF00000101305",
+      "format": "bam",
+      "id": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
+      "size": 206327988774
+    },
+    {
+      "accession": "GHGA:FIL000000000003",
+      "alias": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
+      "checksum": "aacae9d2235654f8018c0b08a27280e8",
+      "ega_accession": "EGAF00000101306",
+      "format": "bam",
+      "id": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
+      "size": 482771491105
+    }
+  ]
+}
