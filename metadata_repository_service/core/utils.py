@@ -298,7 +298,7 @@ async def store_document(docs: Dict, config: Config = CONFIG):
     records: Dict[str, List] = {}
     for key in docs.keys():
         (cname, record) = docs[key]
-        if cname not in records.keys():
+        if cname not in records:
             records[cname] = []
         records[cname].append(record)
 
