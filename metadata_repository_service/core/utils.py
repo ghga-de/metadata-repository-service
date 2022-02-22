@@ -65,7 +65,7 @@ async def _get_reference(
         The document corresponding to ``document_id``
 
     """
-    client = await get_db_client()
+    client = await get_db_client(config)
     collection = client[config.db_name][collection_name]
     doc = await collection.find_one({"id": document_id})  # type: ignore
     if not doc:
