@@ -19,7 +19,7 @@ import copy
 import datetime
 import logging
 import uuid
-from typing import Dict, Set
+from typing import Dict, List, Set
 
 import stringcase
 
@@ -118,6 +118,202 @@ async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
     return parent_document
 
 
+async def parse_document(document: Dict) -> Dict:
+    """Given a document, identify the embeded documents and extract them
+    as the separate documents. Add the identifier and creation/update date to each
+    of the objects.
+
+    Args:
+        document: The original document
+
+    Returns
+        The dictionary of embedded documents with alias as a key
+
+    """
+    embedded_docs = {}
+
+    for field in document.keys():
+        if field.startswith("has_") and field not in {"has_attribute"}:
+            cname = field.split("_", 1)[1]
+            formatted_cname = stringcase.pascalcase(cname)
+            if cname not in embedded_fields:
+                continue
+            if document[field] is None:
+                continue
+            if not isinstance(document[field], list):
+                doc = document[field]
+                embedded_docs[doc["alias"]] = (
+                    formatted_cname,
+                    await add_create_fields(doc),
+                )
+            else:
+                for doc in document[field]:
+                    embedded_docs[doc["alias"]] = (
+                        formatted_cname,
+                        await add_create_fields(doc),
+                    )
+
+    return embedded_docs
+
+
+async def link_embedded(docs: Dict) -> Dict:
+    """Given a dictionary of embedded documents linked by the alias,
+    substitute the alias references by UUID references.
+
+    Args:
+        docs: The dictionary of documents linked by alias
+
+    Returns
+        The dictionary of documents linked by UUID ids
+
+    """
+
+    for alias in docs.keys():
+        (doc_type, doc) = docs[alias]
+        for field in doc.keys():
+            if field.startswith("has_") and field not in {"has_attribute"}:
+                cname = field.split("_", 1)[1]
+                if cname not in embedded_fields:
+                    continue
+                doc[field] = await replace_reference(doc[field], docs)
+        docs[alias] = (doc_type, doc)
+
+    return docs
+
+
+async def replace_reference(reference, docs: Dict) -> Dict:
+    """Given a reference/list of references via aliases ,
+    substitute the alias references by UUID references.
+
+    Args:
+        reference: Reference by alias
+        docs: The dictionary of documents linked by alias
+
+    Returns
+        References by UUID ids
+
+    """
+    new_reference = reference
+    if isinstance(reference, str):
+        if reference in docs.keys():
+            (_, referenced_doc) = docs[reference]
+            new_reference = referenced_doc["id"]
+        elif isinstance(reference, list):
+            new_list = []
+            for ref in reference:
+                if ref in docs.keys():
+                    (_, referenced_doc) = docs[ref]
+                    new_list.append(referenced_doc["id"])
+            new_reference = new_list
+
+    return new_reference
+
+
+async def update_document(parent_document, docs: Dict, old_document=None) -> Dict:
+    """Given a parent document and a dictionary of embedded documents,
+    update the embedded documents within the parent one,
+    then add the parent document to the dictionary.
+
+    Args:
+        parent_document: The parent document
+
+    Returns
+        The dictionary of all documents (parent and embedded documents)
+
+    """
+    if old_document is None:
+        parent_document = await add_create_fields(parent_document)
+        parent_document["status"] = "in progress"
+    else:
+        parent_document = await add_update_fields(parent_document, old_document)
+        parent_document["status"] = old_document["status"]
+
+    for field in parent_document.keys():
+        if field.startswith("has_") and field not in {"has_attribute"}:
+            cname = field.split("_", 1)[1]
+            if cname not in embedded_fields:
+                continue
+            if parent_document[field] is None:
+                continue
+            if not isinstance(parent_document[field], list):
+                doc = parent_document[field]
+                (_, referenced_doc) = docs[doc["alias"]]
+                parent_document[field] = referenced_doc
+            else:
+                new_list = []
+                for doc in parent_document[field]:
+                    (_, referenced_doc) = docs[doc["alias"]]
+                    new_list.append(referenced_doc)
+                parent_document[field] = new_list
+
+    docs["parent"] = ["Submission", parent_document]
+
+    return docs
+
+
+async def delete_document(
+    parent_document: Dict, parent_cname: str, config: Config = CONFIG
+):
+    """Deletes a parent document together with embedded documents from the database.
+
+    Args:
+        parent_document: The parent document
+
+    """
+
+    client = await get_db_client()
+
+    collection = client[config.db_name][parent_cname]
+    collection.delete_one({"id": parent_document["id"]})
+
+    for field in parent_document.keys():
+        if field.startswith("has_") and field not in {"has_attribute"}:
+            cname = field.split("_", 1)[1]
+            if cname not in embedded_fields:
+                continue
+            if parent_document[field] is None:
+                continue
+            formatted_cname = stringcase.pascalcase(cname)
+            collection = client[config.db_name][formatted_cname]
+            if not isinstance(parent_document[field], list):
+                doc = parent_document[field]
+                await collection.delete_one({"id": doc["id"]})
+            else:
+                for doc in parent_document[field]:
+                    await collection.delete_one({"id": doc["id"]})
+
+    client.close()
+
+
+async def store_document(docs: Dict, config: Config = CONFIG):
+    """
+    Stores submission documents to metadata store
+
+
+    Args:
+        docs: Dictionary of documents to be stored
+
+    """
+
+    records: Dict[str, List] = {}
+    for key in docs.keys():
+        (cname, record) = docs[key]
+        if cname not in records.keys():
+            records[cname] = []
+        records[cname].append(record)
+
+    client = await get_db_client()
+
+    for (key, record_list) in records.items():
+        collection = client[config.db_name][key]
+        if len(record_list) == 1:
+            await collection.insert_one(record_list[0])
+        else:
+            await collection.insert_many(record_list)
+
+    client.close()
+
+
 async def get_timestamp() -> str:
     """
     Get the current timestamp in UTC according to ISO 8601
@@ -138,3 +334,38 @@ async def generate_uuid() -> str:
 
     """
     return str(uuid.uuid4())
+
+
+async def add_create_fields(document: Dict) -> Dict:
+    """Add uuid identifier and create/update date to a document
+
+     Args:
+        document: Original document
+
+    Returns
+        Annotated document
+
+    """
+    document["id"] = await generate_uuid()
+    document["creation_date"] = await get_timestamp()
+    document["update_date"] = document["creation_date"]
+
+    return document
+
+
+async def add_update_fields(document, old_document: Dict) -> Dict:
+    """Add current update date to a document,
+    uuid and create date are taken from the original document
+
+     Args:
+        document: Original document
+
+    Returns
+        Annotated document
+
+    """
+    document["id"] = old_document["id"]
+    document["creation_date"] = old_document["creation_date"]
+    document["update_date"] = await get_timestamp()
+
+    return document
