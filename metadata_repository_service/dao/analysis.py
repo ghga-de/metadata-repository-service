@@ -19,8 +19,8 @@ Convenience methods for retrieving Analysis records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references, get_entity
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import embed_references, get_entity
 from metadata_repository_service.models import Analysis
 
 COLLECTION_NAME = "Analysis"

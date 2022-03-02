@@ -19,12 +19,7 @@ Convenience methods for retrieving Dataset records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import (
-    generate_accession,
-    generate_uuid,
-    get_entity,
-    get_timestamp,
-)
+from metadata_repository_service.core.utils import generate_uuid, get_timestamp
 from metadata_repository_service.dao.analysis import get_analysis_by_linked_files
 from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
@@ -34,6 +29,7 @@ from metadata_repository_service.dao.experiment import get_experiment_by_linked_
 from metadata_repository_service.dao.file import get_file_by_accession
 from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.dao.study import get_study
+from metadata_repository_service.dao.utils import generate_accession, get_entity
 from metadata_repository_service.models import (
     CreateDataset,
     Dataset,
