@@ -16,7 +16,7 @@
 Convenience methods for retrieving Submission records
 """
 
-from typing import List
+from typing import Dict, List
 
 from pymongo import ReturnDocument
 
@@ -85,14 +85,15 @@ async def insert_submission(submission: Submission, config: Config = CONFIG):
     client.close()
 
 
-async def update_submission_status(
-    submission_id: str, status_value: str, config: Config = CONFIG
+async def update_submission_values(
+    submission_id: str, update_json: Dict, config: Config = CONFIG
 ) -> Submission:
     """
     Updates a Submission object status.
 
     Args:
-        submission: Submission object
+        submission_id: submission id
+        update_json: values to be updated
         config: Rumtime configuration
 
     """
@@ -100,7 +101,7 @@ async def update_submission_status(
     collection = client[config.db_name][COLLECTION_NAME]
     submission = await collection.find_one_and_update(
         {"id": submission_id},
-        {"$set": {"status": status_value}},
+        {"$set": update_json},
         upsert=True,
         return_document=ReturnDocument.AFTER,
     )

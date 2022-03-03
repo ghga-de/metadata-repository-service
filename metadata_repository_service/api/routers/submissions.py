@@ -23,6 +23,7 @@ from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
 from metadata_repository_service.core.utils import (
     delete_document,
+    get_timestamp,
     link_embedded,
     parse_document,
     store_document,
@@ -30,7 +31,7 @@ from metadata_repository_service.core.utils import (
 )
 from metadata_repository_service.dao.submission import (
     get_submission,
-    update_submission_status,
+    update_submission_values,
 )
 from metadata_repository_service.models import (
     CreateSubmission,
@@ -46,7 +47,9 @@ submission_router = APIRouter()
     summary="Add a submission object to a metadata store",
     response_model=Submission,
 )
-async def add_submission(input_submission: CreateSubmission):
+async def add_submission(
+    input_submission: CreateSubmission, config: Config = Depends(get_config)
+):
     """Add a submission object to a metadata store."""
     if input_submission is None:
         raise HTTPException(
@@ -59,7 +62,7 @@ async def add_submission(input_submission: CreateSubmission):
     docs = await link_embedded(docs)
     docs = await update_document(document, docs)
 
-    await store_document(docs)
+    await store_document(docs, config)
 
     return docs["parent"][1]
 
@@ -111,9 +114,10 @@ async def update_status(
         )
 
     if (status.status is not None) and (submission.status != status.status.value):
-        submission = await update_submission_status(
-            submission_id, status.status.value, config
-        )
+        update_json = {}
+        update_json["status"] = status.status.value
+        update_json["update_date"] = await get_timestamp()
+        submission = await update_submission_values(submission_id, update_json, config)
 
     return submission
 

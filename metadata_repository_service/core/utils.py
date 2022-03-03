@@ -198,13 +198,13 @@ async def replace_reference(reference, docs: Dict) -> Dict:
         if reference in docs.keys():
             (_, referenced_doc) = docs[reference]
             new_reference = referenced_doc["id"]
-        elif isinstance(reference, list):
-            new_list = []
-            for ref in reference:
-                if ref in docs.keys():
-                    (_, referenced_doc) = docs[ref]
-                    new_list.append(referenced_doc["id"])
-            new_reference = new_list
+    elif isinstance(reference, list):
+        new_list = []
+        for ref in reference:
+            if ref in docs.keys():
+                (_, referenced_doc) = docs[ref]
+                new_list.append(referenced_doc["id"])
+        new_reference = new_list
 
     return new_reference
 
@@ -302,7 +302,7 @@ async def store_document(docs: Dict, config: Config = CONFIG):
             records[cname] = []
         records[cname].append(record)
 
-    client = await get_db_client()
+    client = await get_db_client(config)
 
     for (key, record_list) in records.items():
         collection = client[config.db_name][key]
