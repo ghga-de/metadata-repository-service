@@ -151,6 +151,6 @@ async def update_submission(
     docs = await parse_document(document)
     docs = await link_embedded(docs)
     docs = await update_document(document, docs, old_document)
-    await store_document(docs)
+    await store_document(docs, config=config)
 
     return docs["parent"][1]
