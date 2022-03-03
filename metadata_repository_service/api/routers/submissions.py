@@ -147,7 +147,7 @@ async def update_submission(
 
     document = input_submission.dict()
     old_document = copy.deepcopy(submission.dict())
-    await delete_document(old_document, "Submission")
+    await delete_document(old_document, "Submission", config=config)
     docs = await parse_document(document)
     docs = await link_embedded(docs)
     docs = await update_document(document, docs, old_document)
