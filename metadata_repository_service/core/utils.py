@@ -261,7 +261,7 @@ async def delete_document(
 
     """
 
-    client = await get_db_client()
+    client = await get_db_client(config=config)
 
     collection = client[config.db_name][parent_cname]
     collection.delete_one({"id": parent_document["id"]})
