@@ -3421,7 +3421,7 @@ paths:
   /submissions:
     post:
       description: Add a submission object to a metadata store.
-      operationId: add_submission_submissions_post
+      operationId: create_submission_submissions_post
       requestBody:
         content:
           application/json:
@@ -3480,7 +3480,7 @@ paths:
       description: 'Given a Submission ID and a status, update the status of corresponding
 
         Submission record from the metadata store.'
-      operationId: update_status_submissions__submission_id__patch
+      operationId: update_submission_status_submissions__submission_id__patch
       parameters:
       - in: path
         name: submission_id
@@ -3512,7 +3512,7 @@ paths:
       description: 'Given a Submission ID and an updated submission object,
 
         update the submission in the metadata store.'
-      operationId: update_submission_submissions__submission_id__put
+      operationId: update_full_submission_submissions__submission_id__put
       parameters:
       - in: path
         name: submission_id
