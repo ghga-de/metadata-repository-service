@@ -16,14 +16,27 @@
 Convenience methods for retrieving Submission records
 """
 
+import copy
 from typing import Dict, List
 
 from pymongo import ReturnDocument
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import (
+    delete_document,
+    embed_references,
+    get_timestamp,
+    link_embedded,
+    parse_document,
+    store_document,
+    update_document,
+)
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.models import Submission
+from metadata_repository_service.models import (
+    CreateSubmission,
+    Submission,
+    SubmissionStatusPatch,
+)
 
 COLLECTION_NAME = "Submission"
 
@@ -33,7 +46,7 @@ async def retrieve_submissions(config: Config = CONFIG) -> List[str]:
     Retrieve a list of Submission object IDs from metadata store.
 
     Args:
-        config: Rumtime configuration
+        config: Runtime configuration
 
     Returns:
         A list of Submission object IDs.
@@ -55,7 +68,7 @@ async def get_submission(
     Args:
         submission_id: The Submission ID
         embedded: Whether or not to embed references. ``False``, by default.
-        config: Rumtime configuration
+        config: Runtime configuration
 
     Returns:
         The Submission object
@@ -70,13 +83,34 @@ async def get_submission(
     return Submission(**submission)
 
 
+async def add_submission(
+    input_submission: CreateSubmission, config: Config = CONFIG
+) -> Dict:
+    """
+    Add a Submission object into metadata store.
+
+    Args:
+        submission: Submission object
+        config: Runtime configuration
+
+    """
+    document = input_submission.dict()
+    docs = await parse_document(document)
+    docs = await link_embedded(docs)
+    docs = await update_document(document, docs)
+
+    await store_document(docs, config)
+
+    return docs["parent"][1]
+
+
 async def insert_submission(submission: Submission, config: Config = CONFIG):
     """
     Store a Submission object into metadata store.
 
     Args:
         submission: Submission object
-        config: Rumtime configuration
+        config: Runtime configuration
 
     """
     client = await get_db_client(config)
@@ -85,16 +119,37 @@ async def insert_submission(submission: Submission, config: Config = CONFIG):
     client.close()
 
 
-async def update_submission_values(
-    submission_id: str, update_json: Dict, config: Config = CONFIG
+async def patch_submission(
+    submission: Submission, status: SubmissionStatusPatch, config: Config = CONFIG
 ) -> Submission:
     """
     Updates a Submission object status.
 
     Args:
+        submission: Submission object
+        status: Submission status
+        config: Runtime configuration
+
+    """
+    if (status.status is not None) and (submission.status != status.status.value):
+        update_json = {}
+        update_json["status"] = status.status.value
+        update_json["update_date"] = await get_timestamp()
+        submission = await update_submission_values(submission.id, update_json, config)
+
+    return submission
+
+
+async def update_submission_values(
+    submission_id: str, update_json: Dict, config: Config = CONFIG
+) -> Submission:
+    """
+    Updates a Submission object
+
+    Args:
         submission_id: submission id
         update_json: values to be updated
-        config: Rumtime configuration
+        config: Runtime configuration
 
     """
     client = await get_db_client(config)
@@ -108,3 +163,26 @@ async def update_submission_values(
     client.close()
 
     return submission
+
+
+async def update_submission(
+    submission: Submission, input_submission: CreateSubmission, config: Config = CONFIG
+) -> Dict:
+    """
+    Updates a Submission object into metadata store.
+
+    Args:
+        submission: Submission object to be updated
+        input_submission: New submission object
+        config: Runtime configuration
+
+    """
+    document = input_submission.dict()
+    old_document = copy.deepcopy(submission.dict())
+    await delete_document(old_document, "Submission", config=config)
+    docs = await parse_document(document)
+    docs = await link_embedded(docs)
+    docs = await update_document(document, docs, old_document)
+    await store_document(docs, config=config)
+
+    return docs["parent"][1]

@@ -14,24 +14,16 @@
 # limitations under the License.
 "Routes to support Submissions"
 
-import copy
-
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
-from metadata_repository_service.core.utils import (
-    delete_document,
-    get_timestamp,
-    link_embedded,
-    parse_document,
-    store_document,
-    update_document,
-)
 from metadata_repository_service.dao.submission import (
+    add_submission,
     get_submission,
-    update_submission_values,
+    patch_submission,
+    update_submission,
 )
 from metadata_repository_service.models import (
     CreateSubmission,
@@ -47,7 +39,7 @@ submission_router = APIRouter()
     summary="Add a submission object to a metadata store",
     response_model=Submission,
 )
-async def add_submission(
+async def create_submission(
     input_submission: CreateSubmission, config: Config = Depends(get_config)
 ):
     """Add a submission object to a metadata store."""
@@ -57,14 +49,9 @@ async def add_submission(
             detail="Unexpected error",
         )
 
-    document = input_submission.dict()
-    docs = await parse_document(document)
-    docs = await link_embedded(docs)
-    docs = await update_document(document, docs)
+    submission = await add_submission(input_submission, config)
 
-    await store_document(docs, config)
-
-    return docs["parent"][1]
+    return submission
 
 
 @submission_router.get(
@@ -95,7 +82,7 @@ async def get_submissions(
     response_model=Submission,
     summary="Update the status of a submission",
 )
-async def update_status(
+async def update_submission_status(
     submission_id: str,
     status: SubmissionStatusPatch,
     config: Config = Depends(get_config),
@@ -113,13 +100,9 @@ async def update_status(
             detail=f"{Submission.__name__} with id '{submission_id}' not found",
         )
 
-    if (status.status is not None) and (submission.status != status.status.value):
-        update_json = {}
-        update_json["status"] = status.status.value
-        update_json["update_date"] = await get_timestamp()
-        submission = await update_submission_values(submission_id, update_json, config)
+    patched_submission = await patch_submission(submission, status, config)
 
-    return submission
+    return patched_submission
 
 
 @submission_router.put(
@@ -127,7 +110,7 @@ async def update_status(
     response_model=Submission,
     summary="Update the submission",
 )
-async def update_submission(
+async def update_full_submission(
     submission_id: str,
     input_submission: CreateSubmission,
     config: Config = Depends(get_config),
@@ -145,12 +128,6 @@ async def update_submission(
             detail=f"{Submission.__name__} with id '{submission_id}' not found",
         )
 
-    document = input_submission.dict()
-    old_document = copy.deepcopy(submission.dict())
-    await delete_document(old_document, "Submission", config=config)
-    docs = await parse_document(document)
-    docs = await link_embedded(docs)
-    docs = await update_document(document, docs, old_document)
-    await store_document(docs, config=config)
+    updated_submission = await update_submission(submission, input_submission, config)
 
-    return docs["parent"][1]
+    return updated_submission
