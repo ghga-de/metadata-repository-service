@@ -46,6 +46,7 @@ from metadata_repository_service.api.routers.protocols import protocol_router
 from metadata_repository_service.api.routers.publications import publication_router
 from metadata_repository_service.api.routers.samples import sample_router
 from metadata_repository_service.api.routers.studies import study_router
+from metadata_repository_service.api.routers.submissions import submission_router
 from metadata_repository_service.api.routers.technologies import technology_router
 from metadata_repository_service.api.routers.workflows import workflow_router
 from metadata_repository_service.config import CONFIG
@@ -69,6 +70,7 @@ app.include_router(protocol_router)
 app.include_router(publication_router)
 app.include_router(sample_router)
 app.include_router(study_router)
+app.include_router(submission_router)
 app.include_router(technology_router)
 app.include_router(workflow_router)
 

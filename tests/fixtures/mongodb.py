@@ -68,3 +68,20 @@ def mongo_app_fixture():
         app_client = TestClient(app)
 
         yield MongoAppFixture(app_client=app_client, config=config)
+
+
+@pytest.fixture(scope="function")
+def mongo_app_fixture1():
+    """
+    Setup an empty MongoDB database together with a correspondingly
+    configured app client.
+    """
+
+    with MongoDbContainer() as mongodb:
+        connection_url = mongodb.get_connection_url()
+        config = Config(db_url=connection_url, db_name="test")
+
+        app.dependency_overrides[get_config] = lambda: config
+        app_client = TestClient(app)
+
+        yield MongoAppFixture(app_client=app_client, config=config)
