@@ -38,7 +38,7 @@ class MongoAppFixture:
 
 
 @pytest.fixture(scope="function")
-def mongo_app_fixture():
+def mongo_app_fixture1():
     """
     Setup and tears down a MongoDB database together with a correspondingly
     configured app client.
@@ -107,7 +107,7 @@ def mongo_app_fixture2():
 
 
 @pytest.fixture(scope="function")
-def mongo_app_fixture1():
+def mongo_app_fixture3():
     """
     Setup an empty MongoDB database together with a correspondingly
     configured app client.

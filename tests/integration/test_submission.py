@@ -21,15 +21,15 @@ import nest_asyncio
 from ..fixtures.mongodb import (  # noqa: F401
     BASE_DIR,
     MongoAppFixture,
-    mongo_app_fixture1,
+    mongo_app_fixture3,
 )
 
 nest_asyncio.apply()
 
 
-def test_create_submission(mongo_app_fixture1: MongoAppFixture):  # noqa: F811
+def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
     """Test creation of a Submission"""
-    client = mongo_app_fixture1.app_client
+    client = mongo_app_fixture3.app_client
 
     file_path = BASE_DIR / "test_data" / "submission_example" / "submission.json"
     with open(file_path, "r", encoding="utf8") as file:
