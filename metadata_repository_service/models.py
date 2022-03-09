@@ -1086,6 +1086,7 @@ class CreateTechnology(BaseModel):
     """
 
     alias: Optional[str] = Field(None, description="The alias for an entity.")
+    name: Optional[str] = Field(None, description="The name for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -1104,6 +1105,7 @@ class Technology(BaseModel):
         None, description="An identifier that uniquely represents an entity."
     )
     alias: Optional[str] = Field(None, description="The alias for an entity.")
+    name: Optional[str] = Field(None, description="The name for an entity.")
     xref: Optional[List[str]] = Field(
         None, description="Alternate identifiers for an entity."
     )
@@ -2628,6 +2630,12 @@ class CreateSubmission(BaseModel):
             with this submission.",
     )
 
+    has_technology: List[Technology] = Field(
+        None,
+        description="Information about one or more Technology entities associated \
+            with this submission.",
+    )
+
 
 class SubmissionStatusPatch(BaseModel):
     """
@@ -2691,6 +2699,12 @@ class Submission(BaseModel):
         description="Information about one or more File entities associated \
             with this submission.",
     )
+    has_technology: List[Technology] = Field(
+        None,
+        description="Information about one or more Technology entities associated \
+            with this submission.",
+    )
+
     has_data_access_policy: Optional[DataAccessPolicy] = Field(
         None,
         description="The Data Access Policy entity that applies to the data associated \
