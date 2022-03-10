@@ -67,4 +67,4 @@ async def get_protocol(
         embedded=embedded,
         config=config,
     )
-    return Protocol(**protocol)
+    return protocol

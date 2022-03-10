@@ -70,7 +70,7 @@ async def get_experiment(
     return experiment
 
 
-async def get_experiment_by_linked_files(
+async def get_experiments_by_linked_files(
     file_id_list, embedded: bool = False, config: Config = CONFIG
 ) -> List[Experiment]:
     """

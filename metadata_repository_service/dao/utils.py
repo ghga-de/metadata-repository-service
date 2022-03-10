@@ -28,24 +28,24 @@ from metadata_repository_service.core.utils import generate_uuid, get_timestamp
 from metadata_repository_service.dao.db import get_db_client
 
 embedded_fields: Set = {
-    "analysis",
-    "analysis_process",
-    "biospecimen",
-    "data_access_committee",
-    "data_access_policy",
-    "dataset",
-    "experiment_process",
-    "experiment",
-    "file",
-    "individual",
-    "member",
-    "project",
-    "protocol",
-    "publication",
-    "sample",
-    "study",
-    "technology",
-    "workflow",
+    "has_analysis",
+    "has_analysis_process",
+    "has_biospecimen",
+    "has_data_access_committee",
+    "has_data_access_policy",
+    "has_dataset",
+    "has_experiment_process",
+    "has_experiment",
+    "has_file",
+    "has_individual",
+    "has_member",
+    "has_project",
+    "has_protocol",
+    "has_publication",
+    "has_sample",
+    "has_study",
+    "has_technology",
+    "has_workflow",
 }
 
 
@@ -92,7 +92,7 @@ async def get_entity(
         identifier: The identifier
         field: The name of the field
         collection_name: The collection in the metadata store that has the document
-        model_class:
+        model_class: The model class
         embedded: Whether or not to embed references. ``False``, by default.
         config: Rumtime configuration
 
@@ -128,9 +128,9 @@ async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
     parent_document = copy.deepcopy(document)
     for field in parent_document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
-            cname = field.split("_", 1)[1]
-            if cname not in embedded_fields:
+            if field not in embedded_fields:
                 continue
+            cname = field.split("_", 1)[1]
             formatted_cname = stringcase.pascalcase(cname)
             if isinstance(parent_document[field], str):
                 referenced_doc = await _get_reference(
@@ -230,10 +230,10 @@ async def parse_document(document: Dict) -> Dict:
 
     for field in document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
+            if field not in embedded_fields:
+                continue
             cname = field.split("_", 1)[1]
             formatted_cname = stringcase.pascalcase(cname)
-            if cname not in embedded_fields:
-                continue
             if document[field] is None:
                 continue
             if not isinstance(document[field], list):
@@ -268,8 +268,7 @@ async def link_embedded(docs: Dict) -> Dict:
         (doc_type, doc) = docs[alias]
         for field in doc.keys():
             if field.startswith("has_") and field not in {"has_attribute"}:
-                cname = field.split("_", 1)[1]
-                if cname not in embedded_fields:
+                if field not in embedded_fields:
                     continue
                 doc[field] = await replace_reference(doc[field], docs)
         docs[alias] = (doc_type, doc)
@@ -326,8 +325,7 @@ async def update_document(parent_document, docs: Dict, old_document=None) -> Dic
 
     for field in parent_document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
-            cname = field.split("_", 1)[1]
-            if cname not in embedded_fields:
+            if field not in embedded_fields:
                 continue
             if parent_document[field] is None:
                 continue
@@ -364,11 +362,11 @@ async def delete_document(
 
     for field in parent_document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
-            cname = field.split("_", 1)[1]
-            if cname not in embedded_fields:
+            if field not in embedded_fields:
                 continue
             if parent_document[field] is None:
                 continue
+            cname = field.split("_", 1)[1]
             formatted_cname = stringcase.pascalcase(cname)
             collection = client[config.db_name][formatted_cname]
             if not isinstance(parent_document[field], list):

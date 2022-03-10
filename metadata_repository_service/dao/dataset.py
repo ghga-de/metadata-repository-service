@@ -25,7 +25,7 @@ from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
 )
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.dao.experiment import get_experiment_by_linked_files
+from metadata_repository_service.dao.experiment import get_experiments_by_linked_files
 from metadata_repository_service.dao.file import get_file_by_accession
 from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.dao.study import get_study
@@ -147,7 +147,7 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
         )
     file_entity_id_list = list(file_entities.keys())
 
-    experiment_entities = await get_experiment_by_linked_files(
+    experiment_entities = await get_experiments_by_linked_files(
         file_id_list=file_entity_id_list, config=config
     )
 
@@ -219,7 +219,7 @@ async def change_dataset_status(
     dataset_entity = await get_dataset_by_accession(dataset_accession, config=config)
     if dataset_entity.status != dataset.status:
         if dataset.status not in set(ReleaseStatusEnum):
-            raise Exception(
+            raise ValueError(
                 f"dataset.status {dataset.status} not a valid value."
                 + f" Must be one of {[x.value for x in ReleaseStatusEnum]}"
             )

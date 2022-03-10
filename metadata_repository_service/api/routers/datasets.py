@@ -26,6 +26,7 @@ from metadata_repository_service.dao.dataset import (
     change_dataset_status,
     create_dataset,
     get_dataset,
+    get_dataset_by_accession,
 )
 from metadata_repository_service.dao.file import get_file_by_accession
 from metadata_repository_service.models import (
@@ -79,17 +80,20 @@ async def create_datasets(dataset: CreateDataset, config: Config = Depends(get_c
         )
 
     file_accessions = dataset.has_file
+    nonexistent_file_accessions = []
     for file_accession in file_accessions:
         file_entity = await get_file_by_accession(file_accession, config=config)
         if not file_entity:
-            raise HTTPException(
-                status_code=404,
-                detail=f"File Accession {file_accession} provided in "
-                + "'dataset.has_file' could not be found. "
-                + "Cannot create a Dataset that references a "
-                + "non-existing File entity.",
-            )
+            nonexistent_file_accessions.append(file_accession)
 
+    if nonexistent_file_accessions:
+        raise HTTPException(
+            status_code=404,
+            detail=f"File Accessions {nonexistent_file_accessions} provided in "
+            + "'dataset.has_file' could not be found. "
+            + "Cannot create a Dataset that references a "
+            + "non-existing File entity.",
+        )
     new_dataset = await create_dataset(dataset, config=config)
     return new_dataset
 
@@ -114,7 +118,17 @@ async def update_dataset_status(
             detail=f"dataset.status {dataset.status} is not a valid value."
             + f" Must be one of {[x.value for x in ReleaseStatusEnum]}",
         )
-
+    if dataset.status == ReleaseStatusEnum.UNRELEASED.value:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Changing a dataset status to '{dataset.status}' is not supported.",
+        )
+    dataset_entity = await get_dataset_by_accession(dataset_accession, config=config)
+    if not dataset_entity:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Dataset with accession '{dataset_accession}' could not be found.",
+        )
     updated_dataset = await change_dataset_status(
         dataset_accession, dataset, config=config
     )

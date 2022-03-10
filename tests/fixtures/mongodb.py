@@ -40,8 +40,7 @@ class MongoAppFixture:
 @pytest.fixture(scope="function")
 def mongo_app_fixture1():
     """
-    Setup and tears down a MongoDB database together with a correspondingly
-    configured app client.
+    Setup a MongoDB database with basic metadata examples.
     """
 
     json_files = [
@@ -73,8 +72,7 @@ def mongo_app_fixture1():
 @pytest.fixture(scope="function")
 def mongo_app_fixture2():
     """
-    Setup and tears down a MongoDB database together with a correspondingly
-    configured app client.
+    Setup a MongoDB database with metadata for testing of creation of a Dataset.
     """
 
     json_files = [
@@ -109,8 +107,7 @@ def mongo_app_fixture2():
 @pytest.fixture(scope="function")
 def mongo_app_fixture3():
     """
-    Setup an empty MongoDB database together with a correspondingly
-    configured app client.
+    Setup an empty MongoDB database.
     """
 
     with MongoDbContainer() as mongodb:
