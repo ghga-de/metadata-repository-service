@@ -14,11 +14,7 @@
 # limitations under the License.
 """Test the creation of dataset via the API"""
 
-import nest_asyncio
-
 from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture2  # noqa: F401
-
-nest_asyncio.apply()
 
 
 def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
