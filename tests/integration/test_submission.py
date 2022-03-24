@@ -16,15 +16,11 @@
 
 import json
 
-import nest_asyncio
-
 from ..fixtures.mongodb import (  # noqa: F401
     BASE_DIR,
     MongoAppFixture,
     mongo_app_fixture3,
 )
-
-nest_asyncio.apply()
 
 
 def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
