@@ -15,13 +15,10 @@
 
 """Test the api module"""
 
-import nest_asyncio
 import pytest
 from fastapi import status
 
 from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture  # noqa: F401
-
-nest_asyncio.apply()
 
 
 def test_index(mongo_app_fixture: MongoAppFixture):  # noqa: F811
@@ -64,8 +61,7 @@ def test_index(mongo_app_fixture: MongoAppFixture):  # noqa: F811
         ),
     ],
 )
-@pytest.mark.asyncio
-async def test_get_entity_by_id(
+def test_get_entity_by_id(
     mongo_app_fixture: MongoAppFixture, route, entity_id, check_conditions  # noqa: F811
 ):
     client = mongo_app_fixture.app_client
