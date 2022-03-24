@@ -29,6 +29,7 @@ analysis_process_router = APIRouter()
     "/analysis_process/{analysis_process_id}",
     response_model=AnalysisProcess,
     summary="Get an AnalysisProcess",
+    tags=["Query"],
 )
 async def get_analysis_processes(
     analysis_process_id: str,

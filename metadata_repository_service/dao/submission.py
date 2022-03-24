@@ -22,7 +22,8 @@ from typing import Dict, List
 from pymongo import ReturnDocument
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import (
+from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import (
     delete_document,
     embed_references,
     get_timestamp,
@@ -31,7 +32,6 @@ from metadata_repository_service.core.utils import (
     store_document,
     update_document,
 )
-from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.models import (
     CreateSubmission,
     Submission,

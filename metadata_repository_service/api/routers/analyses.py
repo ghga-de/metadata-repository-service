@@ -26,7 +26,10 @@ analysis_router = APIRouter()
 
 
 @analysis_router.get(
-    "/analyses/{analysis_id}", response_model=Analysis, summary="Get an Analysis"
+    "/analyses/{analysis_id}",
+    response_model=Analysis,
+    summary="Get an Analysis",
+    tags=["Query"],
 )
 async def get_analyses(
     analysis_id: str, embedded: bool = False, config: Config = Depends(get_config)

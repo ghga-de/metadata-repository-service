@@ -19,8 +19,8 @@ Convenience methods for retrieving Sample records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import get_entity
 from metadata_repository_service.models import Sample
 
 COLLECTION_NAME = "Sample"
@@ -48,7 +48,7 @@ async def get_sample(
     sample_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Sample:
     """
-    Given a Datset ID, get the Sample object from metadata store.
+    Given a Sample ID, get the Sample object from metadata store.
 
     Args:
         sample_id: The Sample ID
@@ -59,10 +59,12 @@ async def get_sample(
         The Sample object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    sample = await collection.find_one({"id": sample_id})  # type: ignore
-    if sample and embedded:
-        sample = await embed_references(sample, config=config)
-    client.close()
+    sample = await get_entity(
+        identifier=sample_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Sample,
+        embedded=embedded,
+        config=config,
+    )
     return sample

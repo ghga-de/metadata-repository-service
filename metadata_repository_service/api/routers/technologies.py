@@ -29,6 +29,7 @@ technology_router = APIRouter()
     "/technologies/{technology_id}",
     response_model=Technology,
     summary="Get a Technology",
+    tags=["Query"],
 )
 async def get_technologies(
     technology_id: str, embedded: bool = False, config: Config = Depends(get_config)

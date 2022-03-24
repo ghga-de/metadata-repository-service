@@ -29,6 +29,7 @@ publication_router = APIRouter()
     "/publications/{publication_id}",
     response_model=Publication,
     summary="Get a Publication",
+    tags=["Query"],
 )
 async def get_publications(
     publication_id: str, embedded: bool = False, config: Config = Depends(get_config)

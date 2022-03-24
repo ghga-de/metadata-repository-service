@@ -26,9 +26,7 @@ study_router = APIRouter()
 
 
 @study_router.get(
-    "/studies/{study_id}",
-    response_model=Study,
-    summary="Get a Study",
+    "/studies/{study_id}", response_model=Study, summary="Get a Study", tags=["Query"]
 )
 async def get_studies(
     study_id: str, embedded: bool = False, config: Config = Depends(get_config)

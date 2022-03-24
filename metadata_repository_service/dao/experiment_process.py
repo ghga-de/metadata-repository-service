@@ -19,8 +19,8 @@ Convenience methods for retrieving ExperimentProcess records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import get_entity
 from metadata_repository_service.models import ExperimentProcess
 
 COLLECTION_NAME = "ExperimentProcess"
@@ -48,7 +48,7 @@ async def get_experiment_process(
     experiment_process_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> ExperimentProcess:
     """
-    Given a Datset ID, get the ExperimentProcess object from metadata store.
+    Given a ExperimentProcess ID, get the ExperimentProcess object from metadata store.
 
     Args:
         experiment_process_id: The ExperimentProcess ID
@@ -59,10 +59,12 @@ async def get_experiment_process(
         The ExperimentProcess object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    experiment_process = await collection.find_one({"id": experiment_process_id})  # type: ignore
-    if experiment_process and embedded:
-        experiment_process = await embed_references(experiment_process, config=config)
-    client.close()
+    experiment_process = await get_entity(
+        identifier=experiment_process_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=ExperimentProcess,
+        embedded=embedded,
+        config=config,
+    )
     return experiment_process

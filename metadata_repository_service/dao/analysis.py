@@ -19,8 +19,8 @@ Convenience methods for retrieving Analysis records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import embed_references, get_entity
 from metadata_repository_service.models import Analysis
 
 COLLECTION_NAME = "Analysis"
@@ -48,7 +48,7 @@ async def get_analysis(
     analysis_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Analysis:
     """
-    Given a Datset ID, get the Analysis object from metadata store.
+    Given an Analysis ID, get the Analysis object from metadata store.
 
     Args:
         analysis_id: The Analysis ID
@@ -59,10 +59,65 @@ async def get_analysis(
         The Analysis object
 
     """
+    analysis = await get_entity(
+        identifier=analysis_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Analysis,
+        embedded=embedded,
+        config=config,
+    )
+    return analysis
+
+
+async def get_analysis_by_accession(
+    analysis_accession: str, embedded: bool = False, config: Config = CONFIG
+) -> Analysis:
+    """
+    Given an Analysis accession, get the Analysis object from metadata store.
+
+    Args:
+        analysis_accession: The Analysis accession
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        The Analysis object
+
+    """
+    analysis_entity = await get_entity(
+        identifier=analysis_accession,
+        field="accession",
+        collection_name=COLLECTION_NAME,
+        model_class=Analysis,
+        embedded=embedded,
+        config=config,
+    )
+    return analysis_entity
+
+
+async def get_analysis_by_linked_files(
+    file_id_list: List[str], embedded: bool = False, config: Config = CONFIG
+) -> List[Analysis]:
+    """
+    Given a list of File IDs, get the corresponding Analysis objects that
+    reference the File IDs.
+
+    Args:
+        file_id_list: The File IDs
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        A list of Analysis objects
+
+    """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    analysis = await collection.find_one({"id": analysis_id})  # type: ignore
-    if analysis and embedded:
-        analysis = await embed_references(analysis, config=config)
+    entities = await collection.find({"has_file": {"$in": file_id_list}}).to_list(None)
+    if entities and embedded:
+        for analysis in entities:
+            analysis = await embed_references(analysis, config=config)
     client.close()
-    return analysis
+    analysis_entities = [Analysis(**x) for x in entities]
+    return analysis_entities

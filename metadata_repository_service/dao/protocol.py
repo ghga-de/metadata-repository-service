@@ -19,8 +19,8 @@ Convenience methods for retrieving Protocol records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import get_entity
 from metadata_repository_service.models import Protocol
 
 COLLECTION_NAME = "Protocol"
@@ -59,10 +59,12 @@ async def get_protocol(
         The Protocol object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    protocol = await collection.find_one({"id": protocol_id})  # type: ignore
-    if protocol and embedded:
-        protocol = await embed_references(protocol, config=config)
-    client.close()
+    protocol = await get_entity(
+        identifier=protocol_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Protocol,
+        embedded=embedded,
+        config=config,
+    )
     return protocol

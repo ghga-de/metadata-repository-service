@@ -29,6 +29,7 @@ biospecimen_router = APIRouter()
     "/biospecimens/{biospecimen_id}",
     response_model=Biospecimen,
     summary="Get a Biospecimen",
+    tags=["Query"],
 )
 async def get_biospecimens(
     biospecimen_id: str, embedded: bool = False, config: Config = Depends(get_config)

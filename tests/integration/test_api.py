@@ -18,13 +18,13 @@
 import pytest
 from fastapi import status
 
-from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture  # noqa: F401
+from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture1  # noqa: F401
 
 
-def test_index(mongo_app_fixture: MongoAppFixture):  # noqa: F811
+def test_index(mongo_app_fixture1: MongoAppFixture):  # noqa: F811
     """Test the index endpoint"""
 
-    client = mongo_app_fixture.app_client
+    client = mongo_app_fixture1.app_client
     response = client.get("/")
 
     assert response.status_code == status.HTTP_200_OK
@@ -62,9 +62,12 @@ def test_index(mongo_app_fixture: MongoAppFixture):  # noqa: F811
     ],
 )
 def test_get_entity_by_id(
-    mongo_app_fixture: MongoAppFixture, route, entity_id, check_conditions  # noqa: F811
+    mongo_app_fixture1: MongoAppFixture,  # noqa: F811
+    route,
+    entity_id,
+    check_conditions,
 ):
-    client = mongo_app_fixture.app_client
+    client = mongo_app_fixture1.app_client
 
     response = client.get(f"/{route}/{entity_id}")
     assert response.status_code == status.HTTP_200_OK

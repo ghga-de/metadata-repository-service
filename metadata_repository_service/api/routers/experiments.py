@@ -29,6 +29,7 @@ experiment_router = APIRouter()
     "/experiments/{experiment_id}",
     response_model=Experiment,
     summary="Get an Experiment",
+    tags=["Query"],
 )
 async def get_experiments(
     experiment_id: str, embedded: bool = False, config: Config = Depends(get_config)

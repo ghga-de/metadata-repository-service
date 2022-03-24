@@ -29,6 +29,7 @@ workflow_router = APIRouter()
     "/workflows/{workflow_id}",
     response_model=Workflow,
     summary="Get a Workflow",
+    tags=["Query"],
 )
 async def get_workflows(
     workflow_id: str, embedded: bool = False, config: Config = Depends(get_config)

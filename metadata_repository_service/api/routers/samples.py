@@ -29,6 +29,7 @@ sample_router = APIRouter()
     "/samples/{sample_id}",
     response_model=Sample,
     summary="Get a Sample",
+    tags=["Query"],
 )
 async def get_samples(
     sample_id: str, embedded: bool = False, config: Config = Depends(get_config)

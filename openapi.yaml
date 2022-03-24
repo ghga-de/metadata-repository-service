@@ -635,6 +635,133 @@ components:
           type: array
       title: CreateBiospecimen
       type: object
+    CreateDataAccessCommittee:
+      description: 'A group of members that are delegated to grant access to one or
+        more datasets
+
+        after ensuring the minimum criteria for data sharing has been met, and request
+
+        for data use does not raise ethical and/or legal concerns.'
+      properties:
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
+          type: string
+        has_member:
+          description: All the members that are part of this Data Access Committee.
+          items:
+            $ref: '#/components/schemas/CreateMember'
+          title: Has Member
+          type: array
+        main_contact:
+          allOf:
+          - $ref: '#/components/schemas/CreateMember'
+          description: The main contact for the Data Access Committee.
+          title: Main Contact
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateDataAccessCommittee
+      type: object
+    CreateDataAccessPolicy:
+      description: 'A Data Access Policy specifies under which circumstances, legal
+        or otherwise,
+
+        a user can have access to one or more Datasets belonging to one or more Studies.'
+      properties:
+        description:
+          description: A short description for the Data Access Policy.
+          title: Description
+          type: string
+        ega_accession:
+          description: A unique European Genome-Phenome Archive (EGA) identifier             assigned
+            to an entity for the sole purpose of referring to that entity             within
+            the EGA federated network.
+          title: Ega Accession
+          type: string
+        has_data_access_committee:
+          description: The Data Access Committee accession linked to this policy.
+          title: Has Data Access Committee
+          type: string
+        has_data_use_condition:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/DataUseCondition'
+            type: array
+          description: Data Use Condition entities that are associated with the             Data
+            Access Policy.
+          title: Has Data Use Condition
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        policy_text:
+          description: The terms of data use and policy verbiage should be             captured
+            here.
+          title: Policy Text
+          type: string
+        policy_url:
+          description: URL for the policy, if available. This is useful if the             terms
+            of the policy is made available online at a resolvable URL.
+          title: Policy Url
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateDataAccessPolicy
+      type: object
+    CreateDataset:
+      description: A Dataset is a collection of Files that is prepared for distribution.
+      properties:
+        description:
+          description: Description of an entity.
+          title: Description
+          type: string
+        has_data_access_policy:
+          description: The accession of the Data Access Policy that applies             to
+            this Dataset.
+          title: Has Data Access Policy
+          type: string
+        has_file:
+          description: One or more File accessions that collectively are part of             this
+            Dataset.
+          items:
+            type: string
+          title: Has File
+          type: array
+        title:
+          description: The title that describes an entity.
+          title: Title
+          type: string
+        type:
+          description: The type of Dataset.
+          title: Type
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateDataset
+      type: object
     CreateDisease:
       description: 'A disease is a disposition to undergo pathological processes that
         exists in an
@@ -981,6 +1108,45 @@ components:
           title: Year Of Birth
           type: string
       title: CreateIndividual
+      type: object
+    CreateMember:
+      description: Member of an Organization or a Committee.
+      properties:
+        additional_name:
+          description: Additional name(s).
+          title: Additional Name
+          type: string
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        email:
+          description: The email of the Member.
+          title: Email
+          type: string
+        family_name:
+          description: Last name.
+          title: Family Name
+          type: string
+        given_name:
+          description: First name.
+          title: Given Name
+          type: string
+        organization:
+          description: The organization that the Member is part of.
+          title: Organization
+          type: string
+        telephone:
+          description: The telephone number of the Member.
+          title: Telephone
+          type: string
+        xref:
+          description: Alternate identifiers for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      title: CreateMember
       type: object
     CreatePhenotypicFeature:
       description: 'The observable form taken by some character (or group of characters)
@@ -1719,6 +1885,15 @@ components:
           title: Xref
           type: array
       title: Dataset
+      type: object
+    DatasetStatusPatch:
+      description: A Dataset is a collection of Files that is prepared for distribution.
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ReleaseStatusEnum'
+          description: The status of an entity.
+      title: DatasetStatusPatch
       type: object
     Disease:
       description: 'A disease is a disposition to undergo pathological processes that
@@ -2929,6 +3104,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an Analysis
+      tags:
+      - Query
   /analysis_process/{analysis_process_id}:
     get:
       description: Given an AnalysisProcess ID, get the AnalysisProcess record from
@@ -2962,6 +3139,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an AnalysisProcess
+      tags:
+      - Query
   /biospecimens/{biospecimen_id}:
     get:
       description: Given a Biospecimen ID, get the Biospecimen record from the metadata
@@ -2995,10 +3174,39 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Biospecimen
+      tags:
+      - Query
+  /data_access_committees:
+    post:
+      description: Create a DataAccessCommittee and write to the metadata store.
+      operationId: create_data_access_committees_data_access_committees_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAccessCommittee'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAccessCommittee'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create a DataAccessCommittee
+      tags:
+      - DataAccessCommittee
   /data_access_committees/{data_access_committee_id}:
     get:
-      description: Given a DataAccessCommittee ID, get the DataAccessCommittee record
-        from the metadata store.
+      description: 'Given a DataAccessCommittee ID, get the DataAccessCommittee record
+
+        from the metadata store.'
       operationId: get_data_access_committees_data_access_committees__data_access_committee_id__get
       parameters:
       - in: path
@@ -3028,6 +3236,34 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessCommittee
+      tags:
+      - Query
+  /data_access_policies:
+    post:
+      description: Create a DataAccessPolicy and write to the metadata store.
+      operationId: create_data_access_policies_data_access_policies_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAccessPolicy'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAccessPolicy'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create a DataAccessPolicy
+      tags:
+      - DataAccessPolicy
   /data_access_policies/{data_access_policy_id}:
     get:
       description: Given a DataAccessPolicy ID, get the DataAccessPolicy record from
@@ -3061,6 +3297,70 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessPolicy
+      tags:
+      - Query
+  /datasets:
+    post:
+      description: 'Given a list of File accessions and a DataAccessPolicy accession,
+        create a
+
+        Dataset and write to the metadata store.'
+      operationId: create_datasets_datasets_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataset'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Create a Dataset
+      tags:
+      - Dataset
+  /datasets/{dataset_accession}:
+    patch:
+      description: Update status of a Dataset entity.
+      operationId: update_dataset_status_datasets__dataset_accession__patch
+      parameters:
+      - in: path
+        name: dataset_accession
+        required: true
+        schema:
+          title: Dataset Accession
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetStatusPatch'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Update status of a Dataset
+      tags:
+      - Dataset
   /datasets/{dataset_id}:
     get:
       description: Given a Dataset ID, get the Dataset record from the metadata store.
@@ -3093,6 +3393,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Dataset
+      tags:
+      - Query
   /experiment_processes/{experiment_process_id}:
     get:
       description: Given a ExperimentProcess ID, get the ExperimentProcess record
@@ -3126,6 +3428,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a ExperimentProcess
+      tags:
+      - Query
   /experiments/{experiment_id}:
     get:
       description: Given a Experiment ID, get the Experiment record from the metadata
@@ -3159,6 +3463,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get an Experiment
+      tags:
+      - Query
   /files/{file_id}:
     get:
       description: Given a File ID, get the File record from the metadata store.
@@ -3191,6 +3497,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a File
+      tags:
+      - Query
   /individuals/{individual_id}:
     get:
       description: Given a Individual ID, get the Individual record from the metadata
@@ -3224,6 +3532,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Individual
+      tags:
+      - Query
   /members/{member_id}:
     get:
       description: Given a Member ID, get the Member record from the metadata store.
@@ -3256,6 +3566,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Member
+      tags:
+      - Query
   /projects/{project_id}:
     get:
       description: Given a Project ID, get the Project record from the metadata store.
@@ -3288,6 +3600,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Project
+      tags:
+      - Query
   /protocols/{protocol_id}:
     get:
       description: Given a Protocol ID, get the Protocol record from the metadata
@@ -3321,6 +3635,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Protocol
+      tags:
+      - Query
   /publications/{publication_id}:
     get:
       description: Given a Publication ID, get the Publication record from the metadata
@@ -3354,6 +3670,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Publication
+      tags:
+      - Query
   /samples/{sample_id}:
     get:
       description: Given a Sample ID, get the Sample record from the metadata store.
@@ -3386,6 +3704,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Sample
+      tags:
+      - Query
   /studies/{study_id}:
     get:
       description: Given a Study ID, get the Study record from the metadata store.
@@ -3418,6 +3738,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Study
+      tags:
+      - Query
   /submissions:
     post:
       description: Add a submission object to a metadata store.
@@ -3442,6 +3764,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Add a submission object to a metadata store
+      tags:
+      - Submission
   /submissions/{submission_id}:
     get:
       description: 'Given a Submission ID, get the corresponding Submission record
@@ -3476,6 +3800,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Submission
+      tags:
+      - Query
     patch:
       description: 'Given a Submission ID and a status, update the status of corresponding
 
@@ -3508,6 +3834,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Update the status of a submission
+      tags:
+      - Submission
     put:
       description: 'Given a Submission ID and an updated submission object,
 
@@ -3540,6 +3868,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Update the submission
+      tags:
+      - Submission
   /technologies/{technology_id}:
     get:
       description: Given a Technology ID, get the Technology record from the metadata
@@ -3573,6 +3903,8 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Technology
+      tags:
+      - Query
   /workflows/{workflow_id}:
     get:
       description: Given a Workflow ID, get the Workflow record from the metadata
@@ -3606,3 +3938,5 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a Workflow
+      tags:
+      - Query

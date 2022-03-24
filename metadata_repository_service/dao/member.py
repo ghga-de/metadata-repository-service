@@ -19,9 +19,10 @@ Convenience methods for retrieving Member records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
+from metadata_repository_service.core.utils import generate_uuid, get_timestamp
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.models import Member
+from metadata_repository_service.dao.utils import get_entity
+from metadata_repository_service.models import CreateMember, Member
 
 COLLECTION_NAME = "Member"
 
@@ -49,7 +50,7 @@ async def get_member(
     member_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Member:
     """
-    Given a Datset ID, get the Member object from metadata store.
+    Given a Member ID, get the Member object from metadata store.
 
     Args:
         member_id: The Member ID
@@ -60,10 +61,62 @@ async def get_member(
         The Member object
 
     """
+    member = await get_entity(
+        identifier=member_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Member,
+        embedded=embedded,
+        config=config,
+    )
+    return member
+
+
+async def get_member_by_email(
+    email: str, embedded: bool = False, config: Config = CONFIG
+) -> Member:
+    """
+    Given an email of a Member, get the Member object from metadata store.
+
+    Args:
+        email: The Member email
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        The Member object
+
+    """
+    member = await get_entity(
+        identifier=email,
+        field="email",
+        collection_name=COLLECTION_NAME,
+        model_class=Member,
+        embedded=embedded,
+        config=config,
+    )
+    return member
+
+
+async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Member:
+    """
+    Create a Member object and write to the metadata store.
+
+    Args:
+        member_obj: The Member object
+        config: Rumtime configuration
+
+    Returns:
+        The newly created Member object
+
+    """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    member = await collection.find_one({"id": member_id})  # type: ignore
-    if member and embedded:
-        member = await embed_references(member, config=config)
+    member_entity = member_obj.dict()
+    member_entity["id"] = await generate_uuid()
+    member_entity["creation_date"] = await get_timestamp()
+    member_entity["update_date"] = member_entity["creation_date"]
+    await collection.insert_one(member_entity)
     client.close()
+    member = await get_member(member_entity["id"], config=config)
     return member

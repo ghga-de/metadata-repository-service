@@ -29,6 +29,7 @@ individual_router = APIRouter()
     "/individuals/{individual_id}",
     response_model=Individual,
     summary="Get a Individual",
+    tags=["Query"],
 )
 async def get_individuals(
     individual_id: str, embedded: bool = False, config: Config = Depends(get_config)

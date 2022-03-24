@@ -19,8 +19,8 @@ Convenience methods for retrieving Experiment records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import embed_references, get_entity
 from metadata_repository_service.models import Experiment
 
 COLLECTION_NAME = "Experiment"
@@ -59,10 +59,39 @@ async def get_experiment(
         The Experiment object
 
     """
+    experiment = await get_entity(
+        identifier=experiment_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Experiment,
+        embedded=embedded,
+        config=config,
+    )
+    return experiment
+
+
+async def get_experiments_by_linked_files(
+    file_id_list, embedded: bool = False, config: Config = CONFIG
+) -> List[Experiment]:
+    """
+    Given a list of File IDs, get the corresponding Experiment objects that
+    reference the File IDs.
+
+    Args:
+        file_id_list: The File IDs
+        embedded: Whether or not to embed references. ``False``, by default.
+        config: Rumtime configuration
+
+    Returns:
+        A list of Experiment objects
+
+    """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    experiment = await collection.find_one({"id": experiment_id})  # type: ignore
-    if experiment and embedded:
-        experiment = await embed_references(experiment, config=config)
+    entities = await collection.find({"has_file": {"$in": file_id_list}}).to_list(None)
+    if entities and embedded:
+        for experiment in entities:
+            experiment = await embed_references(experiment, config=config)
     client.close()
-    return experiment
+    experiment_entities = [Experiment(**x) for x in entities]
+    return experiment_entities

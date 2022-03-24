@@ -25,7 +25,9 @@ from metadata_repository_service.models import File
 file_router = APIRouter()
 
 
-@file_router.get("/files/{file_id}", response_model=File, summary="Get a File")
+@file_router.get(
+    "/files/{file_id}", response_model=File, summary="Get a File", tags=["Query"]
+)
 async def get_files(
     file_id: str, embedded: bool = False, config: Config = Depends(get_config)
 ):

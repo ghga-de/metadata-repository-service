@@ -38,6 +38,7 @@ submission_router = APIRouter()
     "/submissions",
     summary="Add a submission object to a metadata store",
     response_model=Submission,
+    tags=["Submission"],
 )
 async def create_submission(
     input_submission: CreateSubmission, config: Config = Depends(get_config)
@@ -58,6 +59,7 @@ async def create_submission(
     "/submissions/{submission_id}",
     response_model=Submission,
     summary="Get a Submission",
+    tags=["Query"],
 )
 async def get_submissions(
     submission_id: str, embedded: bool = False, config: Config = Depends(get_config)
@@ -81,6 +83,7 @@ async def get_submissions(
     "/submissions/{submission_id}",
     response_model=Submission,
     summary="Update the status of a submission",
+    tags=["Submission"],
 )
 async def update_submission_status(
     submission_id: str,
@@ -109,6 +112,7 @@ async def update_submission_status(
     "/submissions/{submission_id}",
     response_model=Submission,
     summary="Update the submission",
+    tags=["Submission"],
 )
 async def update_full_submission(
     submission_id: str,

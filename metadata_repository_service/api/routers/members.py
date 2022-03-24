@@ -29,6 +29,7 @@ member_router = APIRouter()
     "/members/{member_id}",
     response_model=Member,
     summary="Get a Member",
+    tags=["Query"],
 )
 async def get_members(
     member_id: str, embedded: bool = False, config: Config = Depends(get_config)

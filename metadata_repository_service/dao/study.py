@@ -19,8 +19,8 @@ Convenience methods for retrieving Study records
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
-from metadata_repository_service.core.utils import embed_references
 from metadata_repository_service.dao.db import get_db_client
+from metadata_repository_service.dao.utils import get_entity
 from metadata_repository_service.models import Study
 
 COLLECTION_NAME = "Study"
@@ -48,7 +48,7 @@ async def get_study(
     study_id: str, embedded: bool = False, config: Config = CONFIG
 ) -> Study:
     """
-    Given a Datset ID, get the Study object from metadata store.
+    Given a Study ID, get the Study object from metadata store.
 
     Args:
         study_id: The Study ID
@@ -59,10 +59,12 @@ async def get_study(
         The Study object
 
     """
-    client = await get_db_client(config)
-    collection = client[config.db_name][COLLECTION_NAME]
-    study = await collection.find_one({"id": study_id})  # type: ignore
-    if study and embedded:
-        study = await embed_references(study, config=config)
-    client.close()
+    study = await get_entity(
+        identifier=study_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        model_class=Study,
+        embedded=embedded,
+        config=config,
+    )
     return study
