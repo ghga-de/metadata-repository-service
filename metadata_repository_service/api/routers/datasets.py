@@ -19,6 +19,7 @@ from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
+from metadata_repository_service.creation_models import CreateDataset
 from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
 )
@@ -29,9 +30,8 @@ from metadata_repository_service.dao.dataset import (
     get_dataset_by_accession,
 )
 from metadata_repository_service.dao.file import get_file_by_accession
-from metadata_repository_service.models import (
-    CreateDataset,
-    Dataset,
+from metadata_repository_service.models import Dataset
+from metadata_repository_service.patch_models import (
     DatasetStatusPatch,
     ReleaseStatusEnum,
 )
@@ -112,16 +112,16 @@ async def update_dataset_status(
     """
     Update status of a Dataset entity.
     """
-    if dataset.status not in set(ReleaseStatusEnum):
+    if dataset.release_status not in set(ReleaseStatusEnum):
         raise HTTPException(
             status_code=400,
-            detail=f"dataset.status {dataset.status} is not a valid value."
+            detail=f"dataset.release_status {dataset.release_status} is not a valid value."
             + f" Must be one of {[x.value for x in ReleaseStatusEnum]}",
         )
-    if dataset.status == ReleaseStatusEnum.UNRELEASED.value:
+    if dataset.release_status == ReleaseStatusEnum.unreleased.value:
         raise HTTPException(
             status_code=400,
-            detail=f"Changing a dataset status to '{dataset.status}' is not supported.",
+            detail=f"Changing a dataset status to '{dataset.release_status}' is not supported.",
         )
     dataset_entity = await get_dataset_by_accession(dataset_accession, config=config)
     if not dataset_entity:

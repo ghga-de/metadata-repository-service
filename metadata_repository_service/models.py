@@ -2442,15 +2442,15 @@ class Dataset(InformationContentEntity):
         None,
         description="""One or more Study entities that are referenced by this Dataset.""",
     )
-    has_experiment: Optional[Union[List[Analysis], List[str]]] = Field(
+    has_experiment: Optional[Union[List[Experiment], List[str]]] = Field(
         None,
         description="""One or more Analysis entities that are referenced by this Dataset.""",
     )
-    has_sample: Union[List[Study], List[str]] = Field(
+    has_sample: Union[List[Sample], List[str]] = Field(
         None,
         description="""One or more Sample entities that are referenced by this Dataset.""",
     )
-    has_analysis: Optional[Union[List[Study], List[str]]] = Field(
+    has_analysis: Optional[Union[List[Analysis], List[str]]] = Field(
         None,
         description="""One or more Analysis entities that are referenced by this Dataset.""",
     )

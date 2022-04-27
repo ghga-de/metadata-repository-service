@@ -16,9 +16,10 @@
 Convenience methods for retrieving File records
 """
 
-from typing import List
+from typing import List, Union
 
 from metadata_repository_service.config import CONFIG, Config
+from metadata_repository_service.creation_models import CreateFile
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.dao.utils import get_entity
 from metadata_repository_service.models import File
@@ -71,7 +72,9 @@ async def get_file(
 
 
 async def get_file_by_accession(
-    file_accession: str, embedded: bool = False, config: Config = CONFIG
+    file_accession: Union[CreateFile, str],
+    embedded: bool = False,
+    config: Config = CONFIG,
 ) -> File:
     """
     Given a File accession, get the File object from metadata store.
