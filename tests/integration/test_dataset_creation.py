@@ -66,6 +66,7 @@ def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
 
     response = client.get(f"/datasets/{dataset_entity['id']}?embedded=true")
     full_dataset_entity = response.json()
+    print(full_dataset_entity)
     assert "has_file" in full_dataset_entity
     assert len(full_dataset_entity["has_file"]) == 2
     assert "has_experiment" in full_dataset_entity
@@ -74,13 +75,14 @@ def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
     assert len(full_dataset_entity["has_sample"]) == 1
     assert "has_study" in full_dataset_entity
     assert len(full_dataset_entity["has_study"]) == 1
-    assert "status" in full_dataset_entity
-    assert full_dataset_entity["status"] == "unreleased"
+    assert "release_status" in full_dataset_entity
+    assert full_dataset_entity["release_status"] == "unreleased"
 
-    dataset_patch = {"status": "released"}
+    dataset_patch = {"release_status": "released"}
     response = client.patch(
         f"/datasets/{full_dataset_entity['accession']}", json=dataset_patch
     )
     patched_dataset = response.json()
-    assert patched_dataset["status"] == dataset_patch["status"]
+    assert patched_dataset["release_status"] == dataset_patch["release_status"]
     assert patched_dataset["creation_date"] != patched_dataset["update_date"]
+    print(patched_dataset)

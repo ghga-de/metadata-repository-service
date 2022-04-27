@@ -12,9 +12,10 @@
       "has_file": [
         "61052f5a-7bc1-458c-9924-ae4c1c86cad1"
       ],
-      "has_sample": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "has_sample": [
+        "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-      "has_technology": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
       "id": "bff27a01-fc20-439b-81a6-639f217c46fc",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     },
@@ -30,9 +31,10 @@
       "has_file": [
         "a2ca36c8-72f3-4cc7-8841-3530a995dea8"
       ],
-      "has_sample": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "has_sample": [
+        "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-      "has_technology": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
       "id": "bff27a01-tc46-439b-76f2-382f122x54dc",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     },
@@ -48,9 +50,10 @@
       "has_file": [
         "c8d86e6d-8345-4e3a-869e-ec78ce353993"
       ],
-      "has_sample": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "has_sample": [
+        "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-      "has_technology": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
       "id": "472c0263-6dc5-4c08-a20c-bb85bef31795",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     }
