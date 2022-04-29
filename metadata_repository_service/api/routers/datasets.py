@@ -19,7 +19,11 @@ from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
-from metadata_repository_service.creation_models import CreateDataset
+from metadata_repository_service.creation_models import (
+    CreateDataAccessPolicy,
+    CreateDataset,
+    CreateFile,
+)
 from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
 )
@@ -69,6 +73,8 @@ async def create_datasets(dataset: CreateDataset, config: Config = Depends(get_c
     Dataset and write to the metadata store.
     """
     dap_accession = dataset.has_data_access_policy
+    if isinstance(dap_accession, CreateDataAccessPolicy):
+        dap_accession = dap_accession.alias
     dap_entity = await get_data_access_policy_by_accession(dap_accession, config=config)
     if not dap_entity:
         raise HTTPException(
@@ -82,6 +88,8 @@ async def create_datasets(dataset: CreateDataset, config: Config = Depends(get_c
     file_accessions = dataset.has_file
     nonexistent_file_accessions = []
     for file_accession in file_accessions:
+        if isinstance(file_accession, CreateFile):
+            file_accession = file_accession.alias
         file_entity = await get_file_by_accession(file_accession, config=config)
         if not file_entity:
             nonexistent_file_accessions.append(file_accession)
