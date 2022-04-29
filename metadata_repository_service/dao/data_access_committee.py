@@ -125,22 +125,29 @@ async def create_data_access_committee(
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     member_entity_id_list = []
-    if data_access_committee.main_contact:
-        if isinstance(data_access_committee.main_contact, CreateMember):
-            # CreateDataAccessCommittee.main_contact is an embedded object
-            member_email = data_access_committee.main_contact.email
-            members = {member_email: data_access_committee.main_contact}
-            if data_access_committee.has_member:
-                for member in data_access_committee.has_member:
-                    members[member.email] = member
-            main_contact_member = None
-            for member in members.values():
-                member_entity = await get_member_by_email(member.email, config=config)
-                if not member_entity:
-                    member_entity = await create_member(member, config=config)
-                if member_entity.email == data_access_committee.main_contact.email:
-                    main_contact_member = member_entity
-                member_entity_id_list.append(member_entity.id)
+    members = {}
+    if not data_access_committee.main_contact:
+        raise Exception("DataAccessCommittee must have main_contact")
+    if not isinstance(data_access_committee.main_contact, CreateMember):
+        raise Exception(
+            "data_access_committee.main_contact must be " "an instance of CreateMember"
+        )
+    # CreateDataAccessCommittee.main_contact is an embedded object
+    member_email = data_access_committee.main_contact.email
+    members = {member_email: data_access_committee.main_contact}
+
+    if data_access_committee.has_member:
+        for member in data_access_committee.has_member:
+            if isinstance(member, CreateMember):
+                members[member.email] = member
+    main_contact_member = None
+    for member in members.values():
+        member_entity = await get_member_by_email(member.email, config=config)
+        if not member_entity:
+            member_entity = await create_member(member, config=config)
+        if member_entity.email == data_access_committee.main_contact.email:
+            main_contact_member = member_entity
+        member_entity_id_list.append(member_entity.id)
 
     # data_access_committee_obj = data_access_committee.dict()
     # if "main_contact" in data_access_committee_obj:

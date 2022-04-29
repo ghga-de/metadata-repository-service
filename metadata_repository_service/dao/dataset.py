@@ -20,7 +20,11 @@ from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import generate_uuid, get_timestamp
-from metadata_repository_service.creation_models import CreateDataset
+from metadata_repository_service.creation_models import (
+    CreateDataAccessPolicy,
+    CreateDataset,
+    CreateFile,
+)
 from metadata_repository_service.dao.analysis import get_analysis_by_linked_files
 from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
@@ -134,20 +138,23 @@ async def create_dataset(  # noqa: C901
     for file_accession in dataset.has_file:
         if not file_accession:
             raise Exception("Dataset does not have a valid File: " f"{dataset}")
+        if isinstance(file_accession, CreateFile):
+            file_accession = file_accession.alias
         file_entity = await get_file_by_accession(
             file_accession=file_accession, config=config
         )
         if not file_entity:
-            raise Exception("Cannot find a File with accession: " + file_accession)
+            raise Exception(f"Cannot find a File with accession: {file_accession}")
         file_entities[file_entity.id] = file_entity
 
-    dap_entity = await get_data_access_policy_by_accession(
-        dataset.has_data_access_policy, config=config
-    )
+    dap_accession = dataset.has_data_access_policy
+    if isinstance(dap_accession, CreateDataAccessPolicy):
+        dap_accession = dap_accession.alias
+    dap_entity = await get_data_access_policy_by_accession(dap_accession, config=config)
     if not dap_entity:
         raise Exception(
             "Cannot find a DataAccessPolicy with accession: "
-            + dataset.has_data_access_policy
+            f"{dataset.has_data_access_policy}"
         )
     file_entity_id_list = list(file_entities.keys())
 
@@ -176,12 +183,13 @@ async def create_dataset(  # noqa: C901
         file_id_list=file_entity_id_list, config=config
     )
     for analysis in analysis_entities:
-        if isinstance(analysis.has_study, str):
-            study_entity = await get_study(analysis.has_study, config=config)
-        else:
-            study_entity = await get_study(analysis.has_study.id, config=config)
-        if study_entity.id not in study_entities:
-            study_entities[study_entity.id] = study_entity
+        if analysis.has_study:
+            if isinstance(analysis.has_study, str):
+                study_entity = await get_study(analysis.has_study, config=config)
+            else:
+                study_entity = await get_study(analysis.has_study.id, config=config)
+            if study_entity.id not in study_entities:
+                study_entities[study_entity.id] = study_entity
 
     # Dataset
     dataset_entity = dataset.dict()
