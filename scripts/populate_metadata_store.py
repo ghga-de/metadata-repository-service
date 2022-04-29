@@ -58,7 +58,7 @@ async def populate_record(
     if os.path.exists(file):
         with open(file, encoding="utf-8") as records_file:
             records = json.load(records_file)
-        await insert_records(db_url, db_name, collection_name, records[collection_name])
+        await insert_records(db_url, db_name, collection_name, records[record_type])
 
 
 async def create_text_index(db_url: str, db_name: str, collection_name: str):
