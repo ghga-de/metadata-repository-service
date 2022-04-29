@@ -17,6 +17,69 @@
 from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture2  # noqa: F401
 
 
+def test_create_dac(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
+    """Test creation of a DAC"""
+    client = mongo_app_fixture2.app_client
+    dac_data = {
+        "name": "Test DAC",
+        "description": "A Data Access Committee for sharing test datasets",
+        "main_contact": {
+            "organization": "GHGA",
+            "email": "foo@ghga.de",
+        },
+        "has_member": [
+            {
+                "organization": "GHGA",
+                "email": "foo@ghga.de",
+            },
+            {"organization": "GHGA", "email": "bar@ghga.de"},
+        ],
+    }
+    response = client.post("/data_access_committees", json=dac_data)
+    dac_entity = response.json()
+    assert "accession" in dac_entity
+    dac_accession = dac_entity["accession"]
+    assert dac_accession
+    assert "main_contact" in dac_entity
+    assert dac_entity["main_contact"]
+    assert "has_member" in dac_entity
+    assert len(dac_entity["has_member"]) == 2
+    assert dac_entity["main_contact"] in dac_entity["has_member"]
+
+
+def test_create_dap(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
+    """Test creation of a DAC and a DAP"""
+    client = mongo_app_fixture2.app_client
+    dac_data = {
+        "name": "Test DAC",
+        "description": "A Data Access Committee for sharing test datasets",
+        "main_contact": {
+            "organization": "GHGA",
+            "email": "foo@ghga.de",
+        },
+        "has_member": [
+            {
+                "organization": "GHGA",
+                "email": "foo@ghga.de",
+            },
+            {"organization": "GHGA", "email": "bar@ghga.de"},
+        ],
+    }
+    response = client.post("/data_access_committees", json=dac_data)
+    dac_entity = response.json()
+    assert "accession" in dac_entity
+    dac_accession = dac_entity["accession"]
+
+    dap_data = {
+        "name": "New DAP",
+        "policy_text": "Some text that explains the access restrictions",
+        "has_data_access_committee": dac_accession,
+    }
+    response = client.post("/data_access_policies", json=dap_data)
+    dap_entity = response.json()
+    assert dap_entity["has_data_access_committee"] == dac_entity["id"]
+
+
 def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
     """Test creation of a Dataset"""
     client = mongo_app_fixture2.app_client
