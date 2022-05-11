@@ -1,4 +1,4 @@
-# Copyright 2021 Universität Tübingen, DKFZ and EMBL
+# Copyright 2021 - 2022 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,29 +15,63 @@
 
 """Test the api module"""
 
+import pytest
 from fastapi import status
-from fastapi.testclient import TestClient
 
-from my_microservice.api.main import app
+from ..fixtures.mongodb import MongoAppFixture, mongo_app_fixture1  # noqa: F401
 
 
-def test_index():
+def test_index(mongo_app_fixture1: MongoAppFixture):  # noqa: F811
     """Test the index endpoint"""
 
-    client = TestClient(app)
+    client = mongo_app_fixture1.app_client
     response = client.get("/")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.text == '"Hello World."'
+    assert response.text == '"Index of the Metadata Repository Service"'
 
 
-def test_greet():
-    """Test the greet endpoint"""
+@pytest.mark.parametrize(
+    "route,entity_id,check_conditions",
+    [
+        (
+            "datasets",
+            "12461315-7bd4-40ff-9c2f-0e0fa4cd6c66",
+            {"accession": "EGAD00001000174"},
+        ),
+        (
+            "studies",
+            "595c6fe1-1908-4596-b72a-ac89b7960375",
+            {"accession": "EGAS00001000274"},
+        ),
+        (
+            "experiments",
+            "997dda34-5ed5-42f3-877b-c9cc327d35ff",
+            {"has_study": "595c6fe1-1908-4596-b72a-ac89b7960375"},
+        ),
+        (
+            "samples",
+            "b66a6217-0db0-4619-af77-6f1e19339aaa",
+            {"has_biospecimen": "3b7e3e84-5165-44d4-a636-3a0a825c2491"},
+        ),
+        (
+            "biospecimens",
+            "3b7e3e84-5165-44d4-a636-3a0a825c2491",
+            {"name": "Biospecimen for Sample b66a6217-0db0-4619-af77-6f1e19339aaa"},
+        ),
+    ],
+)
+def test_get_entity_by_id(
+    mongo_app_fixture1: MongoAppFixture,  # noqa: F811
+    route,
+    entity_id,
+    check_conditions,
+):
+    client = mongo_app_fixture1.app_client
 
-    name = "Friendly Tester"
-
-    client = TestClient(app)
-    response = client.get(f"/greet/{name}")
-
+    response = client.get(f"/{route}/{entity_id}")
     assert response.status_code == status.HTTP_200_OK
-    assert name in response.json()["message"]
+    data = response.json()
+    assert "id" in data and data["id"] == entity_id
+    for key, value in check_conditions.items():
+        assert key in data and data[key] == value

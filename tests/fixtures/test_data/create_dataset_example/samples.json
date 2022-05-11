@@ -1,0 +1,22 @@
+{
+  "samples": [
+    {
+      "accession": "GHGA:SAM000000000001",
+      "alias": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "ega_accession": "EGAN00001209716",
+      "has_attribute": [
+        {
+          "key": "centerName",
+          "value": "DKFZ-IBIOS"
+        }
+      ],
+      "has_biospecimen": "4227f15d-1efe-4bc1-91d3-e193563b3bb1",
+      "has_individual": "219afb21-f026-437d-a42a-aa3978df9f8a",
+      "id": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "name": "BT2009034_tumor",
+      "xref": [
+        "SAMEA2634655"
+      ]
+    }
+  ]
+}

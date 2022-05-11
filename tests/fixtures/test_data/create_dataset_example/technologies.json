@@ -1,0 +1,10 @@
+{
+  "technologies": [
+    {
+      "accession": "GHGA:TEC000000000001",
+      "alias": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
+      "id": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
+      "name": "Illumina HiSeq 2000"
+    }
+  ]
+}
