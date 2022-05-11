@@ -65,7 +65,7 @@ async def _get_reference(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][collection_name]
-    doc = await collection.find_one({"id": document_id})  # type: ignore
+    doc = await collection.find_one({"id": document_id})
     if not doc:
         logging.warning(
             "Reference with ID %s not found in collection %s",
@@ -102,7 +102,7 @@ async def get_entity(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][collection_name]
-    entity = await collection.find_one({field: identifier})  # type: ignore
+    entity = await collection.find_one({field: identifier})
     if entity and embedded:
         entity = await embed_references(entity, config=config)
     client.close()
@@ -175,7 +175,7 @@ async def generate_accession(collection_name: str, config: Config = CONFIG) -> s
     client = await get_db_client(config)
     collection = client[config.db_name]["_accession_tracker_"]
     accession = await _generate_accession(collection_name=collection_name)
-    accession_tracker_obj = await collection.find_one({"accession": accession})  # type: ignore
+    accession_tracker_obj = await collection.find_one({"accession": accession})
     if accession_tracker_obj:
         accession = await generate_accession(
             collection_name=collection_name, config=config

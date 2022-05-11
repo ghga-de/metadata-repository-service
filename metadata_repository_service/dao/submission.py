@@ -54,7 +54,7 @@ async def retrieve_submissions(config: Config = CONFIG) -> List[str]:
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    submissions = await collection.find().to_list(None)  # type: ignore
+    submissions = await collection.find().to_list(None)
     client.close()
     return [x["id"] for x in submissions]
 
@@ -76,7 +76,7 @@ async def get_submission(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    submission = await collection.find_one({"id": submission_id})  # type: ignore
+    submission = await collection.find_one({"id": submission_id})
     if submission and embedded:
         submission = await embed_references(submission, config=config)
     client.close()
