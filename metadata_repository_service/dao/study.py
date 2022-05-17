@@ -39,7 +39,7 @@ async def retrieve_studies(config: Config = CONFIG) -> List[str]:
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    studies = await collection.find().to_list(None)  # type: ignore
+    studies = await collection.find().to_list(None)
     client.close()
     return [x["id"] for x in studies]
 

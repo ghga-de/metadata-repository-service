@@ -39,7 +39,7 @@ async def retrieve_analysis_processes(config: Config = CONFIG) -> List[str]:
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    analysis_processes = await collection.find_distinct().to_list(None)  # type: ignore
+    analysis_processes = await collection.find_distinct().to_list(None)
     client.close()
     return [x["id"] for x in analysis_processes]
 

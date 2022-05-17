@@ -39,7 +39,7 @@ async def retrieve_experiments(config: Config = CONFIG) -> List[str]:
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    experiments = await collection.find().to_list(None)  # type: ignore
+    experiments = await collection.find().to_list(None)
     client.close()
     return [x["id"] for x in experiments]
 
