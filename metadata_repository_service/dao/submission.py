@@ -74,7 +74,7 @@ async def get_submission(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
-    submission = await collection.find_one({"id": submission_id})  # type: ignore
+    submission = await collection.find_one({"id": submission_id})
     if submission and embedded:
         submission = await embed_references(submission, config=config)
     client.close()
