@@ -227,8 +227,6 @@ async def parse_document(document: Dict) -> Dict:
 
     """
     embedded_docs = {}
-    # if not isinstance(document, Dict):
-    #     document = document.dict()
     for field in document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
             if field not in embedded_fields:
@@ -239,16 +237,12 @@ async def parse_document(document: Dict) -> Dict:
                 continue
             if not isinstance(document[field], list):
                 doc = document[field]
-                # if not isinstance(doc, Dict):
-                #     doc = doc.dict()
                 embedded_docs[doc["alias"]] = (
                     formatted_cname,
                     await add_create_fields(doc),
                 )
             else:
                 for doc in document[field]:
-                    # if not isinstance(doc, Dict):
-                    #     doc = doc.dict()
                     embedded_docs[doc["alias"]] = (
                         formatted_cname,
                         await add_create_fields(doc),
@@ -348,9 +342,7 @@ async def update_document(parent_document, docs: Dict, old_document=None) -> Dic
                     (_, referenced_doc) = docs[doc["alias"]]
                     new_list.append(referenced_doc)
                 parent_document[field] = new_list
-
     docs["parent"] = ["Submission", parent_document]
-
     return docs
 
 

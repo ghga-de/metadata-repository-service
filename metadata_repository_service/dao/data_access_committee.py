@@ -149,29 +149,6 @@ async def create_data_access_committee(
             main_contact_member = member_entity
         member_entity_id_list.append(member_entity.id)
 
-    # data_access_committee_obj = data_access_committee.dict()
-    # if "main_contact" in data_access_committee_obj:
-    #     if isinstance(data_access_committee_obj["main_contact"], dict):
-    #         # embedded member object
-    #         member_email = data_access_committee_obj["main_contact"]["email"]
-    #         member_objs = {member_email: data_access_committee_obj["main_contact"]}
-    #         if "has_member" in data_access_committee_obj:
-    #             for member_obj in data_access_committee_obj["has_member"]:
-    #                 member_objs[member_obj["email"]] = member_obj
-    #         main_contact_member = None
-    #         for member_obj in member_objs.values():
-    #             member_entity = await get_member_by_email(
-    #                 member_obj["email"], config=config
-    #             )
-    #             if not member_entity:
-    #                 member_entity = await create_member(member_obj, config=config)
-    #             if (
-    #                 member_entity.email
-    #                 == data_access_committee_obj["main_contact"]["email"]
-    #             ):
-    #                 main_contact_member = member_entity
-    #             member_entity_id_list.append(member_entity.id)
-
     dac_entity = data_access_committee.dict()
     dac_entity["id"] = await generate_uuid()
     dac_entity["create_date"] = await get_timestamp()
