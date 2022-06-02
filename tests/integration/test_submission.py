@@ -33,6 +33,7 @@ def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
 
     response = client.post("/submissions", json=submission_json)
     submission_entity = response.json()
+    print(submission_entity)
     assert "id" in submission_entity
     assert (
         submission_entity["has_study"]["has_project"]
@@ -46,15 +47,18 @@ def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
 
     response = client.get(f"/submissions/{submission_entity['id']}?embedded=false")
     full_submission_entity = response.json()
-    assert "status" in full_submission_entity
-    assert full_submission_entity["status"] == "in progress"
+    print(full_submission_entity)
+    assert "submission_status" in full_submission_entity
+    assert full_submission_entity["submission_status"] == "in_progress"
 
-    submission_patch = {"status": "completed"}
+    submission_patch = {"submission_status": "completed"}
     response = client.patch(
         f"/submissions/{submission_entity['id']}", json=submission_patch
     )
     patched_submission = response.json()
-    assert patched_submission["status"] == submission_patch["status"]
+    assert (
+        patched_submission["submission_status"] == submission_patch["submission_status"]
+    )
     assert patched_submission["creation_date"] == submission_entity["creation_date"]
     assert patched_submission["creation_date"] != patched_submission["update_date"]
 

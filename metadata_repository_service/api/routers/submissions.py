@@ -19,17 +19,15 @@ from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
+from metadata_repository_service.creation_models import CreateSubmission
 from metadata_repository_service.dao.submission import (
     add_submission,
     get_submission,
     patch_submission,
     update_submission,
 )
-from metadata_repository_service.models import (
-    CreateSubmission,
-    Submission,
-    SubmissionStatusPatch,
-)
+from metadata_repository_service.models import Submission
+from metadata_repository_service.patch_models import SubmissionStatusPatch
 
 submission_router = APIRouter()
 
@@ -51,7 +49,6 @@ async def create_submission(
         )
 
     submission = await add_submission(input_submission, config)
-
     return submission
 
 

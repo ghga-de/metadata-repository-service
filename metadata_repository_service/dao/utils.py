@@ -227,7 +227,6 @@ async def parse_document(document: Dict) -> Dict:
 
     """
     embedded_docs = {}
-
     for field in document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
             if field not in embedded_fields:
@@ -318,10 +317,10 @@ async def update_document(parent_document, docs: Dict, old_document=None) -> Dic
     """
     if old_document is None:
         parent_document = await add_create_fields(parent_document)
-        parent_document["status"] = "in progress"
+        parent_document["submission_status"] = "in_progress"
     else:
         parent_document = await add_update_fields(parent_document, old_document)
-        parent_document["status"] = old_document["status"]
+        parent_document["submission_status"] = old_document["submission_status"]
 
     for field in parent_document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
@@ -331,17 +330,19 @@ async def update_document(parent_document, docs: Dict, old_document=None) -> Dic
                 continue
             if not isinstance(parent_document[field], list):
                 doc = parent_document[field]
+                if not isinstance(doc, Dict):
+                    doc = doc.dict()
                 (_, referenced_doc) = docs[doc["alias"]]
                 parent_document[field] = referenced_doc
             else:
                 new_list = []
                 for doc in parent_document[field]:
+                    if not isinstance(doc, Dict):
+                        doc = doc.dict()
                     (_, referenced_doc) = docs[doc["alias"]]
                     new_list.append(referenced_doc)
                 parent_document[field] = new_list
-
     docs["parent"] = ["Submission", parent_document]
-
     return docs
 
 
@@ -418,6 +419,8 @@ async def add_create_fields(document: Dict) -> Dict:
         Annotated document
 
     """
+    if not isinstance(document, Dict):
+        document = document.__dict__
     document["id"] = await generate_uuid()
     document["creation_date"] = await get_timestamp()
     document["update_date"] = document["creation_date"]

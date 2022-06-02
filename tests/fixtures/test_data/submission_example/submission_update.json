@@ -18,9 +18,10 @@
       "has_file": [
         "61052f5a-7bc1-458c-9924-ae4c1c86cad1"
       ],
-      "has_sample": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "has_sample": [
+        "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-      "has_technology": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     },
     {
@@ -34,9 +35,10 @@
       "has_file": [
         "a2ca36c8-72f3-4cc7-8841-3530a995dea8"
       ],
-      "has_sample": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "has_sample": [
+        "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-      "has_technology": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     },
     {
@@ -50,9 +52,10 @@
       "has_file": [
         "c8d86e6d-8345-4e3a-869e-ec78ce353993"
       ],
-      "has_sample": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "has_sample": [
+        "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-      "has_technology": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     }
   ],
@@ -61,28 +64,27 @@
       "alias": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
       "checksum": "0181a2605d552b7733ef4492031ccf3c",
       "ega_accession": "EGAF00000101304",
-      "format": "bam",
+      "file_format": "bam",
       "size": 202142862506
     },
     {
       "alias": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
       "checksum": "59237c0e3060a625e6cf0a5d71dd7611",
       "ega_accession": "EGAF00000101305",
-      "format": "bam",
+      "file_format": "bam",
       "size": 206327988774
     },
     {
       "alias": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
       "checksum": "aacae9d2235654f8018c0b08a27280e8",
       "ega_accession": "EGAF00000101306",
-      "format": "bam",
+      "file_format": "bam",
       "size": 482771491105
     }
   ],
   "has_individual": [
     {
-      "alias": "219afb21-f026-437d-a42a-aa3978df9f8a",
-      "gender": "male"
+      "alias": "219afb21-f026-437d-a42a-aa3978df9f8a"
     }
   ],
   "has_project": {
@@ -127,15 +129,8 @@
     ],
     "has_project": "3baab233-1840-48b6-9e41-668cdef258e0",
     "title": "Epigenomic alterations define lethal CIMP-positive ependymomas of infancy",
-    "type": "Other",
     "xref": [
       "lindt_ependymoma_2013_02_28"
     ]
-  },
-  "has_technology": [
-    {
-      "alias": "efdedff4-a4aa-48bf-8f8d-01afbf33c952",
-      "name": "Illumina HiSeq 2000"
-    }
-  ]
+  }
 }

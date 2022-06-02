@@ -22,6 +22,7 @@ from typing import Dict, List
 from pymongo import ReturnDocument
 
 from metadata_repository_service.config import CONFIG, Config
+from metadata_repository_service.creation_models import CreateSubmission
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.dao.utils import (
     delete_document,
@@ -32,11 +33,8 @@ from metadata_repository_service.dao.utils import (
     store_document,
     update_document,
 )
-from metadata_repository_service.models import (
-    CreateSubmission,
-    Submission,
-    SubmissionStatusPatch,
-)
+from metadata_repository_service.models import Submission
+from metadata_repository_service.patch_models import SubmissionStatusPatch
 
 COLLECTION_NAME = "Submission"
 
@@ -131,9 +129,11 @@ async def patch_submission(
         config: Runtime configuration
 
     """
-    if (status.status is not None) and (submission.status != status.status.value):
+    if (status.submission_status is not None) and (
+        submission.submission_status != status.submission_status.value
+    ):
         update_json = {}
-        update_json["status"] = status.status.value
+        update_json["submission_status"] = status.submission_status.value
         update_json["update_date"] = await get_timestamp()
         submission = await update_submission_values(submission.id, update_json, config)
 

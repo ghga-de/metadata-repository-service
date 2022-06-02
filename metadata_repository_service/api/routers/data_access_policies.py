@@ -19,6 +19,10 @@ from fastapi.exceptions import HTTPException
 
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
+from metadata_repository_service.creation_models import (
+    CreateDataAccessCommittee,
+    CreateDataAccessPolicy,
+)
 from metadata_repository_service.dao.data_access_committee import (
     get_data_access_committee_by_accession,
 )
@@ -26,7 +30,7 @@ from metadata_repository_service.dao.data_access_policy import (
     create_data_access_policy,
     get_data_access_policy,
 )
-from metadata_repository_service.models import CreateDataAccessPolicy, DataAccessPolicy
+from metadata_repository_service.models import DataAccessPolicy
 
 data_access_policy_router = APIRouter()
 
@@ -70,7 +74,13 @@ async def create_data_access_policies(
     Create a DataAccessPolicy and write to the metadata store.
     """
 
-    dac_accession = data_access_policy.has_data_access_committee
+    if isinstance(
+        data_access_policy.has_data_access_committee, CreateDataAccessCommittee
+    ):
+        dac_accession = data_access_policy.has_data_access_committee.alias
+    else:
+        dac_accession = data_access_policy.has_data_access_committee
+
     dac_entity = await get_data_access_committee_by_accession(
         dac_accession, config=config
     )

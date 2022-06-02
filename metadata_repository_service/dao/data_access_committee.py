@@ -16,17 +16,18 @@
 Convenience methods for retrieving DataAccessCommittee records
 """
 
-from typing import List
+from typing import List, Union
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import generate_uuid, get_timestamp
+from metadata_repository_service.creation_models import (
+    CreateDataAccessCommittee,
+    CreateMember,
+)
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.dao.member import create_member, get_member_by_email
 from metadata_repository_service.dao.utils import generate_accession, get_entity
-from metadata_repository_service.models import (
-    CreateDataAccessCommittee,
-    DataAccessCommittee,
-)
+from metadata_repository_service.models import DataAccessCommittee
 
 COLLECTION_NAME = "DataAccessCommittee"
 
@@ -77,7 +78,9 @@ async def get_data_access_committee(
 
 
 async def get_data_access_committee_by_accession(
-    data_access_committee_accession: str, embedded: bool = True, config: Config = CONFIG
+    data_access_committee_accession: Union[CreateDataAccessCommittee, str],
+    embedded: bool = True,
+    config: Config = CONFIG,
 ) -> DataAccessCommittee:
     """
     Given a DataAccessCommittee accession, get the corresponding
@@ -92,6 +95,8 @@ async def get_data_access_committee_by_accession(
         The DataAccessCommittee object
 
     """
+    if isinstance(data_access_committee_accession, CreateDataAccessCommittee):
+        data_access_committee_accession = data_access_committee_accession.alias
     dac = await get_entity(
         identifier=data_access_committee_accession,
         field="accession",
@@ -120,17 +125,26 @@ async def create_data_access_committee(
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     member_entity_id_list = []
-    member_objs = {
-        data_access_committee.main_contact.email: data_access_committee.main_contact
-    }
-    for member_obj in data_access_committee.has_member:
-        member_objs[member_obj.email] = member_obj
+    members = {}
+    if not data_access_committee.main_contact:
+        raise Exception("DataAccessCommittee must have main_contact")
+    if not isinstance(data_access_committee.main_contact, CreateMember):
+        raise Exception(
+            "data_access_committee.main_contact must be " "an instance of CreateMember"
+        )
+    # CreateDataAccessCommittee.main_contact is an embedded object
+    member_email = data_access_committee.main_contact.email
+    members = {member_email: data_access_committee.main_contact}
 
+    if data_access_committee.has_member:
+        for member in data_access_committee.has_member:
+            if isinstance(member, CreateMember):
+                members[member.email] = member
     main_contact_member = None
-    for member_obj in member_objs.values():
-        member_entity = await get_member_by_email(member_obj.email, config=config)
+    for member in members.values():
+        member_entity = await get_member_by_email(member.email, config=config)
         if not member_entity:
-            member_entity = await create_member(member_obj, config=config)
+            member_entity = await create_member(member, config=config)
         if member_entity.email == data_access_committee.main_contact.email:
             main_contact_member = member_entity
         member_entity_id_list.append(member_entity.id)

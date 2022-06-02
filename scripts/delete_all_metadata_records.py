@@ -35,10 +35,11 @@ CollectionTypes = Literal[
     "Member",
     "Sample",
     "Study",
-    "Technology",
+    "Submission",
     "Publication",
     "Project",
     "PhenotypicFeature",
+    "Protocol",
 ]
 
 

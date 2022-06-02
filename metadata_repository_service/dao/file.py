@@ -71,7 +71,9 @@ async def get_file(
 
 
 async def get_file_by_accession(
-    file_accession: str, embedded: bool = False, config: Config = CONFIG
+    file_accession: str,
+    embedded: bool = False,
+    config: Config = CONFIG,
 ) -> File:
     """
     Given a File accession, get the File object from metadata store.

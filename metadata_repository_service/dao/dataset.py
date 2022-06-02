@@ -20,6 +20,11 @@ from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import generate_uuid, get_timestamp
+from metadata_repository_service.creation_models import (
+    CreateDataAccessPolicy,
+    CreateDataset,
+    CreateFile,
+)
 from metadata_repository_service.dao.analysis import get_analysis_by_linked_files
 from metadata_repository_service.dao.data_access_policy import (
     get_data_access_policy_by_accession,
@@ -30,14 +35,13 @@ from metadata_repository_service.dao.file import get_file_by_accession
 from metadata_repository_service.dao.sample import get_sample
 from metadata_repository_service.dao.study import get_study
 from metadata_repository_service.dao.utils import generate_accession, get_entity
-from metadata_repository_service.models import (
-    CreateDataset,
-    Dataset,
+from metadata_repository_service.models import Dataset
+from metadata_repository_service.patch_models import (
     DatasetStatusPatch,
     ReleaseStatusEnum,
 )
 
-# pylint: disable=too-many-locals, too-many-statements
+# pylint: disable=too-many-locals, too-many-statements, too-many-branches
 
 COLLECTION_NAME = "Dataset"
 
@@ -112,7 +116,9 @@ async def get_dataset_by_accession(
     return dataset
 
 
-async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dataset:
+async def create_dataset(  # noqa: C901
+    dataset: CreateDataset, config: Config = CONFIG
+) -> Dataset:
     """
     Given a list of File IDs and a Data Access Policy ID, create a new Dataset object
     and write to the metadata store.
@@ -130,20 +136,25 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
     # Get referenced File entities
     file_entities = {}
     for file_accession in dataset.has_file:
+        if not file_accession:
+            raise Exception("Dataset does not have a valid File: " f"{dataset}")
+        if isinstance(file_accession, CreateFile):
+            file_accession = file_accession.alias
         file_entity = await get_file_by_accession(
             file_accession=file_accession, config=config
         )
         if not file_entity:
-            raise Exception("Cannot find a File with accession: " + file_accession)
+            raise Exception(f"Cannot find a File with accession: {file_accession}")
         file_entities[file_entity.id] = file_entity
 
-    dap_entity = await get_data_access_policy_by_accession(
-        dataset.has_data_access_policy, config=config
-    )
+    dap_accession = dataset.has_data_access_policy
+    if isinstance(dap_accession, CreateDataAccessPolicy):
+        dap_accession = dap_accession.alias
+    dap_entity = await get_data_access_policy_by_accession(dap_accession, config=config)
     if not dap_entity:
         raise Exception(
             "Cannot find a DataAccessPolicy with accession: "
-            + dataset.has_data_access_policy
+            f"{dataset.has_data_access_policy}"
         )
     file_entity_id_list = list(file_entities.keys())
 
@@ -160,30 +171,32 @@ async def create_dataset(dataset: CreateDataset, config: Config = CONFIG) -> Dat
         else:
             study_entity = await get_study(experiment.has_study.id, config=config)
         study_entities[study_entity.id] = study_entity
-        if isinstance(experiment.has_sample, str):
-            sample_entity = await get_sample(experiment.has_sample, config=config)
-        else:
-            sample_entity = await get_sample(experiment.has_sample.id, config=config)
-        sample_entities[sample_entity.id] = sample_entity
+        for sample in experiment.has_sample:
+            if isinstance(sample, str):
+                sample_entity = await get_sample(sample, config=config)
+            else:
+                sample_entity = await get_sample(sample.id, config=config)
+            sample_entities[sample_entity.id] = sample_entity
 
     # Analysis
     analysis_entities = await get_analysis_by_linked_files(
         file_id_list=file_entity_id_list, config=config
     )
     for analysis in analysis_entities:
-        if isinstance(analysis.has_study, str):
-            study_entity = await get_study(analysis.has_study, config=config)
-        else:
-            study_entity = await get_study(analysis.has_study.id, config=config)
-        if study_entity.id not in study_entities:
-            study_entities[study_entity.id] = study_entity
+        if analysis.has_study:
+            if isinstance(analysis.has_study, str):
+                study_entity = await get_study(analysis.has_study, config=config)
+            else:
+                study_entity = await get_study(analysis.has_study.id, config=config)
+            if study_entity.id not in study_entities:
+                study_entities[study_entity.id] = study_entity
 
     # Dataset
     dataset_entity = dataset.dict()
     dataset_entity["id"] = await generate_uuid()
     dataset_entity["creation_date"] = await get_timestamp()
     dataset_entity["update_date"] = dataset_entity["creation_date"]
-    dataset_entity["status"] = ReleaseStatusEnum.UNRELEASED.value
+    dataset_entity["release_status"] = ReleaseStatusEnum.unreleased.value
     dataset_entity["accession"] = await generate_accession(
         COLLECTION_NAME, config=config
     )
@@ -217,15 +230,20 @@ async def change_dataset_status(
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
     dataset_entity = await get_dataset_by_accession(dataset_accession, config=config)
-    if dataset_entity.status != dataset.status:
-        if dataset.status not in set(ReleaseStatusEnum):
+    if dataset_entity.release_status != dataset.release_status:
+        if dataset.release_status not in set(ReleaseStatusEnum):
             raise ValueError(
-                f"dataset.status {dataset.status} not a valid value."
+                f"dataset.release_status {dataset.release_status} not a valid value."
                 + f" Must be one of {[x.value for x in ReleaseStatusEnum]}"
             )
         await collection.update_one(
             {"accession": dataset_accession},
-            {"$set": {"status": dataset.status, "update_date": await get_timestamp()}},
+            {
+                "$set": {
+                    "release_status": dataset.release_status,
+                    "update_date": await get_timestamp(),
+                }
+            },
         )
         updated_dataset = await get_dataset(dataset_entity.id, config=config)
     else:

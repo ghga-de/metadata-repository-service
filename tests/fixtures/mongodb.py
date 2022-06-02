@@ -83,7 +83,7 @@ def mongo_app_fixture2():
         ("projects.json", "Project"),
         ("samples.json", "Sample"),
         ("studies.json", "Study"),
-        ("technologies.json", "Technology"),
+        # ("technologies.json", "Technology"),
     ]
 
     with MongoDbContainer() as mongodb:

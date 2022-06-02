@@ -20,12 +20,13 @@ from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import generate_uuid, get_timestamp
+from metadata_repository_service.creation_models import CreateDataAccessPolicy
 from metadata_repository_service.dao.data_access_committee import (
     get_data_access_committee_by_accession,
 )
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.dao.utils import generate_accession, get_entity
-from metadata_repository_service.models import CreateDataAccessPolicy, DataAccessPolicy
+from metadata_repository_service.models import DataAccessPolicy
 
 COLLECTION_NAME = "DataAccessPolicy"
 
@@ -117,13 +118,18 @@ async def create_data_access_policy(
     """
     client = await get_db_client(config)
     collection = client[config.db_name][COLLECTION_NAME]
+    if not data_access_policy.has_data_access_committee:
+        raise Exception(
+            "DataAccessPolicy does not have a corresponding DataAccessCommittee: "
+            f"{data_access_policy.dict()}"
+        )
     dac_entity = await get_data_access_committee_by_accession(
         data_access_policy.has_data_access_committee, config=config
     )
     if not dac_entity:
         raise Exception(
             "Cannot find a DataAccessCommittee with accession: "
-            + data_access_policy.has_data_access_committee
+            f"{data_access_policy.has_data_access_committee}"
         )
     dap_entity = data_access_policy.dict()
     dap_entity["id"] = await generate_uuid()

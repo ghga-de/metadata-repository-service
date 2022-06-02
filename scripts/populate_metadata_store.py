@@ -43,10 +43,10 @@ RECORD_TYPES = {
     ("members", "Member"),
     ("samples", "Sample"),
     ("studies", "Study"),
-    ("technologies", "Technology"),
     ("publications", "Publication"),
     ("projects", "Project"),
     ("phenotypic_features", "PhenotypicFeature"),
+    ("protocols", "Protocol"),
 }
 
 
