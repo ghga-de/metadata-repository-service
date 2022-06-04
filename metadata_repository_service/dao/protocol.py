@@ -16,14 +16,16 @@
 Convenience methods for retrieving Protocol records
 """
 
+from importlib import import_module
 from typing import List
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.dao.db import get_db_client
-from metadata_repository_service.dao.utils import get_entity
-from metadata_repository_service.models import Protocol
+from metadata_repository_service.dao.utils import get_entity, get_schema_type
+from metadata_repository_service.models import TaggedProtocol
 
 COLLECTION_NAME = "Protocol"
+MODELS_MODULE_NAME = "metadata_repository_service.models"
 
 
 async def retrieve_protocols(config: Config = CONFIG) -> List[str]:
@@ -46,7 +48,7 @@ async def retrieve_protocols(config: Config = CONFIG) -> List[str]:
 
 async def get_protocol(
     protocol_id: str, embedded: bool = False, config: Config = CONFIG
-) -> Protocol:
+) -> TaggedProtocol:
     """
     Given an Protocol ID, get the Protocol object from metadata store.
 
@@ -59,12 +61,22 @@ async def get_protocol(
         The Protocol object
 
     """
+    protocol_type = await get_schema_type(
+        identifier=protocol_id,
+        field="id",
+        collection_name=COLLECTION_NAME,
+        property_name="schema_type",
+        config=CONFIG,
+    )
+    module = import_module(MODELS_MODULE_NAME)
+    protocol_class = getattr(module, protocol_type)
     protocol = await get_entity(
         identifier=protocol_id,
         field="id",
         collection_name=COLLECTION_NAME,
-        model_class=Protocol,
+        model_class=protocol_class,
         embedded=embedded,
         config=config,
     )
+
     return protocol

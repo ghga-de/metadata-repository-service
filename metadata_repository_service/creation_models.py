@@ -17,9 +17,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
+from typing_extensions import Annotated
 
 # pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
@@ -863,7 +864,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Information about one or more Experiment entities associated with this submission.""",
     )
-    has_protocol: Union[List[CreateProtocol], List[str]] = Field(
+    has_protocol: Union[List[CreateTaggedProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Submission.""",
     )
@@ -1548,9 +1549,7 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateLibraryPreparationProtocol"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1643,12 +1642,16 @@ class CreateSequencingProtocol(CreateProtocol):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateSequencingProtocol"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
+
+
+CreateTaggedProtocol = Annotated[
+    Union[CreateLibraryPreparationProtocol, CreateSequencingProtocol],
+    Field(discriminator="schema_type"),
+]
 
 
 class CreateSample(MaterialEntity):
