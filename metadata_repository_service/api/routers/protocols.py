@@ -27,7 +27,7 @@ protocol_router = APIRouter()
 
 @protocol_router.get(
     "/protocols/{protocol_id}",
-    response_model=TaggedProtocol,
+    response_model=TaggedProtocol,  # type: ignore
     summary="Get a Protocol",
     tags=["Query"],
 )
