@@ -1753,7 +1753,7 @@ class Experiment(Investigation):
         None,
         description="""One or more Files entities that are generated as output of this Experiment.""",
     )
-    has_protocol: Union[List[Protocol], List[str]] = Field(
+    has_protocol: Union[List[TaggedProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Experiment.""",
     )
@@ -1817,7 +1817,7 @@ class ExperimentProcess(PlannedProcess):
         None,
         description="""The input to the Experiment Process. Usually a Sample entity.""",
     )
-    has_protocol: Optional[Union[Protocol, str]] = Field(
+    has_protocol: Optional[Union[TaggedProtocol, str]] = Field(
         None, description="""The Protocol entity used by this Experiment Process."""
     )
     has_agent: Optional[Union[Agent, str]] = Field(
