@@ -20,14 +20,14 @@ from fastapi.exceptions import HTTPException
 from metadata_repository_service.api.deps import get_config
 from metadata_repository_service.config import Config
 from metadata_repository_service.dao.protocol import get_protocol
-from metadata_repository_service.models import Protocol
+from metadata_repository_service.models import Protocol, TaggedProtocol
 
 protocol_router = APIRouter()
 
 
 @protocol_router.get(
     "/protocols/{protocol_id}",
-    response_model=Protocol,
+    response_model=TaggedProtocol,  # type: ignore
     summary="Get a Protocol",
     tags=["Query"],
 )

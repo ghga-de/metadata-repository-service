@@ -44,7 +44,6 @@ embedded_fields: Set = {
     "has_publication",
     "has_sample",
     "has_study",
-    "has_technology",
     "has_workflow",
 }
 
@@ -111,6 +110,34 @@ async def get_entity(
     else:
         entity_obj = entity
     return entity_obj
+
+
+async def get_schema_type(
+    identifier: str,
+    field: str,
+    collection_name: str,
+    property_name: str,
+    config: Config = CONFIG,
+) -> str:
+    """
+    Given an identifier, field name and collection name, return the property,
+    e.g. schema type of the object.
+
+    Args:
+        identifier: The identifier
+        field: The name of the field
+        collection_name: The collection in the metadata store that has the document
+        property_name: The name of the property to return
+        config: Rumtime configuration
+
+    Returns
+        The value of the property
+
+    """
+    client = await get_db_client(config)
+    collection = client[config.db_name][collection_name]
+    entity = await collection.find_one({field: identifier})
+    return entity[property_name]
 
 
 async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
@@ -424,6 +451,26 @@ async def add_create_fields(document: Dict) -> Dict:
     document["id"] = await generate_uuid()
     document["creation_date"] = await get_timestamp()
     document["update_date"] = document["creation_date"]
+    if document["schema_type"].startswith("Create"):
+        document["schema_type"] = document["schema_type"].replace("Create", "", 1)
+    for field in document.keys():
+        if (
+            field.startswith("has_")
+            and field not in {"has_attribute"}
+            and field not in embedded_fields
+        ):
+            if document[field] is None:
+                continue
+            if not isinstance(document[field], list):
+                if not isinstance(document[field], str):
+                    document[field] = await add_create_fields(document[field])
+            else:
+                if not isinstance(document[field][0], str):
+                    new_list = []
+                    for doc in document[field]:
+                        doc = await add_create_fields(doc)
+                        new_list.append(doc)
+                    document[field] = new_list
     return document
 
 

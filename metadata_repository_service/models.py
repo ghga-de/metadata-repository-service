@@ -17,9 +17,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
+from typing_extensions import Annotated
 
 # pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
@@ -1155,7 +1156,7 @@ class Submission(BaseModel):
         None,
         description="""Information about one or more Experiment entities associated with this submission.""",
     )
-    has_protocol: Union[List[Protocol], List[str]] = Field(
+    has_protocol: Union[List[TaggedProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Submission.""",
     )
@@ -1752,7 +1753,7 @@ class Experiment(Investigation):
         None,
         description="""One or more Files entities that are generated as output of this Experiment.""",
     )
-    has_protocol: Union[List[Protocol], List[str]] = Field(
+    has_protocol: Union[List[TaggedProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Experiment.""",
     )
@@ -1816,7 +1817,7 @@ class ExperimentProcess(PlannedProcess):
         None,
         description="""The input to the Experiment Process. Usually a Sample entity.""",
     )
-    has_protocol: Optional[Union[Protocol, str]] = Field(
+    has_protocol: Optional[Union[TaggedProtocol, str]] = Field(
         None, description="""The Protocol entity used by this Experiment Process."""
     )
     has_agent: Optional[Union[Agent, str]] = Field(
@@ -1979,9 +1980,7 @@ class LibraryPreparationProtocol(Protocol):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["LibraryPreparationProtocol"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2085,12 +2084,16 @@ class SequencingProtocol(Protocol):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["SequencingProtocol"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
+
+
+TaggedProtocol = Annotated[
+    Union[LibraryPreparationProtocol, SequencingProtocol],
+    Field(discriminator="schema_type"),
+]
 
 
 class Sample(MaterialEntity):

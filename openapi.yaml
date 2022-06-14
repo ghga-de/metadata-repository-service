@@ -1397,7 +1397,9 @@ components:
         has_protocol:
           anyOf:
           - items:
-              $ref: '#/components/schemas/CreateProtocol'
+              anyOf:
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
             type: array
           - items:
               type: string
@@ -1490,7 +1492,9 @@ components:
           title: Has Output
         has_protocol:
           anyOf:
-          - $ref: '#/components/schemas/CreateProtocol'
+          - anyOf:
+            - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+            - $ref: '#/components/schemas/CreateSequencingProtocol'
           - type: string
           description: The Protocol entity used by this Experiment Process.
           title: Has Protocol
@@ -1731,6 +1735,121 @@ components:
           type: array
       title: CreateIndividual
       type: object
+    CreateLibraryPreparationProtocol:
+      description: Information about the library preparation of an Experiment.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        description:
+          description: 'Description about how a sequencing library was prepared (eg:
+            Library construction method).'
+          title: Description
+          type: string
+        end_bias:
+          description: The end of the cDNA molecule that is preferentially sequenced,
+            e.g. 3/5 prime tag or end, or the full-length transcript.
+          title: End Bias
+          type: string
+        has_attribute:
+          description: One or more attributes that further characterizes this Library
+            Preparation Protocol.
+          items:
+            $ref: '#/components/schemas/metadata_repository_service__creation_models__Attribute'
+          title: Has Attribute
+          type: array
+        has_file:
+          anyOf:
+          - $ref: '#/components/schemas/CreateFile'
+          - type: string
+          description: The file associated with an entity.
+          title: Has File
+        library_layout:
+          description: Describe whether the library was sequenced in single-end (forward
+            or reverse) or paired-end mode
+          title: Library Layout
+          type: string
+        library_name:
+          description: A short name identifying the library to potential users. The
+            same name may refer to multiple versions of the same continually updated
+            library.
+          title: Library Name
+          type: string
+        library_preparation:
+          description: The general method for sequencing library preparation (e.g.
+            KAPA PCR-free).
+          title: Library Preparation
+          type: string
+        library_preparation_kit_manufacturer:
+          description: Manufacturer of library preparation kit
+          title: Library Preparation Kit Manufacturer
+          type: string
+        library_preparation_kit_retail_name:
+          description: A unique identifier for the kit used to construct a genomic
+            library. This may include the vendor name, kit name and kit version  (e.g.
+            Agilent sure select Human Exome V8, Twist RefSeq Exome, etc.)
+          title: Library Preparation Kit Retail Name
+          type: string
+        library_selection:
+          description: Whether any method was used to select for or against, enrich,
+            or screen the material being sequenced. Library Selection method (e.g.
+            random, PCA, cDNA, etc )
+          title: Library Selection
+          type: string
+        library_type:
+          description: 'Describe the level of omics analysis (eg: Metagenome, transcriptome,
+            etc)'
+          title: Library Type
+          type: string
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        primer:
+          description: The type of primer used for reverse transcription, e.g. 'oligo-dT'
+            or 'random' primer. This allows users to identify content of the cDNA
+            library input e.g. enriched for mRNA.
+          title: Primer
+          type: string
+        rnaseq_strandedness:
+          description: The strandedness of the library, whether reads come from both
+            strands of the cDNA or only from the first (antisense) or the second (sense)
+            strand.
+          title: Rnaseq Strandedness
+          type: string
+        schema_type:
+          enum:
+          - CreateLibraryPreparationProtocol
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        target_regions:
+          description: Subset of genes or specific regions of the genome, which are
+            most likely to be involved in the phenotype under study.
+          title: Target Regions
+          type: string
+        type:
+          description: The type of an entity.
+          title: Type
+          type: string
+        url:
+          description: A URL to a resource.
+          title: Url
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateLibraryPreparationProtocol
+      type: object
     CreateMember:
       description: Member of an Organization or a Committee.
       properties:
@@ -1871,61 +1990,6 @@ components:
           type: array
       title: CreateProject
       type: object
-    CreateProtocol:
-      description: A plan specification which has sufficient level of detail and quantitative
-        information to communicate it between investigation agents, so that different
-        investigation agents will reliably be able to independently reproduce the
-        process.
-      properties:
-        alias:
-          description: The alias for an entity.
-          title: Alias
-          type: string
-        description:
-          description: Detailed description of the Protocol.
-          title: Description
-          type: string
-        has_attribute:
-          description: One or more attributes that further characterizes this Protocol.
-          items:
-            $ref: '#/components/schemas/metadata_repository_service__creation_models__Attribute'
-          title: Has Attribute
-          type: array
-        has_file:
-          anyOf:
-          - $ref: '#/components/schemas/CreateFile'
-          - type: string
-          description: A document that describes the Protocol.
-          title: Has File
-        name:
-          description: 'Name of the protocol (eg: Sample extraction_PCR amplification).'
-          title: Name
-          type: string
-        schema_type:
-          description: The schema type an instance corresponds to.
-          title: Schema Type
-          type: string
-        schema_version:
-          description: The version of the schema an instance corresponds to.
-          title: Schema Version
-          type: string
-        type:
-          description: 'Type of the protocol (eg: Target enrichment).'
-          title: Type
-          type: string
-        url:
-          description: URL for the resource that describes this Protocol.
-          title: Url
-          type: string
-        xref:
-          description: 'One or more cross-references for this Protocol.  (Eg: manufacturer
-            protocol, protocol from publication etc )'
-          items:
-            type: string
-          title: Xref
-          type: array
-      title: CreateProtocol
-      type: object
     CreatePublication:
       description: The Publication entity represents a publication. While a publication
         can be any article that is published, the minimum expectation is that the
@@ -2058,6 +2122,144 @@ components:
           title: Xref
           type: array
       title: CreateSample
+      type: object
+    CreateSequencingProtocol:
+      description: Information about the sequencing of a sample.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        cell_barcode_offset:
+          description: The offset in sequence of the cell identifying barcode. (Eg.
+            '0').
+          title: Cell Barcode Offset
+          type: string
+        cell_barcode_read:
+          description: 'The type of read that contains the cell barcode (eg: index1/index2/read1/read2).'
+          title: Cell Barcode Read
+          type: string
+        cell_barcode_size:
+          description: The size of the cell identifying barcode (E.g. '16').
+          title: Cell Barcode Size
+          type: string
+        description:
+          description: 'Description about the sequencing protocol (eg: mRNA-seq,Whole
+            exome long-read sequencing etc).'
+          title: Description
+          type: string
+        flow_cell_id:
+          description: 'Flow Cell ID (eg: Experiment ID_Cell 1_Lane_1). The barcode
+            assigned to a flow cell used in nucleotide sequencing.'
+          title: Flow Cell Id
+          type: string
+        flow_cell_type:
+          description: Type of flow cell used (e.g. S4, S2 for NovaSeq; PromethION,
+            Flongle for Nanopore). Aparatus in the fluidic subsystem where the sheath
+            and sample meet. Can be one of several types; jet-in-air, quartz cuvette,
+            or a hybrid of the two. The sample flows through the center of a fluid
+            column of sheath fluid in the flow cell.
+          title: Flow Cell Type
+          type: string
+        has_attribute:
+          description: One or more attributes that further characterizes this Sequencing
+            Protocol.
+          items:
+            $ref: '#/components/schemas/metadata_repository_service__creation_models__Attribute'
+          title: Has Attribute
+          type: array
+        has_file:
+          anyOf:
+          - $ref: '#/components/schemas/CreateFile'
+          - type: string
+          description: The file associated with an entity.
+          title: Has File
+        index_sequence:
+          description: A unique nucleotide sequence that is added to a sample during
+            library preparation to serve as a unique identifier for the sample.
+          title: Index Sequence
+          type: string
+        instrument_model:
+          description: The name and model of the technology platform used to perform
+            sequencing.
+          title: Instrument Model
+          type: string
+        lane_number:
+          description: The numerical identifier for the lane or machine unit where
+            a sample was located during nucleotide sequencing.
+          title: Lane Number
+          type: string
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        paired_or_single_end:
+          allOf:
+          - $ref: '#/components/schemas/metadata_repository_service__creation_models__PairedOrSingleEndEnum'
+          description: Denotes whether a submitted FASTQ file contains forward (R1)
+            or reverse (R2) reads for paired-end sequencing. The number that identifies
+            each read direction in a paired-end nucleotide sequencing replications.
+        sample_barcode_read:
+          description: 'The type of read that contains the sample barcode (eg: index1/index2/read1/read2).'
+          title: Sample Barcode Read
+          type: string
+        schema_type:
+          enum:
+          - CreateSequencingProtocol
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        sequencing_center:
+          description: Center where sample was sequenced.
+          title: Sequencing Center
+          type: string
+        sequencing_read_length:
+          description: 'Length of sequencing reads (eg: Long or short or actual number
+            of the read length etc). The number of nucleotides successfully ordered
+            from each side of a nucleic acid fragment obtained after the completion
+            of a sequencing process'
+          title: Sequencing Read Length
+          type: string
+        target_coverage:
+          description: Mean coverage for whole genome sequencing, or mean target coverage
+            for whole exome and targeted sequencing. The number of times a particular
+            locus (site, nucleotide, amplicon, region) was sequenced.
+          title: Target Coverage
+          type: string
+        type:
+          description: 'Name of the library preparation protocol (eg: mRNA-seq,Whole
+            exome long-read sequencing etc).'
+          title: Type
+          type: string
+        umi_barcode_offset:
+          description: The offset in sequence of the UMI identifying barcode. (E.g.
+            '16').
+          title: Umi Barcode Offset
+          type: string
+        umi_barcode_read:
+          description: 'The type of read that contains the UMI barcode (Eg: index1/index2/read1/read2).'
+          title: Umi Barcode Read
+          type: string
+        umi_barcode_size:
+          description: The size of the UMI identifying barcode (Eg. '10').
+          title: Umi Barcode Size
+          type: string
+        url:
+          description: A URL to a resource.
+          title: Url
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: CreateSequencingProtocol
       type: object
     CreateStudy:
       description: Studies are experimental investigations of a particular phenomenon.
@@ -2230,7 +2432,9 @@ components:
         has_protocol:
           anyOf:
           - items:
-              $ref: '#/components/schemas/CreateProtocol'
+              anyOf:
+              - $ref: '#/components/schemas/CreateLibraryPreparationProtocol'
+              - $ref: '#/components/schemas/CreateSequencingProtocol'
             type: array
           - items:
               type: string
@@ -2983,7 +3187,9 @@ components:
         has_protocol:
           anyOf:
           - items:
-              $ref: '#/components/schemas/Protocol'
+              anyOf:
+              - $ref: '#/components/schemas/LibraryPreparationProtocol'
+              - $ref: '#/components/schemas/SequencingProtocol'
             type: array
           - items:
               type: string
@@ -3088,7 +3294,9 @@ components:
           title: Has Output
         has_protocol:
           anyOf:
-          - $ref: '#/components/schemas/Protocol'
+          - anyOf:
+            - $ref: '#/components/schemas/LibraryPreparationProtocol'
+            - $ref: '#/components/schemas/SequencingProtocol'
           - type: string
           description: The Protocol entity used by this Experiment Process.
           title: Has Protocol
@@ -3370,6 +3578,131 @@ components:
           type: array
       title: Individual
       type: object
+    LibraryPreparationProtocol:
+      description: Information about the library preparation of an Experiment.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        creation_date:
+          description: Timestamp (in ISO 8601 format) when the entity was created.
+          title: Creation Date
+          type: string
+        description:
+          description: 'Description about how a sequencing library was prepared (eg:
+            Library construction method).'
+          title: Description
+          type: string
+        end_bias:
+          description: The end of the cDNA molecule that is preferentially sequenced,
+            e.g. 3/5 prime tag or end, or the full-length transcript.
+          title: End Bias
+          type: string
+        has_attribute:
+          description: One or more attributes that further characterizes this Library
+            Preparation Protocol.
+          items:
+            $ref: '#/components/schemas/metadata_repository_service__models__Attribute'
+          title: Has Attribute
+          type: array
+        has_file:
+          description: The file associated with an entity.
+          title: Has File
+          type: string
+        id:
+          description: An identifier that uniquely represents an entity.
+          title: Id
+          type: string
+        library_layout:
+          description: Describe whether the library was sequenced in single-end (forward
+            or reverse) or paired-end mode
+          title: Library Layout
+          type: string
+        library_name:
+          description: A short name identifying the library to potential users. The
+            same name may refer to multiple versions of the same continually updated
+            library.
+          title: Library Name
+          type: string
+        library_preparation:
+          description: The general method for sequencing library preparation (e.g.
+            KAPA PCR-free).
+          title: Library Preparation
+          type: string
+        library_preparation_kit_manufacturer:
+          description: Manufacturer of library preparation kit
+          title: Library Preparation Kit Manufacturer
+          type: string
+        library_preparation_kit_retail_name:
+          description: A unique identifier for the kit used to construct a genomic
+            library. This may include the vendor name, kit name and kit version  (e.g.
+            Agilent sure select Human Exome V8, Twist RefSeq Exome, etc.)
+          title: Library Preparation Kit Retail Name
+          type: string
+        library_selection:
+          description: Whether any method was used to select for or against, enrich,
+            or screen the material being sequenced. Library Selection method (e.g.
+            random, PCA, cDNA, etc )
+          title: Library Selection
+          type: string
+        library_type:
+          description: 'Describe the level of omics analysis (eg: Metagenome, transcriptome,
+            etc)'
+          title: Library Type
+          type: string
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        primer:
+          description: The type of primer used for reverse transcription, e.g. 'oligo-dT'
+            or 'random' primer. This allows users to identify content of the cDNA
+            library input e.g. enriched for mRNA.
+          title: Primer
+          type: string
+        rnaseq_strandedness:
+          description: The strandedness of the library, whether reads come from both
+            strands of the cDNA or only from the first (antisense) or the second (sense)
+            strand.
+          title: Rnaseq Strandedness
+          type: string
+        schema_type:
+          enum:
+          - LibraryPreparationProtocol
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        target_regions:
+          description: Subset of genes or specific regions of the genome, which are
+            most likely to be involved in the phenotype under study.
+          title: Target Regions
+          type: string
+        type:
+          description: The type of an entity.
+          title: Type
+          type: string
+        update_date:
+          description: Timestamp (in ISO 8601 format) when the entity was updated.
+          title: Update Date
+          type: string
+        url:
+          description: A URL to a resource.
+          title: Url
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: LibraryPreparationProtocol
+      type: object
     Member:
       description: Member of an Organization or a Committee.
       properties:
@@ -3546,71 +3879,6 @@ components:
           type: array
       title: Project
       type: object
-    Protocol:
-      description: A plan specification which has sufficient level of detail and quantitative
-        information to communicate it between investigation agents, so that different
-        investigation agents will reliably be able to independently reproduce the
-        process.
-      properties:
-        alias:
-          description: The alias for an entity.
-          title: Alias
-          type: string
-        creation_date:
-          description: Timestamp (in ISO 8601 format) when the entity was created.
-          title: Creation Date
-          type: string
-        description:
-          description: Detailed description of the Protocol.
-          title: Description
-          type: string
-        has_attribute:
-          description: One or more attributes that further characterizes this Protocol.
-          items:
-            $ref: '#/components/schemas/metadata_repository_service__models__Attribute'
-          title: Has Attribute
-          type: array
-        has_file:
-          description: A document that describes the Protocol.
-          title: Has File
-          type: string
-        id:
-          description: An identifier that uniquely represents an entity.
-          title: Id
-          type: string
-        name:
-          description: 'Name of the protocol (eg: Sample extraction_PCR amplification).'
-          title: Name
-          type: string
-        schema_type:
-          description: The schema type an instance corresponds to.
-          title: Schema Type
-          type: string
-        schema_version:
-          description: The version of the schema an instance corresponds to.
-          title: Schema Version
-          type: string
-        type:
-          description: 'Type of the protocol (eg: Target enrichment).'
-          title: Type
-          type: string
-        update_date:
-          description: Timestamp (in ISO 8601 format) when the entity was updated.
-          title: Update Date
-          type: string
-        url:
-          description: URL for the resource that describes this Protocol.
-          title: Url
-          type: string
-        xref:
-          description: 'One or more cross-references for this Protocol.  (Eg: manufacturer
-            protocol, protocol from publication etc )'
-          items:
-            type: string
-          title: Xref
-          type: array
-      title: Protocol
-      type: object
     Publication:
       description: The Publication entity represents a publication. While a publication
         can be any article that is published, the minimum expectation is that the
@@ -3767,6 +4035,154 @@ components:
           title: Xref
           type: array
       title: Sample
+      type: object
+    SequencingProtocol:
+      description: Information about the sequencing of a sample.
+      properties:
+        alias:
+          description: The alias for an entity.
+          title: Alias
+          type: string
+        cell_barcode_offset:
+          description: The offset in sequence of the cell identifying barcode. (Eg.
+            '0').
+          title: Cell Barcode Offset
+          type: string
+        cell_barcode_read:
+          description: 'The type of read that contains the cell barcode (eg: index1/index2/read1/read2).'
+          title: Cell Barcode Read
+          type: string
+        cell_barcode_size:
+          description: The size of the cell identifying barcode (E.g. '16').
+          title: Cell Barcode Size
+          type: string
+        creation_date:
+          description: Timestamp (in ISO 8601 format) when the entity was created.
+          title: Creation Date
+          type: string
+        description:
+          description: 'Description about the sequencing protocol (eg: mRNA-seq,Whole
+            exome long-read sequencing etc).'
+          title: Description
+          type: string
+        flow_cell_id:
+          description: 'Flow Cell ID (eg: Experiment ID_Cell 1_Lane_1). The barcode
+            assigned to a flow cell used in nucleotide sequencing.'
+          title: Flow Cell Id
+          type: string
+        flow_cell_type:
+          description: Type of flow cell used (e.g. S4, S2 for NovaSeq; PromethION,
+            Flongle for Nanopore). Aparatus in the fluidic subsystem where the sheath
+            and sample meet. Can be one of several types; jet-in-air, quartz cuvette,
+            or a hybrid of the two. The sample flows through the center of a fluid
+            column of sheath fluid in the flow cell.
+          title: Flow Cell Type
+          type: string
+        has_attribute:
+          description: One or more attributes that further characterizes this Sequencing
+            Protocol.
+          items:
+            $ref: '#/components/schemas/metadata_repository_service__models__Attribute'
+          title: Has Attribute
+          type: array
+        has_file:
+          description: The file associated with an entity.
+          title: Has File
+          type: string
+        id:
+          description: An identifier that uniquely represents an entity.
+          title: Id
+          type: string
+        index_sequence:
+          description: A unique nucleotide sequence that is added to a sample during
+            library preparation to serve as a unique identifier for the sample.
+          title: Index Sequence
+          type: string
+        instrument_model:
+          description: The name and model of the technology platform used to perform
+            sequencing.
+          title: Instrument Model
+          type: string
+        lane_number:
+          description: The numerical identifier for the lane or machine unit where
+            a sample was located during nucleotide sequencing.
+          title: Lane Number
+          type: string
+        name:
+          description: The name for an entity.
+          title: Name
+          type: string
+        paired_or_single_end:
+          allOf:
+          - $ref: '#/components/schemas/metadata_repository_service__models__PairedOrSingleEndEnum'
+          description: Denotes whether a submitted FASTQ file contains forward (R1)
+            or reverse (R2) reads for paired-end sequencing. The number that identifies
+            each read direction in a paired-end nucleotide sequencing replications.
+        sample_barcode_read:
+          description: 'The type of read that contains the sample barcode (eg: index1/index2/read1/read2).'
+          title: Sample Barcode Read
+          type: string
+        schema_type:
+          enum:
+          - SequencingProtocol
+          title: Schema Type
+          type: string
+        schema_version:
+          description: The version of the schema an instance corresponds to.
+          title: Schema Version
+          type: string
+        sequencing_center:
+          description: Center where sample was sequenced.
+          title: Sequencing Center
+          type: string
+        sequencing_read_length:
+          description: 'Length of sequencing reads (eg: Long or short or actual number
+            of the read length etc). The number of nucleotides successfully ordered
+            from each side of a nucleic acid fragment obtained after the completion
+            of a sequencing process'
+          title: Sequencing Read Length
+          type: string
+        target_coverage:
+          description: Mean coverage for whole genome sequencing, or mean target coverage
+            for whole exome and targeted sequencing. The number of times a particular
+            locus (site, nucleotide, amplicon, region) was sequenced.
+          title: Target Coverage
+          type: string
+        type:
+          description: 'Name of the library preparation protocol (eg: mRNA-seq,Whole
+            exome long-read sequencing etc).'
+          title: Type
+          type: string
+        umi_barcode_offset:
+          description: The offset in sequence of the UMI identifying barcode. (E.g.
+            '16').
+          title: Umi Barcode Offset
+          type: string
+        umi_barcode_read:
+          description: 'The type of read that contains the UMI barcode (Eg: index1/index2/read1/read2).'
+          title: Umi Barcode Read
+          type: string
+        umi_barcode_size:
+          description: The size of the UMI identifying barcode (Eg. '10').
+          title: Umi Barcode Size
+          type: string
+        update_date:
+          description: Timestamp (in ISO 8601 format) when the entity was updated.
+          title: Update Date
+          type: string
+        url:
+          description: A URL to a resource.
+          title: Url
+          type: string
+        xref:
+          description: Database cross references for an entity.
+          items:
+            type: string
+          title: Xref
+          type: array
+      required:
+      - schema_type
+      title: SequencingProtocol
       type: object
     Study:
       description: Studies are experimental investigations of a particular phenomenon.
@@ -3955,7 +4371,9 @@ components:
         has_protocol:
           anyOf:
           - items:
-              $ref: '#/components/schemas/Protocol'
+              anyOf:
+              - $ref: '#/components/schemas/LibraryPreparationProtocol'
+              - $ref: '#/components/schemas/SequencingProtocol'
             type: array
           - items:
               type: string
@@ -4277,6 +4695,13 @@ components:
       - other
       title: FileFormatEnum
       type: string
+    metadata_repository_service__creation_models__PairedOrSingleEndEnum:
+      description: An enumeration.
+      enum:
+      - paired
+      - single
+      title: PairedOrSingleEndEnum
+      type: string
     metadata_repository_service__creation_models__ReleaseStatusEnum:
       description: An enumeration.
       enum:
@@ -4421,6 +4846,13 @@ components:
       - pxf
       - other
       title: FileFormatEnum
+      type: string
+    metadata_repository_service__models__PairedOrSingleEndEnum:
+      description: An enumeration.
+      enum:
+      - paired
+      - single
+      title: PairedOrSingleEndEnum
       type: string
     metadata_repository_service__models__ReleaseStatusEnum:
       description: An enumeration.
@@ -5051,7 +5483,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Protocol'
+                anyOf:
+                - $ref: '#/components/schemas/LibraryPreparationProtocol'
+                - $ref: '#/components/schemas/SequencingProtocol'
+                title: Response Get Protocols Protocols  Protocol Id  Get
           description: Successful Response
         '422':
           content:

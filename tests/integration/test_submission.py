@@ -33,7 +33,6 @@ def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
 
     response = client.post("/submissions", json=submission_json)
     submission_entity = response.json()
-    print(submission_entity)
     assert "id" in submission_entity
     assert (
         submission_entity["has_study"]["has_project"]
@@ -45,9 +44,16 @@ def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
         == submission_entity["has_file"][0]["id"]
     )
 
+    assert (
+        submission_entity["has_experiment"][0]["has_protocol"][0]
+        == submission_entity["has_protocol"][0]["id"]
+    )
+
+    assert "library_name" in submission_entity["has_protocol"][0]
+    assert "instrument_model" in submission_entity["has_protocol"][1]
+
     response = client.get(f"/submissions/{submission_entity['id']}?embedded=false")
     full_submission_entity = response.json()
-    print(full_submission_entity)
     assert "submission_status" in full_submission_entity
     assert full_submission_entity["submission_status"] == "in_progress"
 
