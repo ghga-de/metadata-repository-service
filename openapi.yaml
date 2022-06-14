@@ -3238,7 +3238,9 @@ components:
         has_protocol:
           anyOf:
           - items:
-              $ref: '#/components/schemas/Protocol'
+              anyOf:
+              - $ref: '#/components/schemas/LibraryPreparationProtocol'
+              - $ref: '#/components/schemas/SequencingProtocol'
             type: array
           - items:
               type: string
@@ -3343,7 +3345,9 @@ components:
           title: Has Output
         has_protocol:
           anyOf:
-          - $ref: '#/components/schemas/Protocol'
+          - anyOf:
+            - $ref: '#/components/schemas/LibraryPreparationProtocol'
+            - $ref: '#/components/schemas/SequencingProtocol'
           - type: string
           description: The Protocol entity used by this Experiment Process.
           title: Has Protocol
@@ -3925,71 +3929,6 @@ components:
           title: Xref
           type: array
       title: Project
-      type: object
-    Protocol:
-      description: A plan specification which has sufficient level of detail and quantitative
-        information to communicate it between investigation agents, so that different
-        investigation agents will reliably be able to independently reproduce the
-        process.
-      properties:
-        alias:
-          description: The alias for an entity.
-          title: Alias
-          type: string
-        creation_date:
-          description: Timestamp (in ISO 8601 format) when the entity was created.
-          title: Creation Date
-          type: string
-        description:
-          description: Detailed description of the Protocol.
-          title: Description
-          type: string
-        has_attribute:
-          description: One or more attributes that further characterizes this Protocol.
-          items:
-            $ref: '#/components/schemas/metadata_repository_service__models__Attribute'
-          title: Has Attribute
-          type: array
-        has_file:
-          description: A document that describes the Protocol.
-          title: Has File
-          type: string
-        id:
-          description: An identifier that uniquely represents an entity.
-          title: Id
-          type: string
-        name:
-          description: 'Name of the protocol (eg: Sample extraction_PCR amplification).'
-          title: Name
-          type: string
-        schema_type:
-          description: The schema type an instance corresponds to.
-          title: Schema Type
-          type: string
-        schema_version:
-          description: The version of the schema an instance corresponds to.
-          title: Schema Version
-          type: string
-        type:
-          description: 'Type of the protocol (eg: Target enrichment).'
-          title: Type
-          type: string
-        update_date:
-          description: Timestamp (in ISO 8601 format) when the entity was updated.
-          title: Update Date
-          type: string
-        url:
-          description: URL for the resource that describes this Protocol.
-          title: Url
-          type: string
-        xref:
-          description: 'One or more cross-references for this Protocol.  (Eg: manufacturer
-            protocol, protocol from publication etc )'
-          items:
-            type: string
-          title: Xref
-          type: array
-      title: Protocol
       type: object
     Publication:
       description: The Publication entity represents a publication. While a publication
