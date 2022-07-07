@@ -140,7 +140,9 @@ async def get_schema_type(
     return entity[property_name]
 
 
-async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
+async def embed_references(
+    document: Dict, config: Config = CONFIG, only_top_level: bool = False
+) -> Dict:
     """Given a document and a document type, identify the references in ``document``
     and query the metadata store. After retrieving the referenced objects,
     embed them in place of the reference in the parent document.
@@ -160,28 +162,40 @@ async def embed_references(document: Dict, config: Config = CONFIG) -> Dict:
             cname = field.split("_", 1)[1]
             formatted_cname = stringcase.pascalcase(cname)
             if isinstance(parent_document[field], str):
-                referenced_doc = await _get_reference(
-                    parent_document[field], formatted_cname, config=config
+                referenced_doc = await get_referenced_doc(
+                    parent_document[field],
+                    formatted_cname,
+                    config=config,
+                    only_top_level=only_top_level,
                 )
-                if referenced_doc:
-                    referenced_doc = await embed_references(
-                        referenced_doc, config=config
-                    )
-                    parent_document[field] = referenced_doc
+                parent_document[field] = referenced_doc
             elif isinstance(parent_document[field], (list, set, tuple)):
                 docs = []
                 for ref in parent_document[field]:
-                    referenced_doc = await _get_reference(
-                        ref, formatted_cname, config=config
+                    referenced_doc = await get_referenced_doc(
+                        ref,
+                        formatted_cname,
+                        config=config,
+                        only_top_level=only_top_level,
                     )
-                    if referenced_doc:
-                        referenced_doc = await embed_references(
-                            referenced_doc, config=config
-                        )
-                        docs.append(referenced_doc)
+                    docs.append(referenced_doc)
                 if docs:
                     parent_document[field] = docs
     return parent_document
+
+
+async def get_referenced_doc(
+    ref: str,
+    collection_name: str,
+    config: Config = CONFIG,
+    only_top_level: bool = False,
+) -> Dict:
+    """Retrieve the referenced document"""
+    referenced_doc = await _get_reference(ref, collection_name, config=config)
+    if referenced_doc:
+        if not only_top_level:
+            referenced_doc = await embed_references(referenced_doc, config=config)
+    return referenced_doc
 
 
 async def generate_accession(collection_name: str, config: Config = CONFIG) -> str:
@@ -360,14 +374,14 @@ async def update_document(parent_document, docs: Dict, old_document=None) -> Dic
                 if not isinstance(doc, Dict):
                     doc = doc.dict()
                 (_, referenced_doc) = docs[doc["alias"]]
-                parent_document[field] = referenced_doc
+                parent_document[field] = referenced_doc["id"]
             else:
                 new_list = []
                 for doc in parent_document[field]:
                     if not isinstance(doc, Dict):
                         doc = doc.dict()
                     (_, referenced_doc) = docs[doc["alias"]]
-                    new_list.append(referenced_doc)
+                    new_list.append(referenced_doc["id"])
                 parent_document[field] = new_list
     docs["parent"] = ["Submission", parent_document]
     return docs
@@ -398,11 +412,11 @@ async def delete_document(
             formatted_cname = stringcase.pascalcase(cname)
             collection = client[config.db_name][formatted_cname]
             if not isinstance(parent_document[field], list):
-                doc = parent_document[field]
-                await collection.delete_one({"id": doc["id"]})
+                doc_id = parent_document[field]
+                await collection.delete_one({"id": doc_id})
             else:
-                for doc in parent_document[field]:
-                    await collection.delete_one({"id": doc["id"]})
+                for doc_id in parent_document[field]:
+                    await collection.delete_one({"id": doc_id})
 
     client.close()
 
