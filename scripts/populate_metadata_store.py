@@ -37,16 +37,20 @@ RECORD_TYPES = {
     ("data_access_committees", "DataAccessCommittee"),
     ("data_access_policies", "DataAccessPolicy"),
     ("datasets", "Dataset"),
+    ("disease_or_phenotypic_features", "DiseaseOrPhenotypicFeature"),
     ("experiments", "Experiment"),
     ("files", "File"),
     ("individuals", "Individual"),
+    ("library_preperation_protocols", "LibraryPreparationProtocol"),
     ("members", "Member"),
-    ("samples", "Sample"),
-    ("studies", "Study"),
-    ("publications", "Publication"),
-    ("projects", "Project"),
     ("phenotypic_features", "PhenotypicFeature"),
+    ("projects", "Project"),
     ("protocols", "Protocol"),
+    ("publications", "Publication"),
+    ("samples", "Sample"),
+    ("sequencing_protocols", "SequencingProtocol"),
+    ("studies", "Study"),
+    ("submissions", "Submission"),
 }
 
 
@@ -58,7 +62,8 @@ async def populate_record(
     if os.path.exists(file):
         with open(file, encoding="utf-8") as records_file:
             records = json.load(records_file)
-        await insert_records(db_url, db_name, collection_name, records[record_type])
+        if len(records[record_type]) > 0:
+            await insert_records(db_url, db_name, collection_name, records[record_type])
 
 
 async def create_text_index(db_url: str, db_name: str, collection_name: str):
