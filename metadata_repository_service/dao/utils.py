@@ -459,7 +459,7 @@ async def store_document(docs: Dict, config: Config = CONFIG):
             for record in record_list:
                 if "accession" in record and record["accession"]:
                     continue
-                accession = await generate_accession(collection_name=key)
+                accession = await generate_accession(collection_name=key, config=config)
                 record["accession"] = accession
 
     for (key, record_list) in records.items():
