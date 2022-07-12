@@ -14,7 +14,7 @@
 # limitations under the License.
 """Utility methods for DAO"""
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-branches
 
 import copy
 import logging
@@ -45,6 +45,27 @@ embedded_fields: Set = {
     "has_sample",
     "has_study",
     "has_workflow",
+}
+
+
+EMBEDDING_PROFILES: Dict = {
+    "minimal": {
+        "Dataset": {"id", "has_project", "has_experiment", "has_study"},
+        "Project": {"id", "title"},
+        "Study": {"id", "type", "title"},
+        "Experiment": {"id", "type", "has_sample", "has_file"},
+        "Protocol": {"id", "name", "type"},
+        "File": {"id", "name", "format", "size"},
+        "Sample": {"id", "type", "has_individual"},
+        "Individual": {"id", "sex", "age", "vital_status"},
+    },
+    "data_portal": {
+        "Dataset": {},
+        "Experiment": {},
+        "Protocol": {},
+        "Project": {},
+    },
+    "full": {},
 }
 
 
@@ -80,6 +101,7 @@ async def get_entity(
     collection_name: str,
     model_class: Any = None,
     embedded: bool = False,
+    embedding_profile: str = "full",
     config: Config = CONFIG,
 ) -> Any:
     """
@@ -93,6 +115,7 @@ async def get_entity(
         collection_name: The collection in the metadata store that has the document
         model_class: The model class
         embedded: Whether or not to embed references. ``False``, by default.
+        embedding_profile: The embedding profile to use
         config: Rumtime configuration
 
     Returns
@@ -103,7 +126,13 @@ async def get_entity(
     collection = client[config.db_name][collection_name]
     entity = await collection.find_one({field: identifier})
     if entity and embedded:
-        entity = await embed_references(entity, config=config)
+        if embedding_profile in EMBEDDING_PROFILES:
+            fields = EMBEDDING_PROFILES[embedding_profile].get(collection_name, {})
+        else:
+            fields = set()
+        entity = await embed_references(
+            entity, embedding_profile=embedding_profile, fields=fields, config=config
+        )
     client.close()
     if model_class and entity:
         entity_obj = model_class(**entity)
@@ -125,7 +154,7 @@ async def get_schema_type(
 
     Args:
         identifier: The identifier
-        field: The name of the field
+       field: The name of the field
         collection_name: The collection in the metadata store that has the document
         property_name: The name of the property to return
         config: Rumtime configuration
@@ -140,8 +169,12 @@ async def get_schema_type(
     return entity[property_name]
 
 
-async def embed_references(
-    document: Dict, config: Config = CONFIG, only_top_level: bool = False
+async def embed_references(  # noqa: C901
+    document: Dict,
+    only_top_level: bool = False,
+    embedding_profile: str = "full",
+    fields: Set = None,
+    config: Config = CONFIG,
 ) -> Dict:
     """Given a document and a document type, identify the references in ``document``
     and query the metadata store. After retrieving the referenced objects,
@@ -149,24 +182,44 @@ async def embed_references(
 
     Args:
         document: The document that has one or more references
+        only_top_level: Whether to embed fields at the top level
+        embedding_profile: The embedding profile to use
+        fields: The fields to embed; typically from an embedding profile
 
     Returns
         The denormalize/embedded document
 
     """
+    if fields:
+        filtered_doc = {}
+        for field in fields:
+            if field in document:
+                filtered_doc[field] = document[field]
+        document = filtered_doc
+
     parent_document = copy.deepcopy(document)
     for field in parent_document.keys():
         if field.startswith("has_") and field not in {"has_attribute"}:
             if field not in embedded_fields:
                 continue
+            if fields and field not in fields:
+                continue
             cname = field.split("_", 1)[1]
             formatted_cname = stringcase.pascalcase(cname)
+            if embedding_profile in EMBEDDING_PROFILES:
+                nested_fields = EMBEDDING_PROFILES[embedding_profile].get(
+                    formatted_cname, {}
+                )
+            else:
+                nested_fields = set()
             if isinstance(parent_document[field], str):
                 referenced_doc = await get_referenced_doc(
                     parent_document[field],
-                    formatted_cname,
-                    config=config,
+                    collection_name=formatted_cname,
                     only_top_level=only_top_level,
+                    embedding_profile=embedding_profile,
+                    fields=nested_fields,
+                    config=config,
                 )
                 parent_document[field] = referenced_doc
             elif isinstance(parent_document[field], (list, set, tuple)):
@@ -174,9 +227,11 @@ async def embed_references(
                 for ref in parent_document[field]:
                     referenced_doc = await get_referenced_doc(
                         ref,
-                        formatted_cname,
-                        config=config,
+                        collection_name=formatted_cname,
                         only_top_level=only_top_level,
+                        embedding_profile=embedding_profile,
+                        fields=nested_fields,
+                        config=config,
                     )
                     docs.append(referenced_doc)
                 if docs:
@@ -187,14 +242,27 @@ async def embed_references(
 async def get_referenced_doc(
     ref: str,
     collection_name: str,
-    config: Config = CONFIG,
     only_top_level: bool = False,
+    embedding_profile: str = "full",
+    fields: Set = None,
+    config: Config = CONFIG,
 ) -> Dict:
     """Retrieve the referenced document"""
     referenced_doc = await _get_reference(ref, collection_name, config=config)
+    if fields:
+        filtered_referenced_doc = {}
+        for field in fields:
+            if field in referenced_doc:
+                filtered_referenced_doc[field] = referenced_doc[field]
+        referenced_doc = filtered_referenced_doc
     if referenced_doc:
         if not only_top_level:
-            referenced_doc = await embed_references(referenced_doc, config=config)
+            referenced_doc = await embed_references(
+                referenced_doc,
+                embedding_profile=embedding_profile,
+                fields=fields,
+                config=config,
+            )
     return referenced_doc
 
 
