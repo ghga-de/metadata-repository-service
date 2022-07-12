@@ -65,7 +65,10 @@ async def retrieve_datasets(config: Config = CONFIG) -> List[str]:
 
 
 async def get_dataset(
-    dataset_id: str, embedded: bool = False, config: Config = CONFIG
+    dataset_id: str,
+    embedded: bool = False,
+    embedding_profile: str = "full",
+    config: Config = CONFIG,
 ) -> Dataset:
     """
     Given a Dataset ID, get the Dataset object from metadata store.
@@ -73,6 +76,7 @@ async def get_dataset(
     Args:
         dataset_id: The Dataset ID
         embedded: Whether or not to embed references. ``False``, by default.
+        embedding_profile: The embedding profile to use
         config: Rumtime configuration
 
     Returns:
@@ -85,6 +89,7 @@ async def get_dataset(
         collection_name=COLLECTION_NAME,
         model_class=Dataset,
         embedded=embedded,
+        embedding_profile=embedding_profile,
         config=config,
     )
     return dataset

@@ -76,7 +76,9 @@ async def get_submission(
     collection = client[config.db_name][COLLECTION_NAME]
     submission = await collection.find_one({"id": submission_id})
     if submission and embedded:
-        submission = await embed_references(submission, config, True)
+        submission = await embed_references(
+            submission, only_top_level=True, config=config
+        )
     client.close()
     return Submission(**submission)
 
@@ -99,7 +101,9 @@ async def add_submission(
 
     await store_document(docs, config)
 
-    submission = await embed_references(docs["parent"][1], config, True)
+    submission = await embed_references(
+        docs["parent"][1], only_top_level=True, config=config
+    )
 
     return submission
 
@@ -186,6 +190,8 @@ async def update_submission(
     docs = await link_embedded(docs)
     docs = await update_document(document, docs, old_document)
     await store_document(docs, config)
-    updated_submission = await embed_references(docs["parent"][1], config, True)
+    updated_submission = await embed_references(
+        docs["parent"][1], only_top_level=True, config=config
+    )
 
     return updated_submission

@@ -34,6 +34,7 @@ from metadata_repository_service.dao.dataset import (
     get_dataset_by_accession,
 )
 from metadata_repository_service.dao.file import get_file_by_accession
+from metadata_repository_service.dao.utils import EMBEDDING_PROFILES
 from metadata_repository_service.models import Dataset
 from metadata_repository_service.patch_models import (
     DatasetStatusPatch,
@@ -48,14 +49,28 @@ dataset_router = APIRouter()
     response_model=Dataset,
     summary="Get a Dataset",
     tags=["Query"],
+    response_model_exclude_none=True,
 )
 async def get_datasets(
-    dataset_id: str, embedded: bool = False, config: Config = Depends(get_config)
+    dataset_id: str,
+    embedded: bool = False,
+    embedding_profile: str = "full",
+    config: Config = Depends(get_config),
 ):
     """
     Given a Dataset ID, get the Dataset record from the metadata store.
     """
-    dataset = await get_dataset(dataset_id=dataset_id, embedded=embedded, config=config)
+    if embedding_profile not in EMBEDDING_PROFILES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"'embedding_profile' must be one of {set(EMBEDDING_PROFILES.keys())}",
+        )
+    dataset = await get_dataset(
+        dataset_id=dataset_id,
+        embedded=embedded,
+        embedding_profile=embedding_profile,
+        config=config,
+    )
     if not dataset:
         raise HTTPException(
             status_code=404,
