@@ -5236,6 +5236,13 @@ paths:
           default: false
           title: Embedded
           type: boolean
+      - in: query
+        name: embedding_profile
+        required: false
+        schema:
+          default: full
+          title: Embedding Profile
+          type: string
       responses:
         '200':
           content:
