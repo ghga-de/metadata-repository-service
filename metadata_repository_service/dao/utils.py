@@ -22,6 +22,10 @@ import random
 from typing import Any, Dict, List, Set
 
 import stringcase
+from ghga_metadata_utils.validation_plugins.jsonschema_validation import (
+    GhgaJsonSchemaValidationPlugin,
+)
+from linkml_validator.validator import Validator
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.core.utils import generate_uuid, get_timestamp
@@ -46,6 +50,14 @@ embedded_fields: Set = {
     "has_study",
     "has_workflow",
 }
+
+
+VALIDATION_PLUGINS = [
+    {
+        "plugin_class": GhgaJsonSchemaValidationPlugin,
+        "args": {"include_range_class_descendants": True},
+    }
+]
 
 
 async def _get_reference(
@@ -503,3 +515,21 @@ async def add_update_fields(document, old_document: Dict) -> Dict:
     document["creation_date"] = old_document["creation_date"]
     document["update_date"] = await get_timestamp()
     return document
+
+
+async def validate(schema: str, obj: Dict, obj_type: str):
+    """
+    Validate an object of a particular type against a given schema.
+
+    Args:
+        schema: The URL or path to the schema YAML
+        obj: The object to validate
+        obj_type: The object type (schema type)
+        config: Rumtime configuration
+
+    """
+    validator = Validator(schema, plugins=VALIDATION_PLUGINS)
+    report = validator.validate(
+        obj, target_class=obj_type, exclude_object=True, truncate_message=True
+    )
+    return report
