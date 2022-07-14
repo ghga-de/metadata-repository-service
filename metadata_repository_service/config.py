@@ -29,6 +29,8 @@ class Config(ApiConfigBase):
     # are inherited from PubSubConfigBase;
     db_url: str = "mongodb://localhost:27017"
     db_name: str = "metadata-store"
+    schema_url: str = "https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/src/schema/ghga.yaml"
+    creation_schema_url: str = "https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/artifacts/derived_schema/creation/ghga_creation.yaml"
 
 
 CONFIG = Config()
