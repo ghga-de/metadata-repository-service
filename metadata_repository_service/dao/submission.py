@@ -32,6 +32,7 @@ from metadata_repository_service.dao.utils import (
     parse_document,
     store_document,
     update_document,
+    validate,
 )
 from metadata_repository_service.models import Submission
 from metadata_repository_service.patch_models import SubmissionStatusPatch
@@ -92,15 +93,25 @@ async def add_submission(
         config: Runtime configuration
 
     """
-    document = input_submission.dict()
+    document = input_submission.dict(exclude_unset=True)
     docs = await parse_document(document)
     docs = await link_embedded(docs)
     docs = await update_document(document, docs)
+    validation_reports = []
+    valid = True
+    for tup in docs.values():
+        obj = tup[1]
+        report = await validate(config.schema_url, obj, obj["schema_type"])
+        if not report.valid:
+            valid = False
+            validation_reports.append(
+                report.dict(exclude_unset=True, exclude_none=True)
+            )
+    if not valid:
+        raise Exception(validation_reports)
 
     await store_document(docs, config)
-
     submission = await embed_references(docs["parent"][1], config, True)
-
     return submission
 
 

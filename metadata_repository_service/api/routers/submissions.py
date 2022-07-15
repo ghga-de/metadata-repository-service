@@ -48,7 +48,10 @@ async def create_submission(
             detail="Unexpected error",
         )
 
-    submission = await add_submission(input_submission, config)
+    try:
+        submission = await add_submission(input_submission, config)
+    except Exception as exception:
+        raise HTTPException(status_code=400, detail=exception.args[0]) from exception
     return submission
 
 
