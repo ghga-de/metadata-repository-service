@@ -12,3 +12,5 @@ db_name: metadata-store
 api_root_path: "/"
 openapi_url: "/openapi.json"
 docs_url: "/docs"
+schema_url: https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/src/schema/ghga.yaml
+creation_schema_url: https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/artifacts/derived_schema/creation/ghga_creation.yaml
