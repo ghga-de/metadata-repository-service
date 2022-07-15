@@ -22,6 +22,7 @@ import random
 from typing import Any, Dict, List, Set
 
 import stringcase
+from cache import AsyncLRU
 from ghga_metadata_utils.validation_plugins.jsonschema_validation import (
     GhgaJsonSchemaValidationPlugin,
 )
@@ -517,6 +518,12 @@ async def add_update_fields(document, old_document: Dict) -> Dict:
     return document
 
 
+@AsyncLRU()
+async def get_validator(schema: str, plugins: List[Set]):
+    validator = Validator(schema, plugins=plugins)
+    return validator
+
+
 async def validate(schema: str, obj: Dict, obj_type: str):
     """
     Validate an object of a particular type against a given schema.
@@ -528,7 +535,7 @@ async def validate(schema: str, obj: Dict, obj_type: str):
         config: Rumtime configuration
 
     """
-    validator = Validator(schema, plugins=VALIDATION_PLUGINS)
+    validator = await get_validator(schema=schema, plugins=VALIDATION_PLUGINS)
     report = validator.validate(
         obj, target_class=obj_type, exclude_object=True, truncate_message=True
     )
