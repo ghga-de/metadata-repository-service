@@ -151,6 +151,22 @@
         "metadata_repository_service_db_name"
       ],
       "type": "string"
+    },
+    "schema_url": {
+      "title": "Schema Url",
+      "default": "https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/src/schema/ghga.yaml",
+      "env_names": [
+        "metadata_repository_service_schema_url"
+      ],
+      "type": "string"
+    },
+    "creation_schema_url": {
+      "title": "Creation Schema Url",
+      "default": "https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/artifacts/derived_schema/creation/ghga_creation.yaml",
+      "env_names": [
+        "metadata_repository_service_creation_schema_url"
+      ],
+      "type": "string"
     }
   },
   "additionalProperties": false

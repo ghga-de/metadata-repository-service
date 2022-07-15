@@ -28,7 +28,6 @@
       "has_sample": [
         "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
       ],
-      "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "schema_type": "CreateExperiment",
       "schema_version": "0.7.0",
       "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"

@@ -4,6 +4,7 @@ cors_allow_credentials: null
 cors_allowed_headers: null
 cors_allowed_methods: null
 cors_allowed_origins: null
+creation_schema_url: https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/artifacts/derived_schema/creation/ghga_creation.yaml
 db_name: metadata-store
 db_url: mongodb://localhost:27017
 docs_url: /docs
@@ -11,5 +12,6 @@ host: 127.0.0.1
 log_level: info
 openapi_url: /openapi.json
 port: 8080
+schema_url: https://raw.githubusercontent.com/ghga-de/ghga-metadata-schema/0.7.0/src/schema/ghga.yaml
 workers: 1
 
