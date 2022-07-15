@@ -30,7 +30,8 @@
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "schema_type": "CreateExperiment",
       "schema_version": "0.7.0",
-      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
+      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763",
+      "description": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     },
     {
       "alias": "bff27a01-fc20-439b-81a6-639f217c46fc",
@@ -53,7 +54,8 @@
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "schema_type": "CreateExperiment",
       "schema_version": "0.7.0",
-      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
+      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763",
+      "description": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     },
     {
       "alias": "472c0263-6dc5-4c08-a20c-bb85bef31795",
@@ -76,13 +78,16 @@
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "schema_type": "CreateExperiment",
       "schema_version": "0.7.0",
-      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
+      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763",
+      "description": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
     }
   ],
   "has_file": [
     {
       "alias": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
+      "name": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
       "checksum": "0181a2605d552b7733ef4492031ccf3c",
+      "checksum_type": "MD5",
       "ega_accession": "EGAF00000101304",
       "format": "bam",
       "schema_type": "CreateFile",
@@ -91,7 +96,9 @@
     },
     {
       "alias": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
+      "name": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
       "checksum": "59237c0e3060a625e6cf0a5d71dd7611",
+      "checksum_type": "MD5",
       "ega_accession": "EGAF00000101305",
       "format": "bam",
       "schema_type": "CreateFile",
@@ -100,7 +107,9 @@
     },
     {
       "alias": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
+      "name": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
       "checksum": "aacae9d2235654f8018c0b08a27280e8",
+      "checksum_type": "MD5",
       "ega_accession": "EGAF00000101306",
       "format": "bam",
       "schema_type": "CreateFile",
@@ -111,16 +120,19 @@
   "has_individual": [
     {
       "alias": "219afb21-f026-437d-a42a-aa3978df9f8a",
-      "gender": "male",
+      "sex": "male",
       "schema_type": "CreateIndividual",
-      "schema_version": "0.7.0"
+      "schema_version": "0.7.0",
+      "age": "unknown",
+      "vital_status": "unknown"
     }
   ],
   "has_project": {
     "alias": "3baab233-1840-48b6-9e41-668cdef258e0",
     "schema_type": "CreateProject",
     "schema_version": "0.7.0",
-    "title": "Project generated for Study 112173bb-b777-403f-ae6b-3b5d36af6a4e"
+    "title": "Project generated for Study 112173bb-b777-403f-ae6b-3b5d36af6a4e",
+    "description": "Project generated for Study 112173bb-b777-403f-ae6b-3b5d36af6a4e"
   },
   "has_protocol": [
     {
@@ -191,7 +203,8 @@
       "schema_version": "0.7.0",
       "xref": [
         "SAMEA2634655"
-      ]
+      ],
+      "description": "N/A"
     }
   ],
   "has_study": {
@@ -219,6 +232,9 @@
     "type": "other",
     "xref": [
       "lindt_ependymoma_2013_02_28"
+    ],
+    "affiliation": [
+      "DKFZ"
     ]
   },
   "schema_type": "CreateSubmission",
