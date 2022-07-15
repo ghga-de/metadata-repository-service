@@ -23,8 +23,8 @@ from ..fixtures.mongodb import (  # noqa: F401
 )
 
 
-def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
-    """Test creation of a Submission"""
+def test_create_submission1(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
+    """Test creation of a Submission with a valid Submission JSON"""
     client = mongo_app_fixture3.app_client
 
     file_path = BASE_DIR / "test_data" / "submission_example" / "submission.json"
@@ -83,3 +83,25 @@ def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
     assert updated_submission["creation_date"] == submission_entity["creation_date"]
     assert updated_submission["creation_date"] != updated_submission["update_date"]
     assert updated_submission["update_date"] != patched_submission["update_date"]
+
+
+def test_create_submission2(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
+    """Test creation of a Submission with an invalid Submission JSON"""
+    client = mongo_app_fixture3.app_client
+
+    file_path = (
+        BASE_DIR / "test_data" / "submission_example" / "invalid_submission.json"
+    )
+    with open(file_path, "r", encoding="utf8") as file:
+        submission_json = json.load(file)
+
+    response = client.post("/submissions", json=submission_json)
+    assert response.status_code == 400
+    data = response.json()
+    assert data["detail"]
+    validation_report = data["detail"][0]
+    assert validation_report["type"] == "Experiment"
+    assert not validation_report["valid"]
+    validation_result = validation_report["validation_results"][0]
+    validation_message = validation_result["validation_messages"][0]
+    assert validation_message["message"] == "'has_study' is a required property"
