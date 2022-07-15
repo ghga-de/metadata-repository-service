@@ -18,6 +18,8 @@
 from ghga_service_chassis_lib.api import ApiConfigBase
 from ghga_service_chassis_lib.config import config_from_yaml
 
+# pylint: disable=line-too-long
+
 
 @config_from_yaml(prefix="metadata_repository_service")
 class Config(ApiConfigBase):

@@ -26,6 +26,7 @@ from cache import AsyncLRU
 from ghga_metadata_utils.validation_plugins.jsonschema_validation import (
     GhgaJsonSchemaValidationPlugin,
 )
+from linkml_validator.models import ValidationReport
 from linkml_validator.validator import Validator
 
 from metadata_repository_service.config import CONFIG, Config
@@ -519,12 +520,23 @@ async def add_update_fields(document, old_document: Dict) -> Dict:
 
 
 @AsyncLRU()
-async def get_validator(schema: str, plugins: List[Set]):
+async def get_validator(schema: str, plugins: List[Dict]) -> Validator:
+    """
+    Get an instance of Validator.
+
+    Args:
+        schema: The schema YAML
+        plugins: A list of plugins to use
+
+    Returns:
+        Validator: An instance of Validator
+
+    """
     validator = Validator(schema, plugins=plugins)
     return validator
 
 
-async def validate(schema: str, obj: Dict, obj_type: str):
+async def validate(schema: str, obj: Dict, obj_type: str) -> ValidationReport:
     """
     Validate an object of a particular type against a given schema.
 
