@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-"""
-Convenience methods for retrieving Dataset summary
-"""
 # Copyright 2021 - 2022 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
@@ -16,7 +12,9 @@ Convenience methods for retrieving Dataset summary
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+Convenience methods for retrieving Dataset summary
+"""
 
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.dao.utils import get_entity
