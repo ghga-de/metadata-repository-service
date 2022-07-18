@@ -48,6 +48,21 @@ embedded_fields: Set = {
 }
 
 
+ACCESSIONED_ENTITIES = {
+    "Dataset",
+    "Study",
+    "Project",
+    "Sample",
+    "Biospecimen",
+    "Individual",
+    "Experiment",
+    "File",
+    "Analysis",
+    "DataAccessPolicy",
+    "DataAccessCommittee",
+}
+
+
 async def _get_reference(
     document_id: str, collection_name: str, config: Config = CONFIG
 ) -> Dict:
@@ -439,6 +454,13 @@ async def store_document(docs: Dict, config: Config = CONFIG):
         records[cname].append(record)
 
     client = await get_db_client(config)
+    for (key, record_list) in records.items():
+        if key in ACCESSIONED_ENTITIES:
+            for record in record_list:
+                if "accession" in record and record["accession"]:
+                    continue
+                accession = await generate_accession(collection_name=key, config=config)
+                record["accession"] = accession
 
     for (key, record_list) in records.items():
         collection = client[config.db_name][key]
