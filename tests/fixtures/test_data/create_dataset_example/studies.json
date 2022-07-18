@@ -21,12 +21,12 @@
       ],
       "has_project": "3baab233-1840-48b6-9e41-668cdef258e0",
       "id": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
+      "schema_type": "Study",
       "title": "Epigenomic alterations define lethal CIMP-positive ependymomas of infancy",
       "type": "other",
       "xref": [
         "lindt_ependymoma_2013_02_28"
-      ],
-      "schema_type": "Study"
+      ]
     }
   ]
 }

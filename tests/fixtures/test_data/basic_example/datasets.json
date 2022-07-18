@@ -29,12 +29,12 @@
         "595c6fe1-1908-4596-b72a-ac89b7960375"
       ],
       "id": "12461315-7bd4-40ff-9c2f-0e0fa4cd6c66",
+      "schema_type": "Dataset",
       "title": "DATA_SET_Coverage_bias_sensitivity_of_variant_calling_for_4_WG_seq_tech",
       "type": "sample",
       "xref": [
         "DATA_SET_Coverage_bias_sensitivity_of_variant_calling_for_4_WG_seq_tech"
-      ],
-      "schema_type": "Dataset"
+      ]
     },
     {
       "accession": "EGAD00001000366",
@@ -113,12 +113,12 @@
         "5e427a5c-a7a0-4eee-ba16-eab1bc598998"
       ],
       "id": "85b322c5-7890-446a-ba85-067fdbfa7bbc",
+      "schema_type": "Dataset",
       "title": "Whole genome bisufite sequencing for smoking and non-smoking mother-child pairs",
       "type": "Methylation profiling by high-throughput sequencing",
       "xref": [
         "DATA_SET_marlboro-EEP-2013-03-15"
-      ],
-      "schema_type": "Dataset"
+      ]
     },
     {
       "accession": "EGAD00001000884",
@@ -155,12 +155,12 @@
         "fbf3d647-a223-4b13-8e6e-6db76ffbe2d8"
       ],
       "id": "2c7e0e84-beea-49a3-9cd2-332fcedb1370",
+      "schema_type": "Dataset",
       "title": "Exome sequencing of serially transplanted genetically marked IC-enriched primary PDAC cultures.",
       "type": "Exome sequencing",
       "xref": [
         "ena-DATASET-DKFZ-IBIOS-17-07-2014-15:54:18:121-70"
-      ],
-      "schema_type": "Dataset"
+      ]
     }
   ]
 }

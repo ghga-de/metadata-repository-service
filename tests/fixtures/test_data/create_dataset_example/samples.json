@@ -14,10 +14,10 @@
       "has_individual": "219afb21-f026-437d-a42a-aa3978df9f8a",
       "id": "2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
       "name": "BT2009034_tumor",
+      "schema_type": "Sample",
       "xref": [
         "SAMEA2634655"
-      ],
-      "schema_type": "Sample"
+      ]
     }
   ]
 }

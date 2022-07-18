@@ -9,8 +9,8 @@
       ],
       "has_study": "595c6fe1-1908-4596-b72a-ac89b7960375",
       "id": "997dda34-5ed5-42f3-877b-c9cc327d35ff",
-      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66",
-      "schema_type": "Experiment"
+      "schema_type": "Experiment",
+      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66"
     },
     {
       "has_file": [
@@ -21,8 +21,8 @@
       ],
       "has_study": "595c6fe1-1908-4596-b72a-ac89b7960375",
       "id": "98d8ddae-525b-4f75-b4f3-1bc9412e03ed",
-      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66",
-      "schema_type": "Experiment"
+      "schema_type": "Experiment",
+      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66"
     },
     {
       "has_file": [
@@ -33,8 +33,8 @@
       ],
       "has_study": "595c6fe1-1908-4596-b72a-ac89b7960375",
       "id": "80a594cd-db54-435a-9cae-d5055003ddc1",
-      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66",
-      "schema_type": "Experiment"
+      "schema_type": "Experiment",
+      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66"
     },
     {
       "has_file": [
@@ -45,8 +45,8 @@
       ],
       "has_study": "595c6fe1-1908-4596-b72a-ac89b7960375",
       "id": "bd1a038f-2032-4553-b33a-026cf9df83ae",
-      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66",
-      "schema_type": "Experiment"
+      "schema_type": "Experiment",
+      "title": "Experiment for Dataset 12461315-7bd4-40ff-9c2f-0e0fa4cd6c66"
     }
   ]
 }
