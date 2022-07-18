@@ -194,33 +194,35 @@
       ]
     }
   ],
-  "has_study": {
-    "alias": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
-    "description": "Ependymomas are common childhood brain tumours that occur throughout the nervous system, but are most common in the paediatric hindbrain. Current standard therapy comprises surgery and radiation, but not cytotoxic chemotherapy as it does not further increase survival. Whole-genome and whole-exome sequencing of 47 hindbrain ependymomas reveals an extremely low mutation rate, and zero significant recurrent somatic single nucleotide variants. Although devoid of recurrent single nucleotide variants and focal copy number aberrations, poor-prognosis hindbrain ependymomas exhibit a CpG island methylator phenotype. Transcriptional silencing driven by CpG methylation converges exclusively on targets of the Polycomb repressive complex 2 which represses expression of differentiation genes through trimethylation of H3K27. CpG island methylator phenotype-positive hindbrain ependymomas are responsive to clinical drugs that target either DNA or H3K27 methylation both in vitro and in vivo. We conclude that epigenetic modifiers are the first rational therapeutic candidates for this deadly malignancy, which is epigenetically deregulated but genetically bland.",
-    "ega_accession": "EGAS00001000443",
-    "has_attribute": [
-      {
-        "key": "centerName",
-        "value": "DKFZ-IBIOS"
-      },
-      {
-        "key": "released",
-        "value": "RELEASED"
-      },
-      {
-        "key": "published",
-        "value": true
-      }
-    ],
-    "has_project": "3baab233-1840-48b6-9e41-668cdef258e0",
-    "schema_type": "CreateStudy",
-    "schema_version": "0.7.0",
-    "title": "Epigenomic alterations define lethal CIMP-positive ependymomas of infancy",
-    "type": "other",
-    "xref": [
-      "lindt_ependymoma_2013_02_28"
-    ]
-  },
+  "has_study": [
+    {
+      "alias": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
+      "description": "Ependymomas are common childhood brain tumours that occur throughout the nervous system, but are most common in the paediatric hindbrain. Current standard therapy comprises surgery and radiation, but not cytotoxic chemotherapy as it does not further increase survival. Whole-genome and whole-exome sequencing of 47 hindbrain ependymomas reveals an extremely low mutation rate, and zero significant recurrent somatic single nucleotide variants. Although devoid of recurrent single nucleotide variants and focal copy number aberrations, poor-prognosis hindbrain ependymomas exhibit a CpG island methylator phenotype. Transcriptional silencing driven by CpG methylation converges exclusively on targets of the Polycomb repressive complex 2 which represses expression of differentiation genes through trimethylation of H3K27. CpG island methylator phenotype-positive hindbrain ependymomas are responsive to clinical drugs that target either DNA or H3K27 methylation both in vitro and in vivo. We conclude that epigenetic modifiers are the first rational therapeutic candidates for this deadly malignancy, which is epigenetically deregulated but genetically bland.",
+      "ega_accession": "EGAS00001000443",
+      "has_attribute": [
+        {
+          "key": "centerName",
+          "value": "DKFZ-IBIOS"
+        },
+        {
+          "key": "released",
+          "value": "RELEASED"
+        },
+        {
+          "key": "published",
+          "value": true
+        }
+      ],
+      "has_project": "3baab233-1840-48b6-9e41-668cdef258e0",
+      "schema_type": "CreateStudy",
+      "schema_version": "0.7.0",
+      "title": "Epigenomic alterations define lethal CIMP-positive ependymomas of infancy",
+      "type": "other",
+      "xref": [
+        "lindt_ependymoma_2013_02_28"
+      ]
+    }
+  ],
   "schema_type": "CreateSubmission",
   "schema_version": "0.7.0"
 }

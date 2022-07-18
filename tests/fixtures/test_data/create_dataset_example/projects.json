@@ -4,7 +4,8 @@
       "accession": "GHGA:PRO000000000001",
       "alias": "3baab233-1840-48b6-9e41-668cdef258e0",
       "id": "3baab233-1840-48b6-9e41-668cdef258e0",
-      "name": "Project generated for Study 112173bb-b777-403f-ae6b-3b5d36af6a4e"
+      "name": "Project generated for Study 112173bb-b777-403f-ae6b-3b5d36af6a4e",
+      "schema_type": "Project"
     }
   ]
 }

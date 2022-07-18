@@ -16,7 +16,8 @@
       "name": "BT2009034_tumor",
       "xref": [
         "SAMEA2634655"
-      ]
+      ],
+      "schema_type": "Sample"
     }
   ]
 }

@@ -33,7 +33,8 @@
       "type": "sample",
       "xref": [
         "DATA_SET_Coverage_bias_sensitivity_of_variant_calling_for_4_WG_seq_tech"
-      ]
+      ],
+      "schema_type": "Dataset"
     },
     {
       "accession": "EGAD00001000366",
@@ -116,7 +117,8 @@
       "type": "Methylation profiling by high-throughput sequencing",
       "xref": [
         "DATA_SET_marlboro-EEP-2013-03-15"
-      ]
+      ],
+      "schema_type": "Dataset"
     },
     {
       "accession": "EGAD00001000884",
@@ -157,7 +159,8 @@
       "type": "Exome sequencing",
       "xref": [
         "ena-DATASET-DKFZ-IBIOS-17-07-2014-15:54:18:121-70"
-      ]
+      ],
+      "schema_type": "Dataset"
     }
   ]
 }

@@ -4,7 +4,8 @@
       "accession": "GHGA:IND000000000001",
       "alias": "219afb21-f026-437d-a42a-aa3978df9f8a",
       "gender": "male",
-      "id": "219afb21-f026-437d-a42a-aa3978df9f8a"
+      "id": "219afb21-f026-437d-a42a-aa3978df9f8a",
+      "schema_type": "Individual"
     }
   ]
 }

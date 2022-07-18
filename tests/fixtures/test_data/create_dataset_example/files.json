@@ -7,7 +7,8 @@
       "ega_accession": "EGAF00000101304",
       "format": "bam",
       "id": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
-      "size": 202142862506
+      "size": 202142862506,
+      "schema_type": "File"
     },
     {
       "accession": "GHGA:FIL000000000002",
@@ -16,7 +17,8 @@
       "ega_accession": "EGAF00000101305",
       "format": "bam",
       "id": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
-      "size": 206327988774
+      "size": 206327988774,
+      "schema_type": "File"
     },
     {
       "accession": "GHGA:FIL000000000003",
@@ -25,7 +27,8 @@
       "ega_accession": "EGAF00000101306",
       "format": "bam",
       "id": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
-      "size": 482771491105
+      "size": 482771491105,
+      "schema_type": "File"
     }
   ]
 }

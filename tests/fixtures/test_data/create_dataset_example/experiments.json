@@ -17,7 +17,8 @@
       ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "id": "bff27a01-fc20-439b-81a6-639f217c46fc",
-      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
+      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763",
+      "schema_type": "Experiment"
     },
     {
       "accession": "GHGA:EXP000000000002",
@@ -36,7 +37,8 @@
       ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "id": "bff27a01-tc46-439b-76f2-382f122x54dc",
-      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
+      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763",
+      "schema_type": "Experiment"
     },
     {
       "accession": "GHGA:EXP000000000003",
@@ -55,7 +57,8 @@
       ],
       "has_study": "112173bb-b777-403f-ae6b-3b5d36af6a4e",
       "id": "472c0263-6dc5-4c08-a20c-bb85bef31795",
-      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763"
+      "title": "Experiment generated for Dataset c351b44f-9264-42a0-8278-bd5d6cbac763",
+      "schema_type": "Experiment"
     }
   ]
 }
