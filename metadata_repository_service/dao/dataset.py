@@ -206,6 +206,7 @@ async def create_dataset(  # noqa: C901
     dataset_entity["has_study"] = list(study_entities.keys())
     dataset_entity["has_sample"] = list(sample_entities.keys())
     dataset_entity["has_data_access_policy"] = dap_entity.id
+    dataset_entity["schema_type"] = "Dataset"
 
     await collection.insert_one(dataset_entity)
     new_dataset = await get_dataset(dataset_entity["id"], config=config)

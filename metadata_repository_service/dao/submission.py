@@ -96,7 +96,6 @@ async def add_submission(
     docs = await parse_document(document)
     docs = await link_embedded(docs)
     docs = await update_document(document, docs)
-
     await store_document(docs, config)
 
     submission = await embed_references(docs["parent"][1], config, True)
@@ -180,6 +179,7 @@ async def update_submission(
 
     """
     document = input_submission.dict()
+    document["schema_type"] = "Submission"
     old_document = copy.deepcopy(submission.dict())
     await delete_document(old_document, "Submission", config=config)
     docs = await parse_document(document)

@@ -137,6 +137,7 @@ async def create_data_access_policy(
     dap_entity["creation_date"] = await get_timestamp()
     dap_entity["update_date"] = dap_entity["creation_date"]
     dap_entity["accession"] = await generate_accession(COLLECTION_NAME, config=config)
+    dap_entity["schema_type"] = "DataAccessPolicy"
     await collection.insert_one(dap_entity)
     client.close()
     dap = await get_data_access_policy(dap_entity["id"], config=config)
