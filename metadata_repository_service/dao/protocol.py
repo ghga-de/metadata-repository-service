@@ -22,7 +22,7 @@ from typing import List
 from metadata_repository_service.config import CONFIG, Config
 from metadata_repository_service.dao.db import get_db_client
 from metadata_repository_service.dao.utils import get_entity, get_schema_type
-from metadata_repository_service.models import TaggedProtocol
+from metadata_repository_service.models import AnnotatedProtocol
 
 COLLECTION_NAME = "Protocol"
 MODELS_MODULE_NAME = "metadata_repository_service.models"
@@ -48,7 +48,7 @@ async def retrieve_protocols(config: Config = CONFIG) -> List[str]:
 
 async def get_protocol(
     protocol_id: str, embedded: bool = False, config: Config = CONFIG
-) -> TaggedProtocol:
+) -> AnnotatedProtocol:
     """
     Given an Protocol ID, get the Protocol object from metadata store.
 
