@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """
 Module containing the main FastAPI router and (optionally) top-level API enpoints.
 Additional endpoints might be structured in dedicated modules
@@ -32,6 +31,9 @@ from metadata_repository_service.api.routers.data_access_committees import (
 )
 from metadata_repository_service.api.routers.data_access_policies import (
     data_access_policy_router,
+)
+from metadata_repository_service.api.routers.dataset_summary import (
+    dataset_summary_router,
 )
 from metadata_repository_service.api.routers.datasets import dataset_router
 from metadata_repository_service.api.routers.experiment_processes import (
@@ -73,6 +75,7 @@ app.include_router(study_router)
 app.include_router(submission_router)
 app.include_router(technology_router)
 app.include_router(workflow_router)
+app.include_router(dataset_summary_router)
 
 
 @app.get("/")
