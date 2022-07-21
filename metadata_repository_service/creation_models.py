@@ -858,7 +858,7 @@ class CreateSubmission(BaseModel):
     submission_status: Optional[SubmissionStatusEnum] = Field(
         None, description="""The status of a Submission."""
     )
-    schema_type: Literal["CreateSubmission"]  # type: ignore
+    schema_type: Literal["CreateSubmission"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
