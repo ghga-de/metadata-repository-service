@@ -3,7 +3,7 @@ name: Dev CD
 on:
   push:
     branches:
-      - "main"
+      - "image-scan-trivy"
 
 jobs:
   get_commit_version:
@@ -66,6 +66,16 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/ghga/${{ github.event.repository.name }}:${{ needs.get_commit_version.outputs.version }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
   update_deployment_repo:
     runs-on: ubuntu-latest
