@@ -1945,7 +1945,7 @@ class SequencingProtocol(Protocol):
         None,
         description="""Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing replications.""",
     )
-    seq_forward_or_reverse: Optional[ForwardOrReverseEnum] = Field(
+    forward_or_reverse: Optional[ForwardOrReverseEnum] = Field(
         None,
         description="""Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing reaction.""",
     )
