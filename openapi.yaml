@@ -3439,6 +3439,51 @@ components:
           description: The release status of a Dataset.
       title: DatasetStatusPatch
       type: object
+    DatasetSummary:
+      description: Dataset summary
+      properties:
+        accession:
+          description: GHGA Accession of the Dataset.
+          title: Accession
+          type: string
+        description:
+          description: Description of the Dataset.
+          title: Description
+          type: string
+        ega_accession:
+          description: EGA Accession of the Dataset.
+          title: Ega Accession
+          type: string
+        experiment_summary:
+          allOf:
+          - $ref: '#/components/schemas/Summary'
+          description: Experiment summary
+          title: Experiment Summary
+        file_summary:
+          allOf:
+          - $ref: '#/components/schemas/Summary'
+          description: File summary
+          title: File Summary
+        sample_summary:
+          allOf:
+          - $ref: '#/components/schemas/Summary'
+          description: Sample summary
+          title: Sample Summary
+        study_summary:
+          allOf:
+          - $ref: '#/components/schemas/Summary'
+          description: Study summary
+          title: Study Summary
+        title:
+          description: A title for the submitted Dataset.
+          title: Title
+          type: string
+        type:
+          description: The type of the Dataset.
+          title: Type
+          type: string
+      title: DatasetSummary
+      type: object
     Disease:
       description: A disease is a disposition to undergo pathological processes that
         exists in an organism because of one or more disorders in that organism.
@@ -5145,6 +5190,19 @@ components:
           description: The status of a Submission.
       title: SubmissionStatusPatch
       type: object
+    Summary:
+      description: Summary
+      properties:
+        count:
+          description: count of the summary item
+          title: Count
+          type: integer
+        stats:
+          description: a dictionary of stats for the summary item
+          title: Stats
+          type: object
+      title: Summary
+      type: object
     Technology:
       description: A Technology is an abstraction that represents the instrument used
         for an assay. The Technology entity captures instrument-specific attributes
@@ -5879,6 +5937,33 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Get a DataAccessPolicy
+      tags:
+      - Query
+  /dataset_summary/{dataset_id}:
+    get:
+      description: Given a Dataset ID, get the Dataset summary from the metadata store.
+      operationId: get_dataset_summary_dataset_summary__dataset_id__get
+      parameters:
+      - in: path
+        name: dataset_id
+        required: true
+        schema:
+          title: Dataset Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetSummary'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Dataset summary
       tags:
       - Query
   /datasets:
