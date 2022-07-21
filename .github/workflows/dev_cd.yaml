@@ -78,7 +78,6 @@ jobs:
           with:
             image-ref: 'docker.io/ghga/${{ github.event.repository.name }}:${{ needs.get_commit_version.outputs.version }}'
             format: 'table'
-            output: 'trivy-results.sarif'
             exit-code: '1'
             ignore-unfixed: true
             vuln-type: 'os,library'
