@@ -843,7 +843,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""The Data Access Committee that applies to Dataset in this submission.""",
     )
-    has_member: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
+    has_member: Optional[Union[List[CreateMember], List[str]]] = Field(
         None,
         description="""One or more member that are part of the Data Access Committee referenced in this submission.""",
     )
@@ -1000,7 +1000,7 @@ class CreateFamily(Population):
     A domestic group, or a number of domestic groups linked through descent (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
     """
 
-    has_member: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None,
         description="""One or more Individuals that collectively define this Family.""",
     )
@@ -1028,7 +1028,7 @@ class CreateCohort(Population):
     A cohort is a collection of individuals that share a common characteristic/observation and have been grouped together for a research study/investigation.
     """
 
-    has_member: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None,
         description="""One or more Individuals that collectively define this Cohort.""",
     )
