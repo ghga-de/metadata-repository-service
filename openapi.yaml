@@ -2762,9 +2762,7 @@ components:
         has_member:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/CreateDonor'
-              - $ref: '#/components/schemas/CreateIndividual'
+              $ref: '#/components/schemas/CreateMember'
             type: array
           - items:
               type: string
@@ -5091,9 +5089,7 @@ components:
         has_member:
           anyOf:
           - items:
-              anyOf:
-              - $ref: '#/components/schemas/Donor'
-              - $ref: '#/components/schemas/Individual'
+              $ref: '#/components/schemas/Member'
             type: array
           - items:
               type: string
