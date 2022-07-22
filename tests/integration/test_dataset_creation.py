@@ -26,14 +26,21 @@ def test_create_dac(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
         "main_contact": {
             "organization": "GHGA",
             "email": "foo@ghga.de",
+            "schema_type": "CreateMember",
         },
         "has_member": [
             {
                 "organization": "GHGA",
                 "email": "foo@ghga.de",
+                "schema_type": "CreateMember",
             },
-            {"organization": "GHGA", "email": "bar@ghga.de"},
+            {
+                "organization": "GHGA",
+                "email": "bar@ghga.de",
+                "schema_type": "CreateMember",
+            },
         ],
+        "schema_type": "CreateDataAccessCommittee",
     }
     response = client.post("/data_access_committees", json=dac_data)
     dac_entity = response.json()
@@ -56,14 +63,21 @@ def test_create_dap(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
         "main_contact": {
             "organization": "GHGA",
             "email": "foo@ghga.de",
+            "schema_type": "CreateMember",
         },
         "has_member": [
             {
                 "organization": "GHGA",
                 "email": "foo@ghga.de",
+                "schema_type": "CreateMember",
             },
-            {"organization": "GHGA", "email": "bar@ghga.de"},
+            {
+                "organization": "GHGA",
+                "email": "bar@ghga.de",
+                "schema_type": "CreateMember",
+            },
         ],
+        "schema_type": "CreateDataAccessCommittee",
     }
     response = client.post("/data_access_committees", json=dac_data)
     dac_entity = response.json()
@@ -74,6 +88,7 @@ def test_create_dap(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
         "name": "New DAP",
         "policy_text": "Some text that explains the access restrictions",
         "has_data_access_committee": dac_accession,
+        "schema_type": "CreateDataAccessPolicy",
     }
     response = client.post("/data_access_policies", json=dap_data)
     dap_entity = response.json()
@@ -89,14 +104,21 @@ def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
         "main_contact": {
             "organization": "GHGA",
             "email": "foo@ghga.de",
+            "schema_type": "CreateMember",
         },
         "has_member": [
             {
                 "organization": "GHGA",
                 "email": "foo@ghga.de",
+                "schema_type": "CreateMember",
             },
-            {"organization": "GHGA", "email": "bar@ghga.de"},
+            {
+                "organization": "GHGA",
+                "email": "bar@ghga.de",
+                "schema_type": "CreateMember",
+            },
         ],
+        "schema_type": "CreateDataAccessCommittee",
     }
     response = client.post("/data_access_committees", json=dac_data)
     dac_entity = response.json()
@@ -108,6 +130,7 @@ def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
         "name": "New DAP",
         "policy_text": "Some text that explains the access restrictions",
         "has_data_access_committee": dac_accession,
+        "schema_type": "CreateDataAccessPolicy",
     }
     response = client.post("/data_access_policies", json=dap_data)
     dap_entity = response.json()
@@ -118,6 +141,7 @@ def test_create_dataset(mongo_app_fixture2: MongoAppFixture):  # noqa: F811
     dataset_data = {
         "has_file": ["GHGA:FIL000000000001", "GHGA:FIL000000000002"],
         "has_data_access_policy": dap_accession,
+        "schema_type": "CreateDataset",
     }
     response = client.post("/datasets", json=dataset_data)
     dataset_entity = response.json()

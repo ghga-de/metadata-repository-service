@@ -5,7 +5,8 @@
       "alias": "4227f15d-1efe-4bc1-91d3-e193563b3bb1",
       "has_individual": "219afb21-f026-437d-a42a-aa3978df9f8a",
       "id": "4227f15d-1efe-4bc1-91d3-e193563b3bb1",
-      "name": "Biospecimen generated for Sample 2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f"
+      "name": "Biospecimen generated for Sample 2efbf6ed-a3c3-4b74-9b3f-fd72d4a6c33f",
+      "schema_type": "Biospecimen"
     }
   ]
 }

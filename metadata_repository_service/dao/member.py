@@ -117,6 +117,7 @@ async def create_member(member_obj: CreateMember, config: Config = CONFIG) -> Me
     member_entity["id"] = await generate_uuid()
     member_entity["creation_date"] = await get_timestamp()
     member_entity["update_date"] = member_entity["creation_date"]
+    member_entity["schema_type"] = "Member"
     await collection.insert_one(member_entity)
     client.close()
     member = await get_member(member_entity["id"], config=config)

@@ -35,7 +35,7 @@ def test_create_submission(mongo_app_fixture3: MongoAppFixture):  # noqa: F811
     submission_entity = response.json()
     assert "id" in submission_entity
     assert (
-        submission_entity["has_study"]["has_project"]
+        submission_entity["has_study"][0]["has_project"]
         == submission_entity["has_project"]["id"]
     )
 

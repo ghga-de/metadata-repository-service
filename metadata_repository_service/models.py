@@ -25,7 +25,7 @@ from typing_extensions import Annotated
 # pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
 metamodel_version = "None"
-version = "0.7.0"
+version = "0.9.0"
 
 
 class BiologicalSexEnum(str, Enum):
@@ -93,6 +93,12 @@ class PairedOrSingleEndEnum(str, Enum):
 
     paired = "paired"
     single = "single"
+
+
+class ForwardOrReverseEnum(str, Enum):
+
+    forward = "forward"
+    reverse = "reverse"
 
 
 class SubmissionStatusEnum(str, Enum):
@@ -202,9 +208,7 @@ class MetadataMixin(BaseModel):
     Mixin for tracking schema specific metadata about an instance.
     """
 
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["MetadataMixin"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -233,9 +237,7 @@ class NamedThing(BaseModel):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["NamedThing"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -265,9 +267,7 @@ class Agent(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Agent"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -296,9 +296,7 @@ class Person(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Person"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -325,9 +323,7 @@ class Committee(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Committee"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -353,9 +349,7 @@ class MaterialEntity(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["MaterialEntity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -381,9 +375,7 @@ class BiologicalQuality(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["BiologicalQuality"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -409,9 +401,7 @@ class InformationContentEntity(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["InformationContentEntity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -437,9 +427,7 @@ class PlannedProcess(NamedThing):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["PlannedProcess"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -471,9 +459,7 @@ class Investigation(PlannedProcess):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Investigation"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -505,9 +491,7 @@ class DataTransformation(PlannedProcess):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataTransformation"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -539,9 +523,7 @@ class ResearchActivity(PlannedProcess):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["ResearchActivity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -567,9 +549,7 @@ class Technology(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Technology"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -600,9 +580,7 @@ class Workflow(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Workflow"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -632,9 +610,7 @@ class WorkflowStep(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["WorkflowStep"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -679,9 +655,7 @@ class DiseaseOrPhenotypicFeature(BiologicalQuality):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DiseaseOrPhenotypicFeature"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -708,9 +682,7 @@ class Population(MaterialEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Population"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -756,9 +728,7 @@ class Ancestry(Population):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Ancestry"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -803,9 +773,7 @@ class AnalysisProcess(PlannedProcess):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["AnalysisProcess"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -839,9 +807,7 @@ class DataUseCondition(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataUseCondition"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -877,9 +843,7 @@ class Member(Person):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Member"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -910,9 +874,7 @@ class Publication(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Publication"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -957,9 +919,7 @@ class AnatomicalEntity(MaterialEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["AnatomicalEntity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -985,9 +945,7 @@ class CellLine(MaterialEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CellLine"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1032,9 +990,7 @@ class Disease(DiseaseOrPhenotypicFeature):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Disease"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1079,9 +1035,7 @@ class PhenotypicFeature(DiseaseOrPhenotypicFeature):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["PhenotypicFeature"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1112,9 +1066,7 @@ class User(Person):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["User"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1132,7 +1084,7 @@ class Submission(BaseModel):
         None,
         description="""Institution/Center/Data Hub that is providing this submission.""",
     )
-    has_study: Optional[Union[Study, str]] = Field(
+    has_study: Optional[Union[List[Study], List[str]]] = Field(
         None,
         description="""Information about a Study entities associated with this submission.""",
     )
@@ -1148,7 +1100,7 @@ class Submission(BaseModel):
         None,
         description="""Information about one or more Biospecimen entities associated with this submission.""",
     )
-    has_individual: Optional[Union[List[Individual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None,
         description="""Information about one or more Individual entities associated with this submission.""",
     )
@@ -1156,7 +1108,7 @@ class Submission(BaseModel):
         None,
         description="""Information about one or more Experiment entities associated with this submission.""",
     )
-    has_protocol: Union[List[TaggedProtocol], List[str]] = Field(
+    has_protocol: Optional[Union[List[AnnotatedProtocol], List[str]]] = Field(
         None,
         description="""One or more Protocol entities associated with this Submission.""",
     )
@@ -1167,6 +1119,23 @@ class Submission(BaseModel):
     has_file: Optional[Union[List[File], List[str]]] = Field(
         None,
         description="""Information about one or more File entities associated with this submission.""",
+    )
+    has_dataset: Optional[Union[List[Dataset], List[str]]] = Field(
+        None, description="""One or more Dataset that are part of this submission."""
+    )
+    has_data_access_policy: Optional[Union[List[DataAccessPolicy], List[str]]] = Field(
+        None,
+        description="""The Data Access Policy that applies to Dataset in this submission.""",
+    )
+    has_data_access_committee: Optional[
+        Union[List[DataAccessCommittee], List[str]]
+    ] = Field(
+        None,
+        description="""The Data Access Committee that applies to Dataset in this submission.""",
+    )
+    has_member: Optional[Union[List[Member], List[str]]] = Field(
+        None,
+        description="""One or more member that are part of the Data Access Committee referenced in this submission.""",
     )
     has_publication: Optional[Union[List[Publication], List[str]]] = Field(
         None,
@@ -1187,9 +1156,7 @@ class Submission(BaseModel):
     submission_status: Optional[SubmissionStatusEnum] = Field(
         None, description="""The status of a Submission."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Submission"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1234,9 +1201,7 @@ class DataUsePermission(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataUsePermission"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1281,9 +1246,7 @@ class DataUseModifier(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataUseModifier"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1318,7 +1281,7 @@ class Biospecimen(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
-    has_individual: Optional[Union[Individual, str]] = Field(
+    has_individual: Optional[Union[AnnotatedIndividual, str]] = Field(
         None,
         description="""The Individual entity from which this Biospecimen was derived.""",
     )
@@ -1353,9 +1316,7 @@ class Biospecimen(MaterialEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Biospecimen"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1366,11 +1327,11 @@ class Family(Population):
     A domestic group, or a number of domestic groups linked through descent (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
     """
 
-    has_member: Optional[Union[List[Individual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None,
         description="""One or more Individuals that collectively define this Family.""",
     )
-    has_proband: Optional[Union[Individual, str]] = Field(
+    has_proband: Optional[Union[AnnotatedIndividual, str]] = Field(
         None,
         description="""The Individual that is reported to have a disorder which results in the Family being brought into a Study.""",
     )
@@ -1394,9 +1355,7 @@ class Family(Population):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Family"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1407,7 +1366,7 @@ class Cohort(Population):
     A cohort is a collection of individuals that share a common characteristic/observation and have been grouped together for a research study/investigation.
     """
 
-    has_member: Optional[Union[List[Individual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None,
         description="""One or more Individuals that collectively define this Cohort.""",
     )
@@ -1431,9 +1390,7 @@ class Cohort(Population):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Cohort"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1474,10 +1431,10 @@ class Individual(Person):
         None,
         description="""A person's descent or lineage, from a person or from a population. Typically this is a value from HANCESTRO (Human Ancestry Ontology).""",
     )
-    has_parent: Optional[Union[List[Individual], List[str]]] = Field(
+    has_parent: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None, description="""One or more parent for this Individual."""
     )
-    has_children: Optional[Union[List[Individual], List[str]]] = Field(
+    has_children: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None, description="""One or more children for this Individual."""
     )
     has_disease: Optional[Union[List[Disease], List[str]]] = Field(
@@ -1518,9 +1475,7 @@ class Individual(Person):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Individual"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1551,10 +1506,10 @@ class Donor(Individual):
         None,
         description="""A person's descent or lineage, from a person or from a population. Typically this is a value from HANCESTRO (Human Ancestry Ontology).""",
     )
-    has_parent: Optional[Union[List[Individual], List[str]]] = Field(
+    has_parent: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None, description="""The parent of an entity."""
     )
-    has_children: Optional[Union[List[Individual], List[str]]] = Field(
+    has_children: Optional[Union[List[AnnotatedIndividual], List[str]]] = Field(
         None, description="""The children of an entity."""
     )
     has_disease: Optional[Union[List[Disease], List[str]]] = Field(
@@ -1593,9 +1548,7 @@ class Donor(Individual):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Donor"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1667,9 +1620,7 @@ class Analysis(DataTransformation):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Analysis"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1717,9 +1668,7 @@ class Project(ResearchActivity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Project"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1753,7 +1702,7 @@ class Experiment(Investigation):
         None,
         description="""One or more Files entities that are generated as output of this Experiment.""",
     )
-    has_protocol: Union[List[TaggedProtocol], List[str]] = Field(
+    has_protocol: Union[List[AnnotatedProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Experiment.""",
     )
@@ -1793,9 +1742,7 @@ class Experiment(Investigation):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Experiment"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1817,7 +1764,7 @@ class ExperimentProcess(PlannedProcess):
         None,
         description="""The input to the Experiment Process. Usually a Sample entity.""",
     )
-    has_protocol: Optional[Union[TaggedProtocol, str]] = Field(
+    has_protocol: Optional[Union[AnnotatedProtocol, str]] = Field(
         None, description="""The Protocol entity used by this Experiment Process."""
     )
     has_agent: Optional[Union[Agent, str]] = Field(
@@ -1846,9 +1793,7 @@ class ExperimentProcess(PlannedProcess):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["ExperimentProcess"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1895,9 +1840,7 @@ class Protocol(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Protocol"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1980,7 +1923,7 @@ class LibraryPreparationProtocol(Protocol):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Literal["LibraryPreparationProtocol"]
+    schema_type: Literal["LibraryPreparationProtocol"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2001,6 +1944,10 @@ class SequencingProtocol(Protocol):
     paired_or_single_end: Optional[PairedOrSingleEndEnum] = Field(
         None,
         description="""Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing replications.""",
+    )
+    forward_or_reverse: Optional[ForwardOrReverseEnum] = Field(
+        None,
+        description="""Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing reaction.""",
     )
     sequencing_read_length: Optional[str] = Field(
         None,
@@ -2084,16 +2031,10 @@ class SequencingProtocol(Protocol):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Literal["SequencingProtocol"]
+    schema_type: Literal["SequencingProtocol"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
-
-
-TaggedProtocol = Annotated[
-    Union[LibraryPreparationProtocol, SequencingProtocol],
-    Field(discriminator="schema_type"),
-]
 
 
 class Sample(MaterialEntity):
@@ -2126,7 +2067,7 @@ class Sample(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
-    has_individual: Optional[Union[Individual, str]] = Field(
+    has_individual: Optional[Union[AnnotatedIndividual, str]] = Field(
         None, description="""The Individual from which this Sample was derived from."""
     )
     has_anatomical_entity: Optional[Union[List[AnatomicalEntity], List[str]]] = Field(
@@ -2163,9 +2104,7 @@ class Sample(MaterialEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Sample"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2184,7 +2123,7 @@ class File(InformationContentEntity):
     format: FileFormatEnum = Field(
         None, description="""The format of the file: BAM, SAM, CRAM, BAI, etc."""
     )
-    size: Optional[int] = Field(None, description="""The size of a file in bytes.""")
+    size: int = Field(None, description="""The size of a file in bytes.""")
     checksum: str = Field(
         None,
         description="""A computed value which depends on the contents of a block of data and which is transmitted or stored along with the data in order to detect corruption of the data. The receiving system recomputes the checksum based upon the received data and compares this value with the one sent with the data. If the two values are the same, the receiver has some confidence that the data was received correctly.""",
@@ -2219,9 +2158,7 @@ class File(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["File"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2283,9 +2220,7 @@ class DataAccessPolicy(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataAccessPolicy"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2333,9 +2268,7 @@ class DataAccessCommittee(Committee):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataAccessCommittee"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2441,9 +2374,7 @@ class Study(Investigation):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Study"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2517,12 +2448,19 @@ class Dataset(InformationContentEntity):
         None,
         description="""Timestamp (in ISO 8601 format) when the entity was updated.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Dataset"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
+
+
+AnnotatedIndividual = Annotated[
+    Union[Donor, Individual], Field(discriminator="schema_type")
+]
+AnnotatedProtocol = Annotated[
+    Union[SequencingProtocol, LibraryPreparationProtocol, Protocol],
+    Field(discriminator="schema_type"),
+]
 
 
 # Update forward refs

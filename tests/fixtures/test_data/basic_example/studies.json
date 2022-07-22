@@ -19,6 +19,7 @@
         }
       ],
       "id": "595c6fe1-1908-4596-b72a-ac89b7960375",
+      "schema_type": "Study",
       "title": "Coverage bias and sensitivity of variant calling for four whole-genome sequencing technologies",
       "type": "whole_genome_sequencing",
       "xref": [
@@ -44,6 +45,7 @@
         }
       ],
       "id": "6a9d2211-a94e-4486-be29-7fc4e0d46bcb",
+      "schema_type": "Study",
       "title": "Epigenomic alterations define lethal CIMP-positive ependymomas of infancy",
       "type": "other",
       "xref": [
@@ -73,6 +75,7 @@
         }
       ],
       "id": "5e427a5c-a7a0-4eee-ba16-eab1bc598998",
+      "schema_type": "Study",
       "title": "Whole genome bisufite sequencing of smoking and non-smoking mother-child pairsBisufite sequencing, RNA-seq and ChIP-Seq data of whole blood samples from smoking and non-smoking mothers and their children at gestation/birth and follow-up years.",
       "type": "epigenetics",
       "xref": [

@@ -157,6 +157,7 @@ async def create_data_access_committee(
     if main_contact_member:
         dac_entity["main_contact"] = main_contact_member.id
     dac_entity["accession"] = await generate_accession(COLLECTION_NAME, config=config)
+    dac_entity["schema_type"] = "DataAccessCommittee"
     await collection.insert_one(dac_entity)
     client.close()
     dac = await get_data_access_committee(dac_entity["id"], config=config)

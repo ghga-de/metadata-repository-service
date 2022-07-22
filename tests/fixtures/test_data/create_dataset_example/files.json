@@ -7,6 +7,7 @@
       "ega_accession": "EGAF00000101304",
       "format": "bam",
       "id": "61052f5a-7bc1-458c-9924-ae4c1c86cad1",
+      "schema_type": "File",
       "size": 202142862506
     },
     {
@@ -16,6 +17,7 @@
       "ega_accession": "EGAF00000101305",
       "format": "bam",
       "id": "a2ca36c8-72f3-4cc7-8841-3530a995dea8",
+      "schema_type": "File",
       "size": 206327988774
     },
     {
@@ -25,6 +27,7 @@
       "ega_accession": "EGAF00000101306",
       "format": "bam",
       "id": "c8d86e6d-8345-4e3a-869e-ec78ce353993",
+      "schema_type": "File",
       "size": 482771491105
     }
   ]

@@ -25,7 +25,7 @@ from typing_extensions import Annotated
 # pylint: disable=too-many-lines,invalid-name,line-too-long,missing-class-docstring
 
 metamodel_version = "None"
-version = "0.7.0"
+version = "0.9.0"
 
 
 class BiologicalSexEnum(str, Enum):
@@ -93,6 +93,12 @@ class PairedOrSingleEndEnum(str, Enum):
 
     paired = "paired"
     single = "single"
+
+
+class ForwardOrReverseEnum(str, Enum):
+
+    forward = "forward"
+    reverse = "reverse"
 
 
 class SubmissionStatusEnum(str, Enum):
@@ -199,9 +205,7 @@ class MetadataMixin(BaseModel):
     Mixin for tracking schema specific metadata about an instance.
     """
 
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["MetadataMixin"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -219,9 +223,7 @@ class NamedThing(BaseModel):
         None,
         description="""Holds one or more database cross references for an entity.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["NamedThing"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -240,9 +242,7 @@ class CreateAgent(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateAgent"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -260,9 +260,7 @@ class Person(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Person"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -278,9 +276,7 @@ class Committee(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Committee"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -295,9 +291,7 @@ class MaterialEntity(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["MaterialEntity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -312,9 +306,7 @@ class BiologicalQuality(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["BiologicalQuality"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -329,9 +321,7 @@ class InformationContentEntity(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["InformationContentEntity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -346,9 +336,7 @@ class PlannedProcess(NamedThing):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["PlannedProcess"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -369,9 +357,7 @@ class Investigation(PlannedProcess):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Investigation"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -392,9 +378,7 @@ class DataTransformation(PlannedProcess):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["DataTransformation"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -415,9 +399,7 @@ class ResearchActivity(PlannedProcess):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["ResearchActivity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -432,9 +414,7 @@ class CreateTechnology(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateTechnology"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -454,9 +434,7 @@ class CreateWorkflow(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateWorkflow"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -475,9 +453,7 @@ class CreateWorkflowStep(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateWorkflowStep"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -511,9 +487,7 @@ class CreateDiseaseOrPhenotypicFeature(BiologicalQuality):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDiseaseOrPhenotypicFeature"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -529,9 +503,7 @@ class Population(MaterialEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["Population"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -566,9 +538,7 @@ class CreateAncestry(Population):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateAncestry"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -602,9 +572,7 @@ class CreateAnalysisProcess(PlannedProcess):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateAnalysisProcess"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -627,9 +595,7 @@ class CreateDataUseCondition(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDataUseCondition"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -654,9 +620,7 @@ class CreateMember(Person):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateMember"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -676,9 +640,7 @@ class CreatePublication(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""One or more cross-references for this Publication."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreatePublication"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -712,9 +674,7 @@ class CreateAnatomicalEntity(MaterialEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateAnatomicalEntity"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -729,9 +689,7 @@ class CreateCellLine(MaterialEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateCellLine"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -765,9 +723,7 @@ class CreateDisease(CreateDiseaseOrPhenotypicFeature):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDisease"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -801,9 +757,7 @@ class CreatePhenotypicFeature(CreateDiseaseOrPhenotypicFeature):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreatePhenotypicFeature"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -823,9 +777,7 @@ class CreateUser(Person):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateUser"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -840,7 +792,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Institution/Center/Data Hub that is providing this submission.""",
     )
-    has_study: Optional[Union[CreateStudy, str]] = Field(
+    has_study: Optional[Union[List[CreateStudy], List[str]]] = Field(
         None,
         description="""Information about a Study entities associated with this submission.""",
     )
@@ -856,7 +808,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Information about one or more Biospecimen entities associated with this submission.""",
     )
-    has_individual: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None,
         description="""Information about one or more Individual entities associated with this submission.""",
     )
@@ -864,7 +816,7 @@ class CreateSubmission(BaseModel):
         None,
         description="""Information about one or more Experiment entities associated with this submission.""",
     )
-    has_protocol: Union[List[CreateTaggedProtocol], List[str]] = Field(
+    has_protocol: Optional[Union[List[AnnotatedCreateProtocol], List[str]]] = Field(
         None,
         description="""One or more Protocol entities associated with this Submission.""",
     )
@@ -875,6 +827,25 @@ class CreateSubmission(BaseModel):
     has_file: Optional[Union[List[CreateFile], List[str]]] = Field(
         None,
         description="""Information about one or more File entities associated with this submission.""",
+    )
+    has_dataset: Optional[Union[List[CreateDataset], List[str]]] = Field(
+        None, description="""One or more Dataset that are part of this submission."""
+    )
+    has_data_access_policy: Optional[
+        Union[List[CreateDataAccessPolicy], List[str]]
+    ] = Field(
+        None,
+        description="""The Data Access Policy that applies to Dataset in this submission.""",
+    )
+    has_data_access_committee: Optional[
+        Union[List[CreateDataAccessCommittee], List[str]]
+    ] = Field(
+        None,
+        description="""The Data Access Committee that applies to Dataset in this submission.""",
+    )
+    has_member: Optional[Union[List[CreateMember], List[str]]] = Field(
+        None,
+        description="""One or more member that are part of the Data Access Committee referenced in this submission.""",
     )
     has_publication: Optional[Union[List[CreatePublication], List[str]]] = Field(
         None,
@@ -887,9 +858,7 @@ class CreateSubmission(BaseModel):
     submission_status: Optional[SubmissionStatusEnum] = Field(
         None, description="""The status of a Submission."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateSubmission"]
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -923,9 +892,7 @@ class CreateDataUsePermission(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDataUsePermission"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -959,9 +926,7 @@ class CreateDataUseModifier(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDataUseModifier"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -996,7 +961,7 @@ class CreateBiospecimen(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
-    has_individual: Optional[Union[CreateIndividual, str]] = Field(
+    has_individual: Optional[Union[AnnotatedCreateIndividual, str]] = Field(
         None,
         description="""The Individual entity from which this Biospecimen was derived.""",
     )
@@ -1024,9 +989,7 @@ class CreateBiospecimen(MaterialEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateBiospecimen"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1037,11 +1000,11 @@ class CreateFamily(Population):
     A domestic group, or a number of domestic groups linked through descent (demonstrated or stipulated) from a common ancestor, marriage, or adoption.
     """
 
-    has_member: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None,
         description="""One or more Individuals that collectively define this Family.""",
     )
-    has_proband: Optional[Union[CreateIndividual, str]] = Field(
+    has_proband: Optional[Union[AnnotatedCreateIndividual, str]] = Field(
         None,
         description="""The Individual that is reported to have a disorder which results in the Family being brought into a Study.""",
     )
@@ -1054,9 +1017,7 @@ class CreateFamily(Population):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateFamily"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1067,7 +1028,7 @@ class CreateCohort(Population):
     A cohort is a collection of individuals that share a common characteristic/observation and have been grouped together for a research study/investigation.
     """
 
-    has_member: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_individual: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None,
         description="""One or more Individuals that collectively define this Cohort.""",
     )
@@ -1080,9 +1041,7 @@ class CreateCohort(Population):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateCohort"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1123,10 +1082,10 @@ class CreateIndividual(Person):
         None,
         description="""A person's descent or lineage, from a person or from a population. Typically this is a value from HANCESTRO (Human Ancestry Ontology).""",
     )
-    has_parent: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_parent: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None, description="""One or more parent for this Individual."""
     )
-    has_children: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_children: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None, description="""One or more children for this Individual."""
     )
     has_disease: Optional[Union[List[CreateDisease], List[str]]] = Field(
@@ -1158,9 +1117,7 @@ class CreateIndividual(Person):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateIndividual"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1191,10 +1148,10 @@ class CreateDonor(CreateIndividual):
         None,
         description="""A person's descent or lineage, from a person or from a population. Typically this is a value from HANCESTRO (Human Ancestry Ontology).""",
     )
-    has_parent: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_parent: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None, description="""The parent of an entity."""
     )
-    has_children: Optional[Union[List[CreateIndividual], List[str]]] = Field(
+    has_children: Optional[Union[List[AnnotatedCreateIndividual], List[str]]] = Field(
         None, description="""The children of an entity."""
     )
     has_disease: Optional[Union[List[CreateDisease], List[str]]] = Field(
@@ -1224,9 +1181,7 @@ class CreateDonor(CreateIndividual):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDonor"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1289,9 +1244,7 @@ class CreateAnalysis(DataTransformation):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateAnalysis"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1328,9 +1281,7 @@ class CreateProject(ResearchActivity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateProject"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1364,7 +1315,7 @@ class CreateExperiment(Investigation):
         None,
         description="""One or more Files entities that are generated as output of this Experiment.""",
     )
-    has_protocol: Union[List[CreateTaggedProtocol], List[str]] = Field(
+    has_protocol: Union[List[AnnotatedCreateProtocol], List[str]] = Field(
         None,
         description="""One or more Protocol entities associated with this Experiment.""",
     )
@@ -1395,9 +1346,7 @@ class CreateExperiment(Investigation):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateExperiment"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1419,7 +1368,7 @@ class CreateExperimentProcess(PlannedProcess):
         None,
         description="""The input to the Experiment Process. Usually a Sample entity.""",
     )
-    has_protocol: Optional[Union[CreateTaggedProtocol, str]] = Field(
+    has_protocol: Optional[Union[AnnotatedCreateProtocol, str]] = Field(
         None, description="""The Protocol entity used by this Experiment Process."""
     )
     has_agent: Optional[Union[CreateAgent, str]] = Field(
@@ -1437,9 +1386,7 @@ class CreateExperimentProcess(PlannedProcess):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateExperimentProcess"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1475,9 +1422,7 @@ class CreateProtocol(InformationContentEntity):
         None,
         description="""One or more cross-references for this Protocol.  (Eg: manufacturer protocol, protocol from publication etc )""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateProtocol"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1549,7 +1494,7 @@ class CreateLibraryPreparationProtocol(CreateProtocol):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Literal["CreateLibraryPreparationProtocol"]
+    schema_type: Literal["CreateLibraryPreparationProtocol"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1570,6 +1515,10 @@ class CreateSequencingProtocol(CreateProtocol):
     paired_or_single_end: Optional[PairedOrSingleEndEnum] = Field(
         None,
         description="""Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing replications.""",
+    )
+    forward_or_reverse: Optional[ForwardOrReverseEnum] = Field(
+        None,
+        description="""Denotes whether a submitted FASTQ file contains forward (R1) or reverse (R2) reads for paired-end sequencing. The number that identifies each read direction in a paired-end nucleotide sequencing reaction.""",
     )
     sequencing_read_length: Optional[str] = Field(
         None,
@@ -1642,16 +1591,10 @@ class CreateSequencingProtocol(CreateProtocol):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Literal["CreateSequencingProtocol"]
+    schema_type: Literal["CreateSequencingProtocol"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
-
-
-CreateTaggedProtocol = Annotated[
-    Union[CreateLibraryPreparationProtocol, CreateSequencingProtocol],
-    Field(discriminator="schema_type"),
-]
 
 
 class CreateSample(MaterialEntity):
@@ -1684,7 +1627,7 @@ class CreateSample(MaterialEntity):
         None,
         description="""Methods by which a biospecimen or a sample is stored (e.g. frozen in liquid nitrogen).""",
     )
-    has_individual: Optional[Union[CreateIndividual, str]] = Field(
+    has_individual: Optional[Union[AnnotatedCreateIndividual, str]] = Field(
         None, description="""The Individual from which this Sample was derived from."""
     )
     has_anatomical_entity: Optional[
@@ -1710,9 +1653,7 @@ class CreateSample(MaterialEntity):
         None,
         description="""One or more cross-references for this Sample. For example, this Sample may have an EBI BioSamples accession or an EGA Sample accession.""",
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateSample"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1731,7 +1672,7 @@ class CreateFile(InformationContentEntity):
     format: FileFormatEnum = Field(
         None, description="""The format of the file: BAM, SAM, CRAM, BAI, etc."""
     )
-    size: Optional[int] = Field(None, description="""The size of a file in bytes.""")
+    size: int = Field(None, description="""The size of a file in bytes.""")
     checksum: str = Field(
         None,
         description="""A computed value which depends on the contents of a block of data and which is transmitted or stored along with the data in order to detect corruption of the data. The receiving system recomputes the checksum based upon the received data and compares this value with the one sent with the data. If the two values are the same, the receiver has some confidence that the data was received correctly.""",
@@ -1755,9 +1696,7 @@ class CreateFile(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateFile"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1808,9 +1747,7 @@ class CreateDataAccessPolicy(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDataAccessPolicy"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1847,9 +1784,7 @@ class CreateDataAccessCommittee(Committee):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDataAccessCommittee"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -1870,7 +1805,7 @@ class DeprecatedMixin(BaseModel):
     Mixin for entities that can be deprecated.
     """
 
-    replaced_by: Optional[NamedThing] = Field(
+    replaced_by: Optional[AnnotatedNamedThing] = Field(
         None,
         description="""Refers to the entity which replaces a currently deprecated entity.""",
     )
@@ -1944,9 +1879,7 @@ class CreateStudy(Investigation):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateStudy"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
@@ -2009,12 +1942,70 @@ class CreateDataset(InformationContentEntity):
     xref: Optional[List[str]] = Field(
         None, description="""Database cross references for an entity."""
     )
-    schema_type: Optional[str] = Field(
-        None, description="""The schema type an instance corresponds to."""
-    )
+    schema_type: Literal["CreateDataset"]  # type: ignore
     schema_version: Optional[str] = Field(
         None, description="""The version of the schema an instance corresponds to."""
     )
+
+
+AnnotatedCreateIndividual = Annotated[
+    Union[CreateDonor, CreateIndividual], Field(discriminator="schema_type")
+]
+AnnotatedCreateProtocol = Annotated[
+    Union[CreateSequencingProtocol, CreateLibraryPreparationProtocol, CreateProtocol],
+    Field(discriminator="schema_type"),
+]
+AnnotatedNamedThing = Annotated[
+    Union[
+        CreateDonor,
+        CreateUser,
+        CreateMember,
+        CreateIndividual,
+        CreateDataAccessCommittee,
+        CreateAncestry,
+        CreateCohort,
+        CreateFamily,
+        CreateCellLine,
+        CreateAnatomicalEntity,
+        Population,
+        CreateSample,
+        CreateBiospecimen,
+        CreatePhenotypicFeature,
+        CreateDisease,
+        CreateDiseaseOrPhenotypicFeature,
+        CreateSequencingProtocol,
+        CreateLibraryPreparationProtocol,
+        CreateDataUseModifier,
+        CreateDataUsePermission,
+        CreatePublication,
+        CreateDataAccessPolicy,
+        CreateDataUseCondition,
+        CreateDataset,
+        CreateFile,
+        CreateWorkflowStep,
+        CreateWorkflow,
+        CreateTechnology,
+        CreateProtocol,
+        CreateExperiment,
+        CreateStudy,
+        CreateAnalysis,
+        CreateProject,
+        CreateAnalysisProcess,
+        CreateExperimentProcess,
+        ResearchActivity,
+        DataTransformation,
+        Investigation,
+        PlannedProcess,
+        InformationContentEntity,
+        BiologicalQuality,
+        MaterialEntity,
+        Committee,
+        Person,
+        CreateAgent,
+        NamedThing,
+    ],
+    Field(discriminator="schema_type"),
+]
 
 
 # Update forward refs
